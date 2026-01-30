@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tu Suerte Suma | Sorteos CMS</title>
+    <title>Tu Suerte Suma | Sorteos Profesionales</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -25,6 +25,8 @@
             --light: #f8fafc;
             --nav-gradient: linear-gradient(180deg, #000000 30%, #064e3b 100%);
             --bg-elegant: radial-gradient(circle at center, #064e3b 0%, #022c22 40%, #000000 100%);
+            --sold-out: #ef4444; 
+            --closed-gray: #4b5563;
         }
 
         /* --- TEMAS DE COLOR (Sistema para el Comprador) --- */
@@ -39,19 +41,16 @@
         body { background: var(--bg-elegant); color: #1f2937; line-height: 1.5; min-height: 100vh; background-attachment: fixed; transition: background 0.5s ease; }
 
         /* ==========================================================================
-           2. VISIBILIDAD ADMIN (CORREGIDO Y MEJORADO)
+           2. VISIBILIDAD ADMIN
            ========================================================================== */
-        /* Oculta elementos de admin por defecto */
         .admin-only, .btn-edit-floating, .admin-controls, .admin-clean-wrapper, .nav-admin-row { 
             display: none !important; 
         }
         
-        /* Muestra solo si el body tiene la clase is-admin */
         body.is-admin .admin-only { display: inline-block !important; }
         body.is-admin .btn-edit-floating { display: flex !important; }
         body.is-admin .admin-controls { display: block !important; }
         
-        /* CORRECCIÓN: Centrado y Visibilidad del Panel */
         body.is-admin .admin-clean-wrapper { 
             display: flex !important; 
             justify-content: center !important; 
@@ -65,7 +64,7 @@
             justify-content: center !important; 
             width: 100%;
             padding: 5px 0;
-            background: rgba(0,0,0,0.3); /* Fondo oscuro suave para destacar el panel */
+            background: rgba(0,0,0,0.3);
             border-bottom: 1px solid var(--accent);
         }
 
@@ -111,7 +110,7 @@
         .page-view { display: none; animation: fade 0.4s; padding-bottom: 80px; }
         @keyframes fade { from {opacity:0;} to {opacity:1;} }
 
-        /* --- BOTÓN PANEL (CSS Mejorado) --- */
+        /* --- BOTÓN PANEL --- */
         .btn-panel-rectangular { 
             display: none; 
             background: linear-gradient(90deg, var(--accent), #eab308); 
@@ -191,6 +190,9 @@
         .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; display: flex; align-items: center; gap: 5px; }
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 10px; max-width: 800px; margin: 0 auto; padding-bottom: 80px; }
         
+        /* BLOQUEO VISUAL POR TIEMPO O SOLD OUT */
+        .grid-container.locked { pointer-events: none; filter: grayscale(1); opacity: 0.6; position: relative; }
+
         .ticket { background: white; border: 2px solid #ddd; border-radius: 12px; padding: 15px 0; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: all 0.2s; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center; color: #333; }
         .ticket:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .ticket.disponible { border-color: #28a745; color: #28a745; }
@@ -240,9 +242,13 @@
         .admin-img-list { max-height: 100px; overflow-y: auto; background: white; border: 1px solid #ccc; padding: 5px; margin-top:5px; }
         .admin-img-item { display:flex; justify-content:space-between; font-size:0.8rem; border-bottom:1px solid #eee; padding:2px; color: black; }
         
-        .search-container { position: relative; margin: 20px 0; color: #333; }
-        .search-input { width: 80%; padding: 10px; border-radius: 30px; border: 2px solid var(--primary); text-align: center; font-size: 1.1rem; }
+        /* --- NUEVO: ESTILOS DE BÚSQUEDA Y VERIFICADOR --- */
+        .search-container { position: relative; margin: 20px 0; color: #333; display: flex; gap: 10px; justify-content: center; }
+        .search-input { width: 70%; padding: 10px; border-radius: 30px; border: 2px solid var(--primary); text-align: center; font-size: 1.1rem; }
         .search-icon { position: absolute; right: 15%; top: 50%; transform: translateY(-50%); color: var(--primary); }
+        
+        .verifier-container { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #ddd; }
+        .verifier-input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin-top: 10px; text-align: center; }
 
         /* --- MODALES --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 12000; display: none; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
@@ -256,6 +262,11 @@
         #modal-lucky .modal-content { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #222; border: 2px solid var(--accent); }
         .btn-lucky { background: linear-gradient(45deg, #FFD700, #ffb300); color: black; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 900; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); width: 80%; max-width: 400px; margin-bottom: 20px; animation: pulseGold 2s infinite; }
         
+        /* --- NUEVO: DETALLE DE BOLETO ADMIN --- */
+        .admin-detail-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 0.9rem; }
+        .admin-detail-label { font-weight: bold; color: #666; }
+        .admin-detail-value { font-weight: bold; color: #333; text-align: right; }
+
         /* --- SLOT MACHINE --- */
         .slot-machine-wrapper { width: 100%; max-width: 300px; height: 120px; background: #000; border: 5px solid var(--accent); border-radius: 10px; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px; margin: 20px auto; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5) inset; position: relative; }
         .slot-machine-wrapper::before { content: ''; position: absolute; top: 50%; left: -10px; right: -10px; height: 2px; background: rgba(255,0,0,0.7); z-index: 20; pointer-events: none; }
@@ -287,18 +298,40 @@
         .copy-btn { background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 2px 8px; border-radius: 5px; cursor: pointer; margin-left: 10px; font-size: 0.7rem; vertical-align: middle; text-shadow: none; }
         .copy-btn:hover { background: white; color: black; }
 
-        /* --- VIRTUAL TICKET --- */
-        .virtual-ticket-card { background: radial-gradient(circle, #064e3b 0%, #000 100%); color: var(--accent); padding: 20px; border-radius: 15px; border: 4px double var(--accent); text-align: center; position: relative; overflow: hidden; width: 90%; max-width: 380px; max-height: 85vh; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); margin: 0 auto; }
+        /* --- VIRTUAL TICKET (BOLETO DIGITAL MEJORADO) --- */
+        .virtual-ticket-card { 
+            background: radial-gradient(circle, #064e3b 0%, #000 100%); 
+            color: var(--accent); 
+            padding: 20px; 
+            border-radius: 15px; 
+            border: 4px double var(--accent); 
+            text-align: center; 
+            position: relative; 
+            overflow: hidden; 
+            width: 90%; 
+            max-width: 380px; 
+            min-height: 500px; /* Aumentado para ver detalles */
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); 
+            margin: 0 auto; 
+        }
         .vt-logo { height: 50px; object-fit:contain; margin-bottom: 5px; filter: drop-shadow(0 0 5px white); flex-shrink: 0; }
         .vt-congrats { font-size: 1.4rem; font-weight: 900; text-transform: uppercase; margin-bottom: 0; color: white; line-height: 1.1; }
         .vt-msg { font-size: 0.8rem; color: #eee; margin-bottom: 10px; font-style: italic; }
         .vt-divider { border-top: 1px solid rgba(255,255,255,0.3); width: 100%; margin: 5px 0; }
+        
+        /* Imagen del evento en el boleto */
+        .vt-event-img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid var(--accent); margin: 5px 0; }
+
         .vt-data-row { margin: 5px 0; }
         .vt-label { font-size: 0.7rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }
         .vt-value { color: white; text-transform: uppercase; font-weight: bold; font-size: 1.2rem; text-shadow: 0 2px 4px black; line-height: 1.2; }
         .vt-numbers { font-size: 2.2rem; font-weight: 900; background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 10px; margin: 5px 0; letter-spacing: 2px; color: #FFD700; text-shadow: 0 2px 4px black; word-wrap: break-word; line-height: 1.1; }
         .vt-footer { font-size: 0.6rem; color: #aaa; margin-top: 5px; flex-shrink: 0; }
         .vt-shine { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, transparent 40%, rgba(255,215,0,0.1) 50%, transparent 60%); pointer-events: none; }
+        
         .btn-whatsapp-share { background: #25D366; color: white; width: 100%; margin-top: 10px; border-radius: 25px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4); text-decoration: none; }
         .btn-whatsapp-share:hover { background: #1ebc57; transform: scale(1.02); }
 
@@ -328,7 +361,12 @@
 
         .progress-container { width: 100%; background: #e5e7eb; height: 12px; border-radius: 6px; overflow: hidden; margin: 15px 0; display: none; }
         body.is-admin .progress-container, .progress-container.public { display: block; }
+        
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%); width: 0%; transition: width 0.5s ease; }
+        
+        /* ESTILO BARRA AGOTADA */
+        .progress-bar.sold-out { background: var(--sold-out); }
+
         .progress-text { font-size: 0.8rem; color: #666; margin-bottom: 5px; display: flex; justify-content: space-between; }
 
         .countdown-box { background: linear-gradient(45deg, #000, #333); color: white; padding: 15px; border-radius: 10px; margin-top: 15px; display: none; justify-content: center; gap: 20px; border: 1px solid var(--accent); }
@@ -358,7 +396,46 @@
 </head>
 <body>
     <div id="overlay-ticket" class="overlay-fullscreen">
+        <div class="virtual-ticket-card" style="margin-top: 20px;">
+            <div class="vt-shine"></div>
+            <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="vt-logo" alt="Logo">
+            
+            <div class="vt-congrats">¡FELICIDADES!</div>
+            <p class="vt-msg" style="color:#25D366; font-weight:bold;">✅ Participación Confirmada</p>
+            
+            <img id="vt-link-img" src="" class="vt-event-img" style="display:none;">
+            
+            <div class="vt-divider"></div>
+            
+            <div class="vt-data-row">
+                <div class="vt-label">Participante</div>
+                <div id="vt-link-client" class="vt-value">NOMBRE CLIENTE</div>
+            </div>
+            
+            <div class="vt-data-row">
+                <div class="vt-label">Ubicación</div>
+                <div id="vt-link-state" class="vt-value" style="font-size:1rem;">ESTADO</div>
+            </div>
+
+            <div class="vt-data-row">
+                <div class="vt-label">Tus Números de la Suerte</div>
+                <div id="vt-link-num" class="vt-numbers">00, 00</div>
+            </div>
+
+            <div class="vt-data-row">
+                <div class="vt-label">Sorteo</div>
+                <div id="vt-link-event-name" style="color:white; font-size:0.9rem;">Nombre Evento</div>
+            </div>
+            
+            <div class="vt-divider"></div>
+            <div class="vt-footer">Tu Suerte Suma | Mucha Suerte 🍀</div>
         </div>
+        
+        <p style="color:#999; margin-top:20px; text-align:center; padding:0 20px;">
+            Guarda este boleto como comprobante.<br>
+            <span style="font-size:0.8rem;">(Toma una captura de pantalla)</span>
+        </p>
+    </div>
 
     <div id="overlay-payment" class="overlay-fullscreen">
         <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" style="height:80px; margin-bottom:20px; filter:drop-shadow(0 0 5px white);">
@@ -456,7 +533,7 @@
             <div class="close-btn" onclick="closeModal('modal-config-contact')">&times;</div>
             <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:15px;">Contacto y Redes</h3>
             <p style="font-size:0.85rem; color:#666; text-align:center; margin-bottom:20px;">
-                Estos enlaces aparecen en los iconos y en el mensaje de confirmación de WhatsApp.
+                Estos enlaces aparecen en los iconos y <b>se envían automáticamente en el mensaje de confirmación</b>.
             </p>
 
             <div class="form-group" style="margin-bottom:15px;">
@@ -623,6 +700,136 @@
             </div>
         </div>
     </div>
+
+    <div id="modal-terms" class="modal-overlay" onclick="closeModal('modal-terms')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="close-btn" onclick="closeModal('modal-terms')">&times;</div>
+            <h3 style="color:var(--primary-dark); text-transform:uppercase; border-bottom:2px solid var(--accent); padding-bottom:10px;">Términos y Condiciones</h3>
+            <div class="terms-text" id="terms-public-content">
+                <p>Cargando términos...</p>
+            </div>
+            <button onclick="closeModal('modal-terms')" class="btn-action" style="background: #333; width:100%;">Entendido y Acepto</button>
+        </div>
+    </div>
+
+    <div id="modal-form" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="close-btn" onclick="closeModal('modal-form')">&times;</div>
+            <h3 style="color:var(--primary);">¡Casi tuyos!</h3>
+            <div style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:15px;">
+                <p>Boletos: <b id="form-nums" style="color:var(--primary-dark);">...</b></p>
+                <p style="font-size:1.2rem; margin-top:5px;">Total a pagar: <b id="form-total" style="font-size:1.5rem; color:#dc3545;">$0</b></p>
+            </div>
+            
+            <input type="text" id="user-name" class="form-control" placeholder="Tu Nombre Completo" style="width:100%; margin:5px 0;">
+            <input type="text" id="user-state" class="form-control" placeholder="Tu Estado (Ej: CDMX, Estado de México)" style="width:100%; margin:5px 0;">
+            <input type="tel" id="user-phone" class="form-control" placeholder="Tu Teléfono (WhatsApp)" style="width:100%; margin:5px 0;">
+            
+            <button onclick="sendWhatsApp()" class="btn-action" style="background:#25D366; margin-top:15px; width:100%;">
+                <i class="fab fa-whatsapp"></i> APARTAR AHORA
+            </button>
+        </div>
+    </div>
+
+    <div id="modal-virtual-ticket" class="modal-overlay" style="display:none;">
+        <div class="modal-content" style="background:transparent; box-shadow:none; padding:0; width:100%; display:flex; flex-direction:column; align-items:center;">
+            
+            <div class="virtual-ticket-card">
+                <div class="vt-shine"></div>
+                <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="vt-logo" alt="Logo">
+                <div class="vt-congrats">¡FELICIDADES!</div>
+                <p class="vt-msg">Participación confirmada.</p>
+                <div class="vt-divider"></div>
+                <div class="vt-data-row"><div class="vt-label">Participante</div><div id="vt-client" class="vt-value">NOMBRE CLIENTE</div></div>
+                <div class="vt-data-row"><div class="vt-label">Estado</div><div id="vt-state" class="vt-value" style="font-size:1rem;">ESTADO</div></div>
+                <div class="vt-data-row"><div class="vt-label">Tus Números</div><div id="vt-num" class="vt-numbers">00, 00</div></div>
+                <div class="vt-data-row"><div class="vt-label">Sorteo</div><div id="vt-event-name" style="color:white; font-size:0.9rem;">Nombre Evento</div></div>
+                <div class="vt-divider"></div>
+                <div class="vt-footer">Tu Suerte Suma | Sorteos Transparentes</div>
+            </div>
+
+            <div style="background:white; padding:15px; border-radius:15px; margin-top:10px; text-align:center; width:90%; max-width:380px;">
+                <p style="color:#666; font-size:0.8rem; margin-bottom:5px;">Enviar al cliente (WhatsApp):</p>
+                <button onclick="shareTicketWhatsApp()" class="btn-whatsapp-share" style="margin-top:0;">
+                    <i class="fab fa-whatsapp"></i> ENVIAR CONFIRMACIÓN
+                </button>
+                <button onclick="closeModal('modal-virtual-ticket')" style="background:transparent; border:none; color:#666; text-decoration:underline; cursor:pointer; margin-top:10px; font-size:0.8rem;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-admin-ticket" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="close-btn" onclick="closeModal('modal-admin-ticket')">&times;</div>
+            <h3 style="color:var(--primary-dark);">Gestión Boleto #<span id="adm-ticket-num"></span></h3>
+            
+            <div style="background:#f9f9f9; padding:15px; text-align:left; border-radius:10px; margin-bottom:15px; border:1px solid #eee;">
+                <div class="admin-detail-row">
+                    <span class="admin-detail-label">Cliente:</span>
+                    <span class="admin-detail-value" id="adm-client">Cargando...</span>
+                </div>
+                <div class="admin-detail-row">
+                    <span class="admin-detail-label">Teléfono:</span>
+                    <span class="admin-detail-value" id="adm-phone">...</span>
+                </div>
+                <div class="admin-detail-row">
+                    <span class="admin-detail-label">Ubicación (Estado):</span>
+                    <span class="admin-detail-value" id="adm-state">...</span>
+                </div>
+                <div class="admin-detail-row" style="border-bottom:none;">
+                    <span class="admin-detail-label">Status Pago:</span>
+                    <span class="admin-detail-value" id="adm-status" style="color:var(--primary);">...</span>
+                </div>
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label style="font-size:0.8rem; font-weight:bold; color:#666;">Todos los boletos de este usuario:</label>
+                <div id="adm-all-tickets" style="background:#eee; padding:5px; border-radius:5px; font-weight:bold; word-wrap:break-word; font-size:0.9rem;">...</div>
+            </div>
+
+            <button onclick="changeStatus('pagado')" class="btn-action" style="background:var(--dark); color:#FFD700; margin-bottom:5px; width:100%;">MARCAR PAGADO Y CONFIRMAR</button>
+            <button onclick="changeStatus('disponible')" class="btn-action" style="background:#ef4444; width:100%;">LIBERAR (BORRAR)</button>
+            
+            <a id="adm-wa-link" href="#" target="_blank" class="btn-action" style="background:#25D366; width:100%; margin-top:5px; text-align:center;">
+                <i class="fab fa-whatsapp"></i> CONTACTAR (SOLO CHAT)
+            </a>
+        </div>
+    </div>
+
+    <div id="modal-screenshot" class="modal-overlay" style="display:none; align-items:flex-start; padding-top:50px; overflow-y:auto;">
+        <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
+            
+            <div id="screenshot-clean-area">
+                <div class="ss-header">
+                    <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="ss-logo" alt="Logo">
+                    <div class="ss-title" id="ss-event-title">EVENTO</div>
+                </div>
+                <div class="leyenda" style="margin-bottom:10px; transform:scale(0.8);">
+                    <span class="badge" style="color:#28a745"><i class="fas fa-circle"></i> Libre</span>
+                    <span class="badge" style="color:#ffc107"><i class="fas fa-circle"></i> Apartado</span>
+                    <span class="badge" style="color:#dc3545"><i class="fas fa-circle"></i> Pagado</span>
+                </div>
+                <div id="screenshot-grid-target" class="screenshot-grid"></div>
+            </div>
+
+            <button onclick="closeModal('modal-screenshot')" class="btn-action" style="background:#333; margin-top:20px;">Cerrar Vista</button>
+            <p style="color:white; font-size:0.8rem; margin-top:10px;">Toma una captura de pantalla de esta zona 👆</p>
+        </div>
+    </div>
+
+    <div id="modal-cms-edit" class="modal-overlay" style="display:none;">
+        <div class="modal-content" style="max-width:600px; text-align:left;">
+            <div class="close-btn" onclick="closeModal('modal-cms-edit')">&times;</div>
+            <h3 style="color:var(--primary-dark); text-align:center; margin-bottom:15px;">✏️ Editar Contenido</h3>
+            <input type="hidden" id="cms-target-id">
+            <textarea id="cms-input-content" class="cms-editor-textarea" rows="5" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></textarea>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button onclick="closeModal('modal-cms-edit')" class="btn-action" style="background:#555;">Cancelar</button>
+                <button onclick="saveCmsContent()" class="btn-action" style="width:100%;">💾 GUARDAR</button>
+            </div>
+        </div>
+    </div>
+
     <nav>
         <div class="nav-structure">
             <div class="nav-top-row">
@@ -654,7 +861,7 @@
             </div>
         </div>
     </nav>
-
+    
     <div id="main-content-area">
 
         <div id="page-inicio" class="page-view" style="display:block;">
@@ -742,6 +949,7 @@
                 </div>
             </section>
         </div>
+
         <div id="page-pagos" class="page-view">
             <div class="container" style="text-align:center; padding: 0 15px;">
                 
@@ -790,7 +998,6 @@
                 <p style="color:#ddd; margin-bottom:2rem;">Selecciona, copia y envía tu comprobante.</p>
 
                 <div class="cards-grid">
-                    
                     <div id="card-bbva-main" class="bank-card card-bbva">
                         <div class="card-top">
                             <div class="card-chip"></div>
@@ -835,7 +1042,7 @@
                             <div><span class="card-label">BANCO</span><div class="card-holder">MERCADO PAGO</div></div>
                         </div>
                     </div>
-
+                    
                     <div id="card-oxxo-main" class="bank-card card-oxxo">
                         <div class="card-top">
                             <div class="card-chip"></div>
@@ -850,7 +1057,7 @@
                             <div><span class="card-label">DEPÓSITO</span><div class="card-holder">OXXO</div></div>
                         </div>
                     </div>
-
+                    
                     <div id="card-banorte-main" class="bank-card card-banorte">
                         <div class="card-top">
                             <div class="card-chip"></div>
@@ -865,7 +1072,7 @@
                             <div><span class="card-label">BANCO</span><div class="card-holder">BANORTE</div></div>
                         </div>
                     </div>
-
+                    
                     <div id="card-banamex-main" class="bank-card card-banamex">
                         <div class="card-top">
                             <div class="card-chip"></div>
@@ -898,11 +1105,20 @@
                     </button>
                 </div>
 
+                <div class="verifier-container">
+                    <h4 style="color:var(--primary-dark); text-transform:uppercase;">🔎 Verificador de Boletos</h4>
+                    <p style="font-size:0.8rem; color:#666; margin-bottom:10px;">Ingresa tu teléfono para ver tus boletos y estado.</p>
+                    <input type="tel" id="verifier-phone" class="verifier-input" placeholder="Tu número de celular">
+                    <button onclick="verifyMyTickets()" class="btn-action" style="margin-top:10px; width:100%; background:var(--dark);">VER MIS BOLETOS</button>
+                    <div id="verifier-result" style="margin-top:15px; text-align:left;"></div>
+                </div>
+
                 <div id="events-grid" class="events-grid">
                     <p style="text-align:center; width:100%; grid-column: 1 / -1; color: white;">Cargando eventos...</p>
                 </div>
             </div>
         </div>
+
         <div id="page-boletos" class="page-view">
             
             <div id="selection-bar" class="selection-bar">
@@ -932,6 +1148,7 @@
                     <div class="cd-item"><div class="cd-num" id="cd-m">00</div><div class="cd-label">Min</div></div>
                     <div class="cd-item"><div class="cd-num" id="cd-s">00</div><div class="cd-label">Seg</div></div>
                 </div>
+                <div id="closed-msg" style="display:none; color:#ef4444; font-weight:900; font-size:1.5rem; margin-top:10px; text-transform:uppercase; animation:urgentPulse 2s infinite;">⛔ SORTEO CERRADO ⛔<br><span style="font-size:0.9rem; color:#666; font-weight:normal;">Esperando resultados...</span></div>
 
                 <img id="header-img" src="" style="width:100%; max-height:300px; object-fit:contain; margin:15px 0; border-radius:10px; background:black; display:none;">
                 
@@ -940,7 +1157,7 @@
                 </div>
                 <div class="progress-text">
                     <span id="progress-percent-txt">0% Vendido</span>
-                    <span>¡Tu suerte suma!</span>
+                    <span id="progress-msg-txt">¡Tu suerte suma!</span>
                 </div>
 
                 <p id="header-desc">...</p>
@@ -988,7 +1205,9 @@
             <div id="grid-rifa" class="grid-container">Cargando...</div>
         </div>
 
-    </div> <footer>
+    </div> 
+    
+    <footer>
         <div class="footer-socials">
             <div style="display:inline-flex; align-items:center;">
                 <a id="footer-fb-link" href="#" target="_blank" class="social-btn"><i class="fab fa-facebook-f"></i></a>
@@ -1008,108 +1227,6 @@
             Esta página fue hecha por <a href="#" target="_blank">ZonaTecno</a>
         </div>
     </footer>
-
-    <div id="modal-terms" class="modal-overlay" onclick="closeModal('modal-terms')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="close-btn" onclick="closeModal('modal-terms')">&times;</div>
-            <h3 style="color:var(--primary-dark); text-transform:uppercase; border-bottom:2px solid var(--accent); padding-bottom:10px;">Términos y Condiciones</h3>
-            <div class="terms-text" id="terms-public-content">
-                <p>Cargando términos...</p>
-            </div>
-            <button onclick="closeModal('modal-terms')" class="btn-action" style="background: #333; width:100%;">Entendido y Acepto</button>
-        </div>
-    </div>
-
-    <div id="modal-form" class="modal-overlay" style="display:none;">
-        <div class="modal-content">
-            <div class="close-btn" onclick="closeModal('modal-form')">&times;</div>
-            <h3 style="color:var(--primary);">¡Casi tuyos!</h3>
-            <div style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:15px;">
-                <p>Boletos: <b id="form-nums" style="color:var(--primary-dark);">...</b></p>
-                <p style="font-size:1.2rem; margin-top:5px;">Total a pagar: <b id="form-total" style="font-size:1.5rem; color:#dc3545;">$0</b></p>
-            </div>
-            <input type="text" id="user-name" class="form-control" placeholder="Tu Nombre Completo" style="width:100%; margin:5px 0;">
-            <input type="text" id="user-state" class="form-control" placeholder="Tu Estado (Ej: CDMX)" style="width:100%; margin:5px 0;">
-            <input type="tel" id="user-phone" class="form-control" placeholder="Tu Teléfono (WhatsApp)" style="width:100%; margin:5px 0;">
-            
-            <button onclick="sendWhatsApp()" class="btn-action" style="background:#25D366; margin-top:15px; width:100%;">
-                <i class="fab fa-whatsapp"></i> APARTAR AHORA
-            </button>
-        </div>
-    </div>
-
-    <div id="modal-virtual-ticket" class="modal-overlay" style="display:none;">
-        <div class="modal-content" style="background:transparent; box-shadow:none; padding:0; width:100%; display:flex; flex-direction:column; align-items:center;">
-            <div class="virtual-ticket-card">
-                <div class="vt-shine"></div>
-                <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="vt-logo" alt="Logo">
-                <div class="vt-congrats">¡FELICIDADES!</div>
-                <p class="vt-msg">Participación confirmada.</p>
-                <div class="vt-divider"></div>
-                <div class="vt-data-row"><div class="vt-label">Participante</div><div id="vt-client" class="vt-value">NOMBRE CLIENTE</div></div>
-                <div class="vt-data-row"><div class="vt-label">Tus Números</div><div id="vt-num" class="vt-numbers">00, 00</div></div>
-                <div class="vt-data-row"><div class="vt-label">Sorteo</div><div id="vt-event-name" style="color:white; font-size:0.9rem;">Nombre Evento</div></div>
-                <div class="vt-divider"></div>
-                <div class="vt-footer">Tu Suerte Suma | Sorteos Transparentes</div>
-            </div>
-            <div style="background:white; padding:15px; border-radius:15px; margin-top:10px; text-align:center; width:90%; max-width:380px;">
-                <p style="color:#666; font-size:0.8rem; margin-bottom:5px;">Enviar al cliente:</p>
-                <button onclick="shareTicketWhatsApp()" class="btn-whatsapp-share" style="margin-top:0;">
-                    <i class="fab fa-whatsapp"></i> ENVIAR AL CLIENTE
-                </button>
-                <button onclick="closeModal('modal-virtual-ticket')" style="background:transparent; border:none; color:#666; text-decoration:underline; cursor:pointer; margin-top:10px; font-size:0.8rem;">Cerrar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-admin-ticket" class="modal-overlay" style="display:none;">
-        <div class="modal-content">
-            <div class="close-btn" onclick="closeModal('modal-admin-ticket')">&times;</div>
-            <h3>Gestión Boleto #<span id="adm-ticket-num"></span></h3>
-            <div style="background:#f9f9f9; padding:10px; text-align:left; border-radius:5px; margin-bottom:15px;">
-                <p>Cliente: <b id="adm-client"></b></p>
-                <p>Tel: <b id="adm-phone"></b></p>
-                <p>Estado: <b id="adm-status"></b></p>
-            </div>
-            <button onclick="changeStatus('pagado')" class="btn-action" style="background:var(--dark); color:#FFD700; margin-bottom:5px; width:100%;">MARCAR PAGADO</button>
-            <button onclick="changeStatus('disponible')" class="btn-action" style="background:#ef4444; width:100%;">LIBERAR (BORRAR)</button>
-        </div>
-    </div>
-
-    <div id="modal-screenshot" class="modal-overlay" style="display:none; align-items:flex-start; padding-top:50px; overflow-y:auto;">
-        <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
-            
-            <div id="screenshot-clean-area">
-                <div class="ss-header">
-                    <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="ss-logo" alt="Logo">
-                    <div class="ss-title" id="ss-event-title">EVENTO</div>
-                </div>
-                <div class="leyenda" style="margin-bottom:10px; transform:scale(0.8);">
-                    <span class="badge" style="color:#28a745"><i class="fas fa-circle"></i> Libre</span>
-                    <span class="badge" style="color:#ffc107"><i class="fas fa-circle"></i> Apartado</span>
-                    <span class="badge" style="color:#dc3545"><i class="fas fa-circle"></i> Pagado</span>
-                </div>
-                <div id="screenshot-grid-target" class="screenshot-grid"></div>
-            </div>
-
-            <button onclick="closeModal('modal-screenshot')" class="btn-action" style="background:#333; margin-top:20px;">Cerrar Vista</button>
-            <p style="color:white; font-size:0.8rem; margin-top:10px;">Toma una captura de pantalla de esta zona 👆</p>
-        </div>
-    </div>
-
-    <div id="modal-cms-edit" class="modal-overlay" style="display:none;">
-        <div class="modal-content" style="max-width:600px; text-align:left;">
-            <div class="close-btn" onclick="closeModal('modal-cms-edit')">&times;</div>
-            <h3 style="color:var(--primary-dark); text-align:center; margin-bottom:15px;">✏️ Editar Contenido</h3>
-            <input type="hidden" id="cms-target-id">
-            <textarea id="cms-input-content" class="cms-editor-textarea" rows="5" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></textarea>
-            <div style="display:flex; gap:10px; margin-top:10px;">
-                <button onclick="closeModal('modal-cms-edit')" class="btn-action" style="background:#555;">Cancelar</button>
-                <button onclick="saveCmsContent()" class="btn-action" style="width:100%;">💾 GUARDAR</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ==========================================
         // 1. CONFIGURACIÓN DE FIREBASE
@@ -1132,12 +1249,12 @@
         const auth = firebase.auth();
         
         // ==========================================
-        // 2. VARIABLES GLOBALES
+        // 2. VARIABLES GLOBALES (ESTADO DE LA APP)
         // ==========================================
         let siteConfig = {
             waOrders: "5215500000000", 
-            waChannel: "#",
-            fbLink: "#",
+            waChannel: "https://whatsapp.com/channel/...", // Nuevo: Canal WA
+            fbLink: "https://facebook.com/...", // Nuevo: Facebook
             theme: "default",
             terms: [], 
             faqs: [],
@@ -1152,6 +1269,7 @@
         let countdownInterval = null;
         let carouselData = { evidence: [] };
         let carouselIdx = { evidence: 0 };
+        let isEventClosed = false; 
 
         // ==========================================
         // 3. INICIALIZACIÓN Y SEGURIDAD ADMIN
@@ -1170,13 +1288,19 @@
                 }
             });
 
-            // Modos de Vista Especiales
+            // MODO: BOLETO DIGITAL (Link que se envía al cliente)
             if(urlParams.get('viewTicket') === 'true') {
                 activateOverlayMode('overlay-ticket');
-                loadDigitalTicketMode(urlParams.get('id'), urlParams.get('num'));
+                // La función loadDigitalTicketMode se define en la Parte 5
+                // pero se ejecutará aquí cuando cargue todo.
+                setTimeout(() => loadDigitalTicketMode(urlParams.get('id'), urlParams.get('num')), 500);
+            
+            // MODO: LINK DE PAGOS DIRECTO
             } else if(urlParams.get('viewPayment') === 'true') {
                 activateOverlayMode('overlay-payment');
                 db.ref('banks').on('value', (snap) => updateBankUI(snap.val() || {}));
+            
+            // MODO NORMAL (App Completa)
             } else {
                 initAppNormal();
                 const directEventId = urlParams.get('evt');
@@ -1185,6 +1309,7 @@
         };
 
         function activateOverlayMode(id) {
+            // Ocultar navegación y footer para vista exclusiva
             document.querySelector('nav').style.display = 'none';
             document.querySelector('footer').style.display = 'none';
             document.getElementById('main-content-area').style.display = 'none';
@@ -1194,25 +1319,27 @@
 
         function initAppNormal() {
             loadSiteConfig();
+            // Escuchas en tiempo real
             db.ref('banks').on('value', (snap) => updateBankUI(snap.val() || {}));
             db.ref('images/evidence').on('value', (snap) => updateEvidenceUI(snap.val() || {}));
             db.ref('events').on('value', (snap) => renderEventsList(snap.val() || {}));
         }
 
         // ==========================================
-        // 4. CMS: TEXTOS Y CONFIGURACIÓN
+        // 4. CMS: CONFIGURACIÓN GENERAL Y TEXTOS
         // ==========================================
         function loadSiteConfig() {
             db.ref('site_config').on('value', (snap) => {
                 const data = snap.val() || {};
                 
-                // General & Redes
+                // General & Redes (Carga los datos para los mensajes)
                 if(data.general) {
-                    siteConfig.waOrders = data.general.waOrders;
-                    siteConfig.waChannel = data.general.waChannel;
-                    siteConfig.fbLink = data.general.fbLink;
+                    siteConfig.waOrders = data.general.waOrders || "";
+                    siteConfig.waChannel = data.general.waChannel || "";
+                    siteConfig.fbLink = data.general.fbLink || "";
+                    
                     applyTheme(data.general.theme || "default");
-                    updateSocialLinksUI();
+                    updateSocialLinksUI(); // Actualiza iconos de nav y footer
                 }
                 
                 // Textos Editables
@@ -1221,7 +1348,7 @@
                     updateTextsUI();
                 }
                 
-                // Listas
+                // Listas (Términos y FAQ)
                 siteConfig.terms = data.terms || [];
                 siteConfig.faqs = data.faqs || [];
                 renderFaqPublic();
@@ -1229,8 +1356,10 @@
         }
 
         function updateSocialLinksUI() {
+            // Actualiza los iconos de la barra de navegación y footer
             const fbs = [document.getElementById('social-fb-nav'), document.getElementById('footer-fb-link')];
             const was = [document.getElementById('social-wa-nav'), document.getElementById('footer-wa-link')];
+            
             fbs.forEach(e => { if(e) e.href = siteConfig.fbLink || "#"; });
             was.forEach(e => { if(e) e.href = siteConfig.waChannel || "#"; });
         }
@@ -1242,6 +1371,7 @@
 
         function updateTextsUI() {
             const t = siteConfig.texts || {};
+            // Actualiza textos en la interfaz sin recargar
             if(document.getElementById('view-hero-title')) document.getElementById('view-hero-title').innerText = t.heroTitle || "¡PARTICIPA Y GANA!";
             if(document.getElementById('view-hero-desc')) document.getElementById('view-hero-desc').innerText = t.heroDesc || "Tu oportunidad...";
             if(document.getElementById('view-bio-main')) document.getElementById('view-bio-main').innerText = t.bioMain || "Hola...";
@@ -1250,7 +1380,9 @@
             if(document.getElementById('view-bio-why')) document.getElementById('view-bio-why').innerText = t.bioWhy || "...";
         }
 
-        // Funciones CMS (Guardar Textos)
+        // --- FUNCIONES DE GUARDADO (CMS) ---
+
+        // 1. Guardar Textos
         function openConfigTexts() { 
             closeModal('modal-settings-menu'); 
             const t = siteConfig.texts || {}; 
@@ -1273,10 +1405,105 @@
                 bioWhy: document.getElementById('txt-bio-why').value 
             }).then(()=>{ 
                 closeModal('modal-config-texts'); 
-                Swal.fire({toast:true, icon:'success', title:'Textos Actualizados'}); 
+                Swal.fire({toast:true, icon:'success', title:'Textos Actualizados', position: 'top-end', showConfirmButton: false, timer: 3000}); 
             }); 
         }
 
+        // 2. Guardar Contacto y Redes (CRUCIAL PARA MENSAJES)
+        function openConfigContact() { 
+            closeModal('modal-settings-menu'); 
+            document.getElementById('cfg-wa-orders').value = siteConfig.waOrders; 
+            document.getElementById('cfg-wa-channel').value = siteConfig.waChannel; 
+            document.getElementById('cfg-fb-link').value = siteConfig.fbLink; 
+            document.getElementById('modal-config-contact').style.display='flex'; 
+        }
+
+        function saveContactConfig() { 
+            db.ref('site_config/general').update({ 
+                waOrders: document.getElementById('cfg-wa-orders').value, 
+                waChannel: document.getElementById('cfg-wa-channel').value, 
+                fbLink: document.getElementById('cfg-fb-link').value 
+            }).then(()=>{ 
+                closeModal('modal-config-contact'); 
+                Swal.fire({toast:true, icon:'success', title:'Redes y Contacto Guardados', position: 'top-end', showConfirmButton: false, timer: 3000}); 
+            }); 
+        }
+
+        // 3. Guardar Tema
+        function openConfigTheme() { closeModal('modal-settings-menu'); document.getElementById('modal-config-theme').style.display='flex'; }
+        
+        function saveThemeConfig() { 
+            // El tema se aplica al hacer click en el color, aquí solo guardamos la selección actual si fuera necesario persistir
+            // En este diseño simplificado, usamos applyTheme directamente, pero guardaremos la preferencia en DB
+            const currentThemeClass = document.body.className.split(' ').find(c => c.startsWith('theme-')) || 'default';
+            db.ref('site_config/general/theme').set(currentThemeClass).then(() => {
+                closeModal('modal-config-theme');
+                Swal.fire({toast:true, icon:'success', title:'Tema Actualizado'});
+            });
+        }
+
+        // 4. FAQ y Términos (Logica Base)
+        function openFaqEditor() { closeModal('modal-settings-menu'); renderFaqEditor(); document.getElementById('modal-editor-faq').style.display='flex'; }
+        
+        function renderFaqEditor() { 
+            const c=document.getElementById('cms-faq-list-container'); c.innerHTML=''; 
+            (siteConfig.faqs||[]).forEach((f,i)=>{ 
+                const d=document.createElement('div'); d.className='cms-term-item'; 
+                d.innerHTML=`<div class="cms-term-delete" onclick="delFaq(${i})">&times;</div><input class="cms-input-sm fq" value="${f.q}"><textarea class="cms-input-sm fa">${f.a}</textarea>`; 
+                c.appendChild(d); 
+            }); 
+        }
+        function addFaqBlockUI() { if(!siteConfig.faqs) siteConfig.faqs=[]; siteConfig.faqs.push({q:'',a:''}); renderFaqEditor(); }
+        function delFaq(i) { siteConfig.faqs.splice(i,1); renderFaqEditor(); }
+        function saveFaqConfig() { 
+            const qs=document.querySelectorAll('.fq'); const as=document.querySelectorAll('.fa'); const arr=[]; 
+            qs.forEach((q,i)=>{ if(q.value) arr.push({q:q.value, a:as[i].value}); }); 
+            db.ref('site_config/faqs').set(arr).then(()=>{ 
+                closeModal('modal-editor-faq'); 
+                Swal.fire({toast:true, icon:'success', title:'FAQ Guardadas'}); 
+            }); 
+        }
+        function renderFaqPublic() { const c=document.getElementById('faq-list-public'); if(!c)return; c.innerHTML=(siteConfig.faqs||[]).map((f,i)=>`<details><summary>${i+1}. ${f.q}</summary><div class="faq-ans">${f.a}</div></details>`).join(''); }
+
+        function openTermsEditor() { closeModal('modal-settings-menu'); renderTermsEditor(); document.getElementById('modal-editor-terms').style.display = 'flex'; }
+        function renderTermsEditor() {
+            const c = document.getElementById('cms-terms-list-container'); c.innerHTML = '';
+            (siteConfig.terms || []).forEach((t, i) => {
+                const d = document.createElement('div'); d.className = 'cms-term-item';
+                d.innerHTML = `<div class="cms-term-delete" onclick="delTerm(${i})">&times;</div><input class="cms-input-sm tt" value="${t.title}" placeholder="Título"><textarea class="cms-input-sm td">${t.desc}</textarea>`;
+                c.appendChild(d);
+            });
+        }
+        function addTermBlockUI() { if(!siteConfig.terms) siteConfig.terms=[]; siteConfig.terms.push({title:'',desc:''}); renderTermsEditor(); }
+        function delTerm(i) { siteConfig.terms.splice(i,1); renderTermsEditor(); }
+        function saveTermsConfig() {
+            const titles = document.querySelectorAll('.tt'); const descs = document.querySelectorAll('.td'); const arr=[];
+            titles.forEach((t,i) => { if(t.value) arr.push({title:t.value, desc:descs[i].value}); });
+            db.ref('site_config/terms').set(arr).then(()=>{ 
+                closeModal('modal-editor-terms'); 
+                Swal.fire({toast:true, icon:'success', title:'Términos Guardados'}); 
+            });
+        }
+        function openTermsPublic() {
+            const c = document.getElementById('terms-public-content');
+            if(!siteConfig.terms || siteConfig.terms.length === 0) c.innerHTML = '<p style="text-align:center;">Sin términos registrados.</p>';
+            else c.innerHTML = siteConfig.terms.map(t => `<div style="margin-bottom:15px;"><strong>${t.title}</strong><p>${t.desc}</p></div>`).join('');
+            document.getElementById('modal-terms').style.display = 'flex';
+        }
+
+        // --- AUTH ADMIN ---
+        function openLogin() { if(!document.body.classList.contains('is-admin')) document.getElementById('loginModal').style.display='flex'; }
+        
+        function attemptLogin() { 
+            auth.signInWithEmailAndPassword(document.getElementById('adminUser').value, document.getElementById('adminPass').value)
+            .then(()=>{ 
+                closeModal('loginModal'); 
+                Swal.fire({toast:true, icon:'success', title:'Bienvenido Admin'});
+            })
+            .catch(()=>Swal.fire("Error","Credenciales incorrectas","error")); 
+        }
+        
+        function logoutAdmin() { auth.signOut().then(()=>location.reload()); }
         // ==========================================
         // 5. LÓGICA DE EVENTOS (CORE)
         // ==========================================
@@ -1313,8 +1540,10 @@
         function selectEvent(id) {
             currentEventId = id;
             selected = [];
+            isEventClosed = false; // Reset estado
             updateBar();
             
+            // Escucha en tiempo real (FIEBRE DE COMPRA - URGENCIA)
             db.ref(`events/${id}`).on('value', (snap) => {
                 const d = snap.val();
                 if(!d) return;
@@ -1330,9 +1559,10 @@
                 else { img.style.display='none'; }
                 
                 startCountdown(currentEventConfig.dateEnd);
-                updateFinancialPanel();
-                createGrid();
+                updateFinancialPanel(); // Maneja aviso "AGOTADO"
+                createGrid(); // Maneja bloqueo visual si está cerrado
                 
+                // Si es admin, actualiza las notificaciones agrupadas (se verá en Parte 5)
                 if(document.body.classList.contains('is-admin')) renderGroupedNotifications();
             });
             showPage('boletos');
@@ -1341,6 +1571,13 @@
         function createGrid() {
             const grid = document.getElementById('grid-rifa');
             grid.innerHTML = '';
+            
+            // BLOQUEO POR TIEMPO (Visually Disabled)
+            if (isEventClosed) {
+                grid.classList.add('locked'); 
+            } else {
+                grid.classList.remove('locked');
+            }
             
             const totalBoletos = parseInt(currentEventConfig.qty || 100);
             let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
@@ -1376,9 +1613,18 @@
         }
 
         function clickTicket(i) {
-            if(document.body.classList.contains('is-admin') && currentEventTickets[i]) {
-                openAdminTicket(i); return;
+            // BLOQUEO: SI ESTÁ CERRADO EL SORTEO
+            if (isEventClosed && !document.body.classList.contains('is-admin')) {
+                return Swal.fire("Sorteo Cerrado", "Ya no se pueden seleccionar boletos. Esperando resultados.", "info");
             }
+
+            // MODO ADMIN: ABRIR DETALLE (Se define en Parte 5)
+            if(document.body.classList.contains('is-admin') && currentEventTickets[i]) {
+                openAdminTicket(i); 
+                return;
+            }
+            
+            // Si está ocupado y no es admin, no hacer nada
             if(currentEventTickets[i]) return;
             
             if(selected.includes(i)) {
@@ -1418,9 +1664,581 @@
         }
 
         // ==========================================
-        // 6. MÁQUINA DE LA SUERTE (SLOT ANIMATION)
+        // 6. PROCESO DE APARTADO (CLIENTE -> ADMIN)
         // ==========================================
+        
+        function openFormModal() {
+            if(isEventClosed) return Swal.fire("Cerrado", "El sorteo ha finalizado.", "error");
+
+            document.getElementById('form-total').innerText = `$${selected.length * currentEventConfig.price}`;
+            const totalBoletos = parseInt(currentEventConfig.qty || 100);
+            let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+            let rangeSize = Math.floor(baseNums / totalBoletos);
+            let displayTxt = "";
+            
+            if(rangeSize > 1) displayTxt = selected.map(n => `#${n+1}`).join(', ');
+            else {
+                let pad = (baseNums > 100) ? (baseNums > 1000 ? 4 : 3) : 2;
+                displayTxt = selected.map(n => n.toString().padStart(pad, '0')).join(', ');
+            }
+            document.getElementById('form-nums').innerText = displayTxt;
+            document.getElementById('modal-form').style.display='flex';
+        }
+
+        function sendWhatsApp() {
+            const name = document.getElementById('user-name').value;
+            const phone = document.getElementById('user-phone').value;
+            const state = document.getElementById('user-state').value; // NUEVO CAMPO
+            
+            if(!name || !phone || !state) return Swal.fire("Error","Por favor llena todos los campos (Nombre, Estado, Teléfono)","warning");
+            
+            const updates = {};
+            const now = new Date().toISOString();
+            
+            // Validar selección
+            selected.forEach(i => {
+                updates[`events/${currentEventId}/tickets/${i}`] = { 
+                    status:'apartado', 
+                    owner:name, 
+                    phone:phone, 
+                    state:state, // GUARDAMOS EL ESTADO
+                    date:now 
+                };
+            });
+            
+            db.ref().update(updates).then(() => {
+                const totalBoletos = parseInt(currentEventConfig.qty || 100);
+                let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+                let rangeSize = Math.floor(baseNums / totalBoletos);
+                let numMsg = "";
+                
+                // Formateo de números para el mensaje
+                if(rangeSize > 1) {
+                    // Si son rangos, mostramos "Boleto #X" o el rango (ej. 00-05)
+                    // Para el mensaje limpio, usaremos los índices humanos #
+                    numMsg = selected.map(n => `${(n+1).toString().padStart(2,'0')}`).join(', ');
+                } else {
+                    let pad = (baseNums > 100) ? 3 : 2;
+                    numMsg = selected.map(n => n.toString().padStart(pad,'0')).join(', ');
+                }
+                
+                const total = selected.length * currentEventConfig.price;
+                
+                // --- MENSAJE EXACTO SOLICITADO ---
+                const txt = `👋 Hola, buen día. Mi nombre es ${name} y me comunico desde el estado de ${state}. 🎉 Deseo participar en el evento “${currentEventConfig.title}”. 🎫 Números seleccionados: 👉 ${numMsg} 💰 Total a pagar: $${total} 📱 Número de contacto: ${phone}. Quedo atento a que me compartan los datos de pago para confirmar mi apartado a la brevedad. ¡Muchas gracias y excelente día! ✨`;
+                
+                window.open(`https://wa.me/${siteConfig.waOrders}?text=${encodeURIComponent(txt)}`, '_blank');
+                
+                selected=[]; updateBar(); closeModal('modal-form'); showPage('pagos');
+            });
+        }
+
+        // ==========================================
+        // 7. CONTADOR Y PANEL FINANCIERO
+        // ==========================================
+        function startCountdown(date) {
+            if(countdownInterval) clearInterval(countdownInterval);
+            const disp = document.getElementById('countdown-display');
+            const msg = document.getElementById('closed-msg');
+            
+            if(!date) { 
+                disp.style.display='none'; 
+                msg.style.display='none'; 
+                return; 
+            }
+            
+            const end = new Date(date).getTime();
+            if(isNaN(end)) { disp.style.display='none'; return; }
+            
+            disp.style.display='flex';
+            msg.style.display='none';
+            isEventClosed = false;
+
+            countdownInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const d = end - now;
+                
+                // SI EL TIEMPO TERMINA
+                if(d < 0) { 
+                    clearInterval(countdownInterval); 
+                    disp.style.display='none';
+                    msg.style.display='block'; // Mostrar mensaje de CERRADO
+                    isEventClosed = true; 
+                    createGrid(); // Re-renderizar para bloquear
+                    return; 
+                }
+                
+                document.getElementById("cd-d").innerText = Math.floor(d/(1000*60*60*24)).toString().padStart(2,'0');
+                document.getElementById("cd-h").innerText = Math.floor((d%(1000*60*60*24))/(1000*60*60)).toString().padStart(2,'0');
+                document.getElementById("cd-m").innerText = Math.floor((d%(1000*60*60))/(1000*60)).toString().padStart(2,'0');
+                document.getElementById("cd-s").innerText = Math.floor((d%(1000*60))/1000).toString().padStart(2,'0');
+            }, 1000);
+        }
+
+        function updateFinancialPanel() {
+            let sold=0, pending=0;
+            if(currentEventTickets) {
+                Object.values(currentEventTickets).forEach(t => {
+                    if(t.status==='pagado') sold++;
+                    else if(t.status==='apartado') pending++;
+                });
+            }
+            const price = parseFloat(currentEventConfig.price || 0);
+            document.getElementById('stat-raised').innerText = `$${(sold*price).toLocaleString()}`;
+            document.getElementById('stat-pending').innerText = `$${(pending*price).toLocaleString()}`;
+            
+            const total = parseInt(currentEventConfig.qty || 100);
+            const pct = Math.floor((sold/total)*100);
+            
+            const pBar = document.getElementById('public-progress-bar');
+            const pTxt = document.getElementById('progress-percent-txt');
+            
+            pBar.style.width = pct+'%';
+            pTxt.innerText = pct+'% Vendido';
+            
+            if(pct >= 100) {
+                pBar.classList.add('sold-out');
+                pTxt.innerText = "¡BOLETOS AGOTADOS!";
+                pTxt.style.color = "#dc3545";
+                pTxt.style.fontWeight = "900";
+            } else {
+                pBar.classList.remove('sold-out');
+                pTxt.style.color = "#666";
+            }
+        }
+        // ==========================================
+        // 8. VERIFICADOR DE BOLETOS (BÚSQUEDA)
+        // ==========================================
+        function verifyMyTickets() {
+            const phoneInput = document.getElementById('verifier-phone').value.trim();
+            const resultDiv = document.getElementById('verifier-result');
+            resultDiv.innerHTML = '<p style="text-align:center;">Buscando...</p>';
+            
+            if(!phoneInput) {
+                resultDiv.innerHTML = '<p style="color:red; text-align:center;">Ingresa un número.</p>';
+                return;
+            }
+            
+            // Busca en todos los eventos (snapshot única para no cargar memoria)
+            db.ref('events').once('value').then(snap => {
+                const allEvents = snap.val() || {};
+                let found = [];
+
+                Object.entries(allEvents).forEach(([evtId, evtData]) => {
+                    const tickets = evtData.tickets || {};
+                    const config = evtData.config || {};
+                    const totalBoletos = parseInt(config.qty || 100);
+                    let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+                    let rangeSize = Math.floor(baseNums / totalBoletos);
+
+                    Object.entries(tickets).forEach(([ticketIdx, tData]) => {
+                        if(tData.phone && tData.phone.includes(phoneInput)) {
+                            // Formatear número
+                            let displayNum = "";
+                            if(rangeSize > 1) {
+                                displayNum = `#${parseInt(ticketIdx)+1}`;
+                            } else {
+                                let pad = (baseNums > 100) ? 3 : 2;
+                                displayNum = ticketIdx.toString().padStart(pad,'0');
+                            }
+                            
+                            found.push({
+                                eventName: config.title,
+                                num: displayNum,
+                                status: tData.status
+                            });
+                        }
+                    });
+                });
+
+                if(found.length === 0) {
+                    resultDiv.innerHTML = '<p style="color:#666; text-align:center;">No encontramos boletos con ese número.</p>';
+                } else {
+                    let html = '<ul style="list-style:none; padding:0;">';
+                    found.forEach(item => {
+                        let color = item.status === 'pagado' ? '#28a745' : '#ffc107';
+                        let statusTxt = item.status === 'pagado' ? 'PAGADO' : 'APARTADO';
+                        html += `<li style="background:#f9f9f9; border-bottom:1px solid #eee; padding:8px; display:flex; justify-content:space-between;">
+                                    <span><b>${item.num}</b> - ${item.eventName}</span>
+                                    <span style="color:${color}; font-weight:bold;">${statusTxt}</span>
+                                 </li>`;
+                    });
+                    html += '</ul>';
+                    resultDiv.innerHTML = html;
+                }
+            });
+        }
+
+        function highlightTicket(val) {
+            if(!val) return;
+            // Busca coincidencia visual (ID t-X)
+            const el = document.getElementById('t-'+parseInt(val));
+            const el2 = document.getElementById('t-'+(parseInt(val)-1)); // Ajuste por si usuario piensa en 1-based
+
+            const target = el || el2;
+            
+            if(target) {
+                target.scrollIntoView({behavior:'smooth', block:'center'});
+                target.style.border='3px solid var(--accent)'; 
+                target.style.transform='scale(1.2)';
+                target.style.zIndex='100';
+                setTimeout(()=>{ 
+                    target.style.border=''; 
+                    target.style.transform='scale(1)'; 
+                    target.style.zIndex='1';
+                }, 2000);
+            }
+        }
+
+        // ==========================================
+        // 9. GESTIÓN DE BOLETOS ADMIN Y MENSAJES
+        // ==========================================
+        
+        // Abre el modal de detalle del boleto
+        function openAdminTicket(i) {
+             window.targetTicketIdx = i;
+             const t = currentEventTickets[i];
+             
+             // Llenar datos básicos
+             document.getElementById('adm-ticket-num').innerText = (parseInt(i)+1);
+             document.getElementById('adm-client').innerText = t.owner || "Sin Nombre";
+             document.getElementById('adm-phone').innerText = t.phone || "Sin Teléfono";
+             document.getElementById('adm-state').innerText = t.state || "No especificado"; 
+             
+             const statusEl = document.getElementById('adm-status');
+             statusEl.innerText = t.status.toUpperCase();
+             statusEl.style.color = (t.status === 'pagado') ? '#28a745' : '#ffc107';
+
+             // Configurar botón de contacto simple (chat vacío)
+             document.getElementById('adm-wa-link').href = `https://wa.me/${t.phone}`;
+
+             // Buscar TODOS los boletos de este usuario (para el mensaje agrupado)
+             let userTickets = [];
+             Object.entries(currentEventTickets).forEach(([idx, ticketData]) => {
+                 if (ticketData.phone === t.phone) {
+                     const totalBoletos = parseInt(currentEventConfig.qty || 100);
+                     let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+                     let rangeSize = Math.floor(baseNums / totalBoletos);
+                     
+                     let label = "";
+                     if (rangeSize > 1) label = `${parseInt(idx)+1}`;
+                     else {
+                        let pad = (baseNums > 100) ? 3 : 2;
+                        label = idx.toString().padStart(pad,'0');
+                     }
+                     userTickets.push(label);
+                 }
+             });
+
+             // Guardamos los tickets del usuario en memoria global para usarlos al enviar el mensaje
+             window.currentUserTicketsList = userTickets.join(", ");
+             document.getElementById('adm-all-tickets').innerText = window.currentUserTicketsList;
+             
+             document.getElementById('modal-admin-ticket').style.display='flex';
+        }
+
+        // Cambia estado y ENVÍA MENSAJE DE CONFIRMACIÓN
+        function changeStatus(s) {
+            const i = window.targetTicketIdx;
+            if(!currentEventId || i === undefined) return;
+            const t = currentEventTickets[i];
+
+            if(s==='disponible') {
+                // Borrar boleto (Liberar)
+                db.ref(`events/${currentEventId}/tickets/${i}`).remove().then(() => {
+                    closeModal('modal-admin-ticket');
+                    Swal.fire({toast:true, icon:'info', title:'Boleto Liberado'});
+                });
+            } else {
+                // MARCAR COMO PAGADO
+                db.ref(`events/${currentEventId}/tickets/${i}`).update({status:s}).then(() => {
+                    closeModal('modal-admin-ticket');
+                    Swal.fire({toast:true, icon:'success', title:'Confirmado Exitosamente'});
+
+                    // GENERAR MENSAJE DE CONFIRMACIÓN AUTOMÁTICO
+                    const linkBase = window.location.href.split('?')[0];
+                    // Usamos el ID del boleto actual para el link, aunque el usuario tenga varios, el link muestra el evento
+                    // El formato de link incluye viewTicket=true, id (evento) y num (boleto para referencia)
+                    // NOTA: Para formatear el número en el link
+                    const totalBoletos = parseInt(currentEventConfig.qty || 100);
+                    let pad = (totalBoletos > 100) ? 3 : 2;
+                    let numFormatted = i.toString().padStart(pad,'0');
+
+                    const digitalLink = `${linkBase}?viewTicket=true&id=${currentEventId}&num=${numFormatted}`;
+                    
+                    const clientName = t.owner;
+                    const eventName = currentEventConfig.title;
+                    const assignedNumbers = window.currentUserTicketsList; // Lista completa: "03, 35, 62..."
+                    
+                    const fb = siteConfig.fbLink || "Facebook No Configurado";
+                    const waChannel = siteConfig.waChannel || "Canal No Configurado";
+
+                    // --- PLANTILLA EXACTA SOLICITADA ---
+                    const msg = `🌟 ¡FELICIDADES, ${clientName}! 🌟 ¡Excelente noticia! 🎉 Tu participación en el Gran Sorteo 🔥 ${eventName} 🔥 ha sido confirmada con éxito. ✅ 🎫 Números Oficiales Asignados: 👉 ${assignedNumbers} 🍀 Te enviamos la mejor de las suertes y toda la buena vibra. Gracias por confiar y ser parte de esta experiencia donde tu suerte también suma. 🙌✨ 👇 Accede aquí a tu Boleto Digital Oficial (Guárdalo y consérvalo para cualquier consulta): 🔗 ${digitalLink} 📡 Mantente al tanto de novedades, resultados y próximos sorteos: 📘 Facebook: ${fb} 💬 WhatsApp: ${waChannel} ✨ ¡Mucho éxito y gracias por participar! ✨`;
+
+                    // Redirigir a WhatsApp
+                    window.open(`https://wa.me/${t.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+                });
+            }
+        }
+
+        // ==========================================
+        // 10. MODOS ESPECIALES Y UTILIDADES FINALES
+        // ==========================================
+
+        // Carga la vista del BOLETO DIGITAL (cuando se abre el link)
+        function loadDigitalTicketMode(evtId, numRaw) {
+            // Obtener datos del evento
+            db.ref(`events/${evtId}`).once('value').then(snap => {
+                const data = snap.val();
+                if(!data) {
+                    document.body.innerHTML = "<h2 style='color:white; text-align:center; margin-top:50px;'>Evento no encontrado o finalizado.</h2>";
+                    return;
+                }
+                
+                const config = data.config;
+                // Como el número "numRaw" puede ser un índice (0) o formateado (00), 
+                // intentamos buscar el ticket exacto. En Firebase los keys son indices (0, 1, 2).
+                // Convertimos numRaw a entero para buscar en el array/objeto tickets.
+                const ticketIdx = parseInt(numRaw);
+                const ticketData = data.tickets ? data.tickets[ticketIdx] : null;
+
+                if(!ticketData) {
+                    document.body.innerHTML = "<h2 style='color:white; text-align:center; margin-top:50px;'>Boleto no encontrado.</h2>";
+                    return;
+                }
+
+                // Llenar datos en el Overlay Ticket
+                document.getElementById('vt-link-client').innerText = ticketData.owner;
+                document.getElementById('vt-link-state').innerText = ticketData.state || ""; // Nuevo Campo
+                document.getElementById('vt-link-event-name').innerText = config.title;
+                
+                // Mostrar imagen del evento
+                const imgEl = document.getElementById('vt-link-img');
+                if(config.img) {
+                    imgEl.src = config.img;
+                    imgEl.style.display = 'block';
+                }
+
+                // Formatear números (Si el usuario tiene varios, podriamos buscar todos, 
+                // pero el link es específico. Mostraremos el solicitado y si hay más, buscamos por teléfono)
+                // LÓGICA MEJORADA: Buscar todos los de ese teléfono en este evento
+                let myNumbers = [];
+                const totalBoletos = parseInt(config.qty || 100);
+                let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+                let rangeSize = Math.floor(baseNums / totalBoletos);
+                let pad = (baseNums > 100) ? 3 : 2;
+
+                Object.entries(data.tickets).forEach(([idx, t]) => {
+                    if(t.phone === ticketData.phone) {
+                        if(rangeSize > 1) myNumbers.push(`#${parseInt(idx)+1}`);
+                        else myNumbers.push(idx.toString().padStart(pad,'0'));
+                    }
+                });
+                
+                document.getElementById('vt-link-num').innerText = myNumbers.join(", ");
+            });
+        }
+
+        // Botón "Enviar Comprobante" en overlay de pagos
+        function sendPaymentProof() {
+            // Mensaje predefinido solicitado
+            const msg = "He concluido con el pago del boleto aparatado a mi nombre te anexo el comprobante de pago espero la confirmación de que ya me encuentro participando oficialmente.";
+            window.open(`https://wa.me/${siteConfig.waOrders}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // Compartir link del evento (Admin)
+        function shareCurrentEventLink() {
+            if(!currentEventId) return;
+            const link = window.location.href.split('?')[0]+"?evt="+currentEventId;
+            navigator.clipboard.writeText(link)
+            .then(()=>Swal.fire({toast:true, icon:'success', title:'Link Copiado'}));
+        }
+
+        // Compartir link de pagos
+        function sharePaymentLink() {
+             const link = window.location.href.split('?')[0]+"?viewPayment=true";
+             navigator.clipboard.writeText(link)
+            .then(()=>Swal.fire({toast:true, icon:'success', title:'Enlace Copiado'}));
+        }
+        
+        // Compartir Ticket Virtual (Desde modal interno)
+        function shareTicketWhatsApp() {
+            const txt = `Hola! Aquí está tu boleto digital:\nEvento: ${document.getElementById('vt-event-name').innerText}\nNúmeros: ${document.getElementById('vt-num').innerText}\nGracias por participar!`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank');
+        }
+
+        // Utilidades UI
+        function showPage(id) {
+            document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
+            document.getElementById('page-'+id).style.display = 'block';
+            window.scrollTo({top:0, behavior:'smooth'});
+        }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function openSettingsMenu() { document.getElementById('modal-settings-menu').style.display = 'flex'; }
+        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>Swal.fire({toast:true, icon:'success', title:'Copiado'})); }
+        
+        function openScreenshotModal() {
+            const t = document.getElementById('screenshot-grid-target'); t.innerHTML='';
+            const total = parseInt(currentEventConfig.qty || 100);
+            for(let i=0; i<total; i++) {
+                const d = document.createElement('div'); d.className='screenshot-cell';
+                const tick = currentEventTickets[i];
+                if(tick) {
+                    if(tick.status==='pagado') d.classList.add('ss-paid');
+                    else { d.classList.add('ss-reserved'); d.innerText=(i+1); }
+                } else {
+                    d.classList.add('ss-free'); d.innerText=(i+1);
+                }
+                t.appendChild(d);
+            }
+            document.getElementById('ss-event-title').innerText = currentEventConfig.title;
+            document.getElementById('modal-screenshot').style.display='flex';
+        }
+
+        // Funciones auxiliares para evidencia (Carrusel)
+        function addImage(type) {
+             const url = document.getElementById('imgEvidenceInput').value;
+             if(url) db.ref('images/evidence').push({url}).then(() => Swal.fire({toast:true, icon:'success', title:'Imagen subida'}));
+        }
+        function updateEvidenceUI(images) {
+            const w = document.getElementById('evidenceCarouselImgWrapper');
+            const list = document.getElementById('evidenceImgList');
+            if(!w) return;
+            w.innerHTML = ''; list.innerHTML = '';
+            carouselData.evidence = [];
+            Object.entries(images).forEach(([key, val]) => {
+                carouselData.evidence.push(val.url);
+                w.innerHTML += `<img src="${val.url}">`;
+                list.innerHTML += `<div class="admin-img-item"><span>Img...${key.substr(-4)}</span><span onclick="db.ref('images/evidence/${key}').remove()" style="color:red;cursor:pointer;">&times;</span></div>`;
+            });
+            if(carouselData.evidence.length > 0) {
+                w.children[0].style.display = 'block';
+            } else {
+                w.innerHTML = '<p style="text-align:center; padding:50px;">Sin evidencia aún.</p>';
+            }
+        }
+        function moveCarousel(type, dir) {
+            const w = document.getElementById(type+'CarouselImgWrapper');
+            const imgs = w.querySelectorAll('img');
+            if(imgs.length === 0) return;
+            imgs[carouselIdx[type]].style.display = 'none';
+            carouselIdx[type] += dir;
+            if(carouselIdx[type] >= imgs.length) carouselIdx[type] = 0;
+            if(carouselIdx[type] < 0) carouselIdx[type] = imgs.length - 1;
+            imgs[carouselIdx[type]].style.display = 'block';
+        }
+
+        // Gestión Eventos (CRUD)
+        function openEventModal() {
+            document.getElementById('edit-event-id').value='';
+            document.getElementById('evt-title').value='';
+            document.getElementById('evt-price').value='';
+            document.getElementById('evt-qty').value='100';
+            document.getElementById('evt-img').value='';
+            document.getElementById('evt-desc-short').value='';
+            document.getElementById('evt-desc-long').value='';
+            document.getElementById('evt-date-end').value='';
+            document.getElementById('btn-delete-event').style.display='none';
+            document.getElementById('modal-event-config').style.display='flex';
+        }
+        function openEditEvent(id) {
+            db.ref(`events/${id}/config`).once('value').then(s=>{
+                const c = s.val();
+                document.getElementById('edit-event-id').value=id;
+                document.getElementById('evt-title').value=c.title;
+                document.getElementById('evt-price').value=c.price;
+                document.getElementById('evt-qty').value=c.qty || '100';
+                document.getElementById('evt-img').value=c.img;
+                document.getElementById('evt-desc-short').value=c.descShort;
+                document.getElementById('evt-desc-long').value=c.descLong;
+                document.getElementById('evt-date-end').value=c.dateEnd||'';
+                document.getElementById('btn-delete-event').style.display='inline-block';
+                document.getElementById('modal-event-config').style.display='flex';
+            });
+        }
+        function saveEventConfig() {
+            const id = document.getElementById('edit-event-id').value;
+            const config = {
+                title: document.getElementById('evt-title').value,
+                price: document.getElementById('evt-price').value,
+                qty: document.getElementById('evt-qty').value,
+                img: document.getElementById('evt-img').value,
+                descShort: document.getElementById('evt-desc-short').value,
+                descLong: document.getElementById('evt-desc-long').value,
+                dateEnd: document.getElementById('evt-date-end').value
+            };
+            if(!config.title) return Swal.fire("Error","Falta título","error");
+            if(id) db.ref(`events/${id}/config`).update(config);
+            else db.ref('events').push({config});
+            closeModal('modal-event-config');
+            Swal.fire({toast:true, icon:'success', title:'Evento Guardado'});
+        }
+        function deleteCurrentEvent() {
+            const id = document.getElementById('edit-event-id').value;
+            Swal.fire({title:'Eliminar?', showCancelButton:true}).then(r=>{
+                if(r.isConfirmed){ db.ref(`events/${id}`).remove(); closeModal('modal-event-config'); }
+            });
+        }
+        
+                // ==========================================
+        // 11. BLOQUE DE CORRECCIÓN: FUNCIONES FALTANTES
+        // (Bancos, Máquina de la Suerte y Notificaciones)
+        // ==========================================
+
+        // --- A. LÓGICA DE BANCOS ---
+        function updateBankUI(banks) {
+             const list = ['bbva','azteca','mp','oxxo','banorte','banamex'];
+             list.forEach(k => {
+                 const b = banks[k] || {};
+                 const active = b.active;
+                 
+                 // Vista Usuario
+                 const cardMain = document.getElementById(`card-${k}-main`);
+                 if(cardMain) cardMain.classList.toggle('visible', !!active);
+
+                 if(active) {
+                     const nameEl = document.getElementById(`view-name-${k}-main`);
+                     const numEl = document.getElementById(`view-num-${k}-main`);
+                     if(nameEl) nameEl.innerText = b.name || "NO DEFINIDO";
+                     if(numEl) numEl.innerText = b.num || "0000";
+                 }
+
+                 // Vista Admin (Inputs)
+                 if(document.body.classList.contains('is-admin')) {
+                     let K = k.charAt(0).toUpperCase() + k.slice(1);
+                     if(k=='bbva') K='BBVA'; if(k=='mp') K='MP'; // Ajuste mayúsculas especiales
+                     
+                     const chk = document.getElementById('check'+K);
+                     if(chk) chk.checked = active;
+                     
+                     const ni = document.getElementById('name'+K);
+                     if(ni) ni.value = b.name||'';
+                     
+                     const nui = document.getElementById('num'+K);
+                     if(nui) nui.value = b.num||'';
+                 }
+             });
+        }
+
+        function saveBank(k) {
+            let K = k.charAt(0).toUpperCase() + k.slice(1);
+            if(k=='bbva') K='BBVA'; if(k=='mp') K='MP';
+            
+            const data = {
+                name: document.getElementById('name'+K).value,
+                num: document.getElementById('num'+K).value,
+                active: document.getElementById('check'+K).checked
+            };
+            
+            db.ref(`banks/${k}`).update(data).then(() => {
+                Swal.fire({toast:true, icon:'success', title: K + ' Actualizado'});
+            });
+        }
+
+        // --- B. LÓGICA MÁQUINA DE LA SUERTE ---
         function openLuckyModal() { 
+            if(isEventClosed) return Swal.fire("Cerrado", "El sorteo ha finalizado.", "warning");
             document.getElementById('modal-lucky').style.display='flex'; 
             document.getElementById('lucky-step-1').style.display='block'; 
             document.getElementById('lucky-step-2').style.display='none'; 
@@ -1508,185 +2326,35 @@
              document.getElementById('lucky-step-1').style.display='block';
         }
 
-        // ==========================================
-        // 7. BANCOS Y PAGOS
-        // ==========================================
-        function updateBankUI(banks) {
-             const list = ['bbva','azteca','mp','oxxo','banorte','banamex'];
-             list.forEach(k => {
-                 const b = banks[k] || {};
-                 const active = b.active;
-                 
-                 const cardMain = document.getElementById(`card-${k}-main`);
-                 if(cardMain) cardMain.classList.toggle('visible', !!active);
-
-                 if(active) {
-                     const nameEl = document.getElementById(`view-name-${k}-main`);
-                     const numEl = document.getElementById(`view-num-${k}-main`);
-                     if(nameEl) nameEl.innerText = b.name || "NO DEFINIDO";
-                     if(numEl) numEl.innerText = b.num || "0000";
-                 }
-
-                 if(document.body.classList.contains('is-admin')) {
-                     let K = k.charAt(0).toUpperCase() + k.slice(1);
-                     if(k=='bbva') K='BBVA'; if(k=='mp') K='MP';
-                     const chk = document.getElementById('check'+K);
-                     if(chk) chk.checked = active;
-                     const ni = document.getElementById('name'+K);
-                     if(ni) ni.value = b.name||'';
-                     const nui = document.getElementById('num'+K);
-                     if(nui) nui.value = b.num||'';
-                 }
-             });
-        }
-
-        function saveBank(k) {
-            let K = k.charAt(0).toUpperCase() + k.slice(1);
-            if(k=='bbva') K='BBVA'; if(k=='mp') K='MP';
-            const data = {
-                name: document.getElementById('name'+K).value,
-                num: document.getElementById('num'+K).value,
-                active: document.getElementById('check'+K).checked
-            };
-            db.ref(`banks/${k}`).update(data);
-            Swal.fire({toast:true, icon:'success', title: K + ' Actualizado'});
-        }
-
-        // ==========================================
-        // 8. OTRAS UTILIDADES
-        // ==========================================
-        function showPage(id) {
-            document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
-            document.getElementById('page-'+id).style.display = 'block';
-            window.scrollTo({top:0, behavior:'smooth'});
-        }
-
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openSettingsMenu() { document.getElementById('modal-settings-menu').style.display = 'flex'; }
-        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>Swal.fire({toast:true, icon:'success', title:'Copiado'})); }
-        
-        function openLogin() { if(!document.body.classList.contains('is-admin')) document.getElementById('loginModal').style.display='flex'; }
-        function attemptLogin() { auth.signInWithEmailAndPassword(document.getElementById('adminUser').value, document.getElementById('adminPass').value).then(()=>{ closeModal('loginModal'); }).catch(()=>Swal.fire("Error","Datos incorrectos","error")); }
-        function logoutAdmin() { auth.signOut().then(()=>location.reload()); }
-        
-        // Formulario WhatsApp
-        function openFormModal() {
-            document.getElementById('form-total').innerText = `$${selected.length * currentEventConfig.price}`;
-            const totalBoletos = parseInt(currentEventConfig.qty || 100);
-            let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
-            let rangeSize = Math.floor(baseNums / totalBoletos);
-            let displayTxt = "";
-            
-            if(rangeSize > 1) displayTxt = selected.map(n => `#${n+1}`).join(', ');
-            else {
-                let pad = (baseNums > 100) ? (baseNums > 1000 ? 4 : 3) : 2;
-                displayTxt = selected.map(n => n.toString().padStart(pad, '0')).join(', ');
-            }
-            document.getElementById('form-nums').innerText = displayTxt;
-            document.getElementById('modal-form').style.display='flex';
-        }
-
-        function sendWhatsApp() {
-            const name = document.getElementById('user-name').value;
-            const phone = document.getElementById('user-phone').value;
-            const state = document.getElementById('user-state').value;
-            
-            if(!name || !phone) return Swal.fire("Error","Llena los campos","warning");
-            
-            const updates = {};
-            const now = new Date().toISOString();
-            selected.forEach(i => {
-                updates[`events/${currentEventId}/tickets/${i}`] = { status:'apartado', owner:name, phone:phone, state:state, date:now };
-            });
-            
-            db.ref().update(updates).then(() => {
-                const totalBoletos = parseInt(currentEventConfig.qty || 100);
-                let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
-                let rangeSize = Math.floor(baseNums / totalBoletos);
-                let numMsg = "";
-                
-                if(rangeSize > 1) {
-                    numMsg = selected.map(n => {
-                        let start = n*rangeSize; 
-                        let end = start+rangeSize-1;
-                        return `Boleto #${n+1} (Nums: ${start}-${end})`; 
-                    }).join(', ');
-                } else {
-                    let pad = (baseNums > 100) ? 3 : 2;
-                    numMsg = selected.map(n => n.toString().padStart(pad,'0')).join(', ');
-                }
-                
-                const total = selected.length * currentEventConfig.price;
-                const txt = `Hola, soy ${name}. Quiero participar en "${currentEventConfig.title}".\n\n🎟️ Seleccioné: ${numMsg}\n💰 Total: $${total}\n📱 Mi Tel: ${phone}\n\nEspero datos de cuenta.`;
-                
-                window.open(`https://wa.me/${siteConfig.waOrders}?text=${encodeURIComponent(txt)}`, '_blank');
-                
-                selected=[]; updateBar(); closeModal('modal-form'); showPage('pagos');
-            });
-        }
-        
-        function shareCurrentEventLink() {
-            if(!currentEventId) return;
-            navigator.clipboard.writeText(window.location.href.split('?')[0]+"?evt="+currentEventId)
-            .then(()=>Swal.fire({toast:true, icon:'success', title:'Link Copiado'}));
-        }
-
-        function startCountdown(date) {
-            if(countdownInterval) clearInterval(countdownInterval);
-            const disp = document.getElementById('countdown-display');
-            if(!date) { disp.style.display='none'; return; }
-            const end = new Date(date).getTime();
-            if(isNaN(end)) { disp.style.display='none'; return; }
-            disp.style.display='flex';
-            
-            countdownInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const d = end - now;
-                if(d < 0) { clearInterval(countdownInterval); disp.innerHTML="<h3>¡CERRADO!</h3>"; return; }
-                document.getElementById("cd-d").innerText = Math.floor(d/(1000*60*60*24)).toString().padStart(2,'0');
-                document.getElementById("cd-h").innerText = Math.floor((d%(1000*60*60*24))/(1000*60*60)).toString().padStart(2,'0');
-                document.getElementById("cd-m").innerText = Math.floor((d%(1000*60*60))/(1000*60)).toString().padStart(2,'0');
-                document.getElementById("cd-s").innerText = Math.floor((d%(1000*60))/1000).toString().padStart(2,'0');
-            }, 1000);
-        }
-
-        function updateFinancialPanel() {
-            let sold=0, pending=0;
-            if(currentEventTickets) {
-                Object.values(currentEventTickets).forEach(t => {
-                    if(t.status==='pagado') sold++;
-                    else if(t.status==='apartado') pending++;
-                });
-            }
-            const price = parseFloat(currentEventConfig.price || 0);
-            document.getElementById('stat-raised').innerText = `$${(sold*price).toLocaleString()}`;
-            document.getElementById('stat-pending').innerText = `$${(pending*price).toLocaleString()}`;
-            
-            const total = parseInt(currentEventConfig.qty || 100);
-            const pct = Math.floor((sold/total)*100);
-            document.getElementById('public-progress-bar').style.width = pct+'%';
-            document.getElementById('progress-percent-txt').innerText = pct+'% Vendido';
-        }
-
-        // Admin Notification Rendering
+        // --- C. NOTIFICACIONES DE ADMIN (Agrupadas) ---
         function renderGroupedNotifications() { 
-            const c=document.getElementById('admin-notifications'); c.innerHTML=''; 
+            const c=document.getElementById('admin-notifications'); 
+            if(!c) return;
+            c.innerHTML=''; 
+            
             const groups = {};
             if(currentEventTickets) {
                 Object.entries(currentEventTickets).forEach(([idx, ticket]) => {
+                    // Solo mostramos 'apartado' en notificaciones pendientes
                     if(ticket.status === 'apartado') {
+                        // Agrupar por teléfono para no repetir tarjetas
                         if(!groups[ticket.phone]) groups[ticket.phone] = { name: ticket.owner, idxs: [] };
                         groups[ticket.phone].idxs.push(idx);
                     }
                 });
             }
-            if(Object.keys(groups).length === 0) { c.innerHTML='<p style="text-align:center; color:#999;">Sin apartados.</p>'; return; }
+            
+            if(Object.keys(groups).length === 0) { 
+                c.innerHTML='<p style="text-align:center; color:#999;">Sin apartados pendientes.</p>'; 
+                return; 
+            }
             
             Object.entries(groups).forEach(([phone, dat]) => {
                 const totalBoletos = parseInt(currentEventConfig.qty || 100);
                 let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
                 let rangeSize = Math.floor(baseNums / totalBoletos);
                 let chips = "";
+                
                 if(rangeSize > 1) chips = dat.idxs.map(i => `<span class="ticket-chip">#${parseInt(i)+1}</span>`).join(' ');
                 else chips = dat.idxs.map(i => `<span class="ticket-chip">${i}</span>`).join(' ');
                 
@@ -1702,209 +2370,30 @@
                 c.innerHTML += html;
             });
         }
+
+        // Acciones rápidas desde Notificaciones
         function payG(phone) {
              const updates={};
-             let clientName = "";
-             let nums = [];
              Object.entries(currentEventTickets).forEach(([i, t]) => {
                  if(t.phone === phone && t.status === 'apartado') {
                      updates[`events/${currentEventId}/tickets/${i}/status`] = 'pagado';
-                     clientName = t.owner;
-                     nums.push(i);
                  }
              });
              db.ref().update(updates).then(()=>{
-                 Swal.fire({toast:true,icon:'success',title:'Confirmado'});
-                 const totalBoletos = parseInt(currentEventConfig.qty || 100);
-                 let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
-                 let rangeSize = Math.floor(baseNums / totalBoletos);
-                 let displayNums = "";
-                 if(rangeSize > 1) {
-                     displayNums = nums.map(n => {
-                        let start = parseInt(n)*rangeSize;
-                        let end = start+rangeSize-1;
-                        return `#${parseInt(n)+1} (${start}-${end})`;
-                     }).join(', ');
-                 } else {
-                     displayNums = nums.join(', ');
-                 }
-                 document.getElementById('vt-client').innerText = clientName;
-                 document.getElementById('vt-num').innerText = displayNums;
-                 document.getElementById('vt-event-name').innerText = currentEventConfig.title;
-                 document.getElementById('modal-virtual-ticket').style.display='flex';
+                 Swal.fire({toast:true,icon:'success',title:'Grupo confirmado'});
              });
         }
+        
         function freeG(phone) {
              const updates={};
              Object.entries(currentEventTickets).forEach(([i, t]) => {
                  if(t.phone === phone && t.status === 'apartado') updates[`events/${currentEventId}/tickets/${i}`] = null;
              });
-             db.ref().update(updates);
+             db.ref().update(updates).then(()=>{
+                 Swal.fire({toast:true,icon:'info',title:'Grupo liberado'});
+             });
         }
-        function openScreenshotModal() {
-            const t = document.getElementById('screenshot-grid-target'); t.innerHTML='';
-            const total = parseInt(currentEventConfig.qty || 100);
-            for(let i=0; i<total; i++) {
-                const d = document.createElement('div'); d.className='screenshot-cell';
-                const tick = currentEventTickets[i];
-                if(tick) {
-                    if(tick.status==='pagado') d.classList.add('ss-paid');
-                    else { d.classList.add('ss-reserved'); d.innerText=(i+1); }
-                } else {
-                    d.classList.add('ss-free'); d.innerText=(i+1);
-                }
-                t.appendChild(d);
-            }
-            document.getElementById('ss-event-title').innerText = currentEventConfig.title;
-            document.getElementById('modal-screenshot').style.display='flex';
-        }
-        function openEventModal() {
-            document.getElementById('edit-event-id').value='';
-            document.getElementById('evt-title').value='';
-            document.getElementById('evt-price').value='';
-            document.getElementById('evt-qty').value='100';
-            document.getElementById('evt-img').value='';
-            document.getElementById('evt-desc-short').value='';
-            document.getElementById('evt-desc-long').value='';
-            document.getElementById('evt-date-end').value='';
-            document.getElementById('btn-delete-event').style.display='none';
-            document.getElementById('modal-event-config').style.display='flex';
-        }
-        function openEditEvent(id) {
-            db.ref(`events/${id}/config`).once('value').then(s=>{
-                const c = s.val();
-                document.getElementById('edit-event-id').value=id;
-                document.getElementById('evt-title').value=c.title;
-                document.getElementById('evt-price').value=c.price;
-                document.getElementById('evt-qty').value=c.qty || '100';
-                document.getElementById('evt-img').value=c.img;
-                document.getElementById('evt-desc-short').value=c.descShort;
-                document.getElementById('evt-desc-long').value=c.descLong;
-                document.getElementById('evt-date-end').value=c.dateEnd||'';
-                document.getElementById('btn-delete-event').style.display='inline-block';
-                document.getElementById('modal-event-config').style.display='flex';
-            });
-        }
-        function saveEventConfig() {
-            const id = document.getElementById('edit-event-id').value;
-            const config = {
-                title: document.getElementById('evt-title').value,
-                price: document.getElementById('evt-price').value,
-                qty: document.getElementById('evt-qty').value,
-                img: document.getElementById('evt-img').value,
-                descShort: document.getElementById('evt-desc-short').value,
-                descLong: document.getElementById('evt-desc-long').value,
-                dateEnd: document.getElementById('evt-date-end').value
-            };
-            if(!config.title) return Swal.fire("Error","Falta título","error");
-            if(id) db.ref(`events/${id}/config`).update(config);
-            else db.ref('events').push({config});
-            closeModal('modal-event-config');
-            Swal.fire({toast:true, icon:'success', title:'Evento Guardado'});
-        }
-        function deleteCurrentEvent() {
-            const id = document.getElementById('edit-event-id').value;
-            Swal.fire({title:'Eliminar?', showCancelButton:true}).then(r=>{
-                if(r.isConfirmed){ db.ref(`events/${id}`).remove(); closeModal('modal-event-config'); }
-            });
-        }
-        function saveContactConfig() { db.ref('site_config/general').update({ waOrders:document.getElementById('cfg-wa-orders').value, waChannel:document.getElementById('cfg-wa-channel').value, fbLink:document.getElementById('cfg-fb-link').value }).then(()=>{ closeModal('modal-config-contact'); Swal.fire({toast:true,icon:'success',title:'Guardado'}); }); }
-        function openConfigContact() { closeModal('modal-settings-menu'); document.getElementById('cfg-wa-orders').value=siteConfig.waOrders; document.getElementById('cfg-wa-channel').value=siteConfig.waChannel; document.getElementById('cfg-fb-link').value=siteConfig.fbLink; document.getElementById('modal-config-contact').style.display='flex'; }
-        function openConfigTheme() { closeModal('modal-settings-menu'); document.getElementById('modal-config-theme').style.display='flex'; }
-        function saveThemeConfig() { closeModal('modal-config-theme'); }
-        function openFaqEditor() { closeModal('modal-settings-menu'); renderFaqEditor(); document.getElementById('modal-editor-faq').style.display='flex'; }
-        function renderFaqEditor() { const c=document.getElementById('cms-faq-list-container'); c.innerHTML=''; (siteConfig.faqs||[]).forEach((f,i)=>{ const d=document.createElement('div'); d.className='cms-term-item'; d.innerHTML=`<div class="cms-term-delete" onclick="delFaq(${i})">&times;</div><input class="cms-input-sm fq" value="${f.q}"><textarea class="cms-input-sm fa">${f.a}</textarea>`; c.appendChild(d); }); }
-        function addFaqBlockUI() { if(!siteConfig.faqs) siteConfig.faqs=[]; siteConfig.faqs.push({q:'',a:''}); renderFaqEditor(); }
-        function delFaq(i) { siteConfig.faqs.splice(i,1); renderFaqEditor(); }
-        function saveFaqConfig() { const qs=document.querySelectorAll('.fq'); const as=document.querySelectorAll('.fa'); const arr=[]; qs.forEach((q,i)=>{ if(q.value) arr.push({q:q.value, a:as[i].value}); }); db.ref('site_config/faqs').set(arr).then(()=>{ closeModal('modal-editor-faq'); Swal.fire({toast:true,icon:'success',title:'Guardado'}); }); }
-        function renderFaqPublic() { const c=document.getElementById('faq-list-public'); if(!c)return; c.innerHTML=(siteConfig.faqs||[]).map((f,i)=>`<details><summary>${i+1}. ${f.q}</summary><div class="faq-ans">${f.a}</div></details>`).join(''); }
-        function openTermsPublic() {
-            const c = document.getElementById('terms-public-content');
-            if(!siteConfig.terms || siteConfig.terms.length === 0) c.innerHTML = '<p style="text-align:center;">Sin términos registrados.</p>';
-            else c.innerHTML = siteConfig.terms.map(t => `<div style="margin-bottom:15px;"><strong>${t.title}</strong><p>${t.desc}</p></div>`).join('');
-            document.getElementById('modal-terms').style.display = 'flex';
-        }
-        function openTermsEditor() { closeModal('modal-settings-menu'); renderTermsEditor(); document.getElementById('modal-editor-terms').style.display = 'flex'; }
-        function renderTermsEditor() {
-            const c = document.getElementById('cms-terms-list-container'); c.innerHTML = '';
-            (siteConfig.terms || []).forEach((t, i) => {
-                const d = document.createElement('div'); d.className = 'cms-term-item';
-                d.innerHTML = `<div class="cms-term-delete" onclick="delTerm(${i})">&times;</div><input class="cms-input-sm tt" value="${t.title}" placeholder="Título"><textarea class="cms-input-sm td">${t.desc}</textarea>`;
-                c.appendChild(d);
-            });
-        }
-        function addTermBlockUI() { if(!siteConfig.terms) siteConfig.terms=[]; siteConfig.terms.push({title:'',desc:''}); renderTermsEditor(); }
-        function delTerm(i) { siteConfig.terms.splice(i,1); renderTermsEditor(); }
-        function saveTermsConfig() {
-            const titles = document.querySelectorAll('.tt'); const descs = document.querySelectorAll('.td'); const arr=[];
-            titles.forEach((t,i) => { if(t.value) arr.push({title:t.value, desc:descs[i].value}); });
-            db.ref('site_config/terms').set(arr).then(()=>{ closeModal('modal-editor-terms'); Swal.fire({toast:true, icon:'success', title:'Guardado'}); });
-        }
-        function openAdminTicket(i) {
-             window.targetTicketIdx = i;
-             const t = currentEventTickets[i];
-             document.getElementById('adm-client').innerText = t.owner;
-             document.getElementById('adm-phone').innerText = t.phone;
-             document.getElementById('adm-status').innerText = t.status.toUpperCase();
-             document.getElementById('modal-admin-ticket').style.display='flex';
-        }
-        function changeStatus(s) {
-            const i = window.targetTicketIdx;
-            if(s==='disponible') db.ref(`events/${currentEventId}/tickets/${i}`).remove();
-            else db.ref(`events/${currentEventId}/tickets/${i}`).update({status:s});
-            closeModal('modal-admin-ticket');
-        }
-        function sharePaymentLink() {
-             navigator.clipboard.writeText(window.location.href.split('?')[0]+"?viewPayment=true")
-            .then(()=>Swal.fire({toast:true, icon:'success', title:'Enlace Copiado'}));
-        }
-        function shareTicketWhatsApp() {
-            const txt = `Hola! Aquí está tu boleto digital:\nEvento: ${document.getElementById('vt-event-name').innerText}\nNúmeros: ${document.getElementById('vt-num').innerText}\nGracias por participar!`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank');
-        }
-        function highlightTicket(val) {
-            const el = document.getElementById('t-'+val) || document.getElementById('t-'+(parseInt(val)-1));
-            if(el) {
-                el.scrollIntoView({behavior:'smooth', block:'center'});
-                el.style.border='2px solid red'; el.style.transform='scale(1.2)';
-                setTimeout(()=>{ el.style.border='2px solid #ddd'; el.style.transform='scale(1)'; }, 2000);
-            }
-        }
-        function loadDigitalTicketMode(id, num) {
-            // Lógica para mostrar ticket solo (Placeholder, en real se conectaría a DB)
-            document.body.innerHTML = "<h1>Cargando Boleto...</h1>"; 
-        }
-        function addImage(type) {
-             const url = document.getElementById('imgEvidenceInput').value;
-             if(url) db.ref('images/evidence').push({url});
-        }
-        function updateEvidenceUI(images) {
-            const w = document.getElementById('evidenceCarouselImgWrapper');
-            const list = document.getElementById('evidenceImgList');
-            if(!w) return;
-            w.innerHTML = ''; list.innerHTML = '';
-            carouselData.evidence = [];
-            Object.entries(images).forEach(([key, val]) => {
-                carouselData.evidence.push(val.url);
-                w.innerHTML += `<img src="${val.url}">`;
-                list.innerHTML += `<div class="admin-img-item"><span>Img...${key.substr(-4)}</span><span onclick="db.ref('images/evidence/${key}').remove()" style="color:red;cursor:pointer;">&times;</span></div>`;
-            });
-            if(carouselData.evidence.length > 0) {
-                w.children[0].style.display = 'block';
-            } else {
-                w.innerHTML = '<p style="text-align:center; padding:50px;">Sin evidencia aún.</p>';
-            }
-        }
-        function moveCarousel(type, dir) {
-            const w = document.getElementById(type+'CarouselImgWrapper');
-            const imgs = w.querySelectorAll('img');
-            if(imgs.length === 0) return;
-            imgs[carouselIdx[type]].style.display = 'none';
-            carouselIdx[type] += dir;
-            if(carouselIdx[type] >= imgs.length) carouselIdx[type] = 0;
-            if(carouselIdx[type] < 0) carouselIdx[type] = imgs.length - 1;
-            imgs[carouselIdx[type]].style.display = 'block';
-        }
+
     </script>
 </body>
 </html>
