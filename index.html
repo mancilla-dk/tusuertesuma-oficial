@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tu Suerte Suma | Gana y Apoya</title>
+    <title>Tu Suerte Suma | Sorteos CMS</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
@@ -13,25 +14,66 @@
 
     <style>
         /* ==========================================================================
-           1. TU CÓDIGO BASE ORIGINAL (INTACTO)
+           1. ESTILOS BASE Y TEMAS (CMS CONFIGURABLE)
            ========================================================================== */
         :root {
+            /* Variables de Color Predeterminado (Verde) */
             --primary: #10b981; 
             --primary-dark: #065f46; 
-            --accent: #FFD700;
+            --accent: #FFD700; /* Dorado para destaques */
             --dark: #000000; 
             --light: #f8fafc;
             --nav-gradient: linear-gradient(180deg, #000000 30%, #064e3b 100%);
             --bg-elegant: radial-gradient(circle at center, #064e3b 0%, #022c22 40%, #000000 100%);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: var(--bg-elegant); color: #1f2937; line-height: 1.5; min-height: 100vh; background-attachment: fixed; }
+        /* --- TEMAS DE COLOR (Sistema para el Comprador) --- */
+        body.theme-maroon { --primary: #800000; --primary-dark: #4a0404; --accent: #ffcc00; --nav-gradient: linear-gradient(180deg, #000000 30%, #4a0404 100%); --bg-elegant: radial-gradient(circle at center, #5c0b0b 0%, #2b0202 40%, #000000 100%); }
+        body.theme-blue { --primary: #007bff; --primary-dark: #004085; --accent: #00d4ff; --nav-gradient: linear-gradient(180deg, #000000 30%, #004085 100%); --bg-elegant: radial-gradient(circle at center, #004085 0%, #001f3f 40%, #000000 100%); }
+        body.theme-red { --primary: #dc3545; --primary-dark: #8a1c26; --accent: #ffdd00; --nav-gradient: linear-gradient(180deg, #000000 30%, #8a1c26 100%); --bg-elegant: radial-gradient(circle at center, #b91c1c 0%, #580a0a 40%, #000000 100%); }
+        body.theme-pink { --primary: #e83e8c; --primary-dark: #880e4f; --accent: #ff80ab; --nav-gradient: linear-gradient(180deg, #000000 30%, #880e4f 100%); --bg-elegant: radial-gradient(circle at center, #ad1457 0%, #4a0624 40%, #000000 100%); }
+        body.theme-orange { --primary: #fd7e14; --primary-dark: #a84600; --accent: #ffff00; --nav-gradient: linear-gradient(180deg, #000000 30%, #a84600 100%); --bg-elegant: radial-gradient(circle at center, #d35400 0%, #6e2c00 40%, #000000 100%); }
+        body.theme-yellow { --primary: #ffc107; --primary-dark: #b78a02; --accent: #ffffff; --nav-gradient: linear-gradient(180deg, #000000 30%, #b78a02 100%); --bg-elegant: radial-gradient(circle at center, #d4a017 0%, #5e4605 40%, #000000 100%); }
 
-        nav { background: var(--nav-gradient); position: sticky; top: 0; z-index: 1000; padding: 10px 0; border-bottom: 2px solid var(--accent); box-shadow: 0 4px 20px rgba(16,185,129,0.4); }
-        .nav-structure { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; position: relative; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg-elegant); color: #1f2937; line-height: 1.5; min-height: 100vh; background-attachment: fixed; transition: background 0.5s ease; }
+
+        /* ==========================================================================
+           2. VISIBILIDAD ADMIN (CORREGIDO Y MEJORADO)
+           ========================================================================== */
+        /* Oculta elementos de admin por defecto */
+        .admin-only, .btn-edit-floating, .admin-controls, .admin-clean-wrapper, .nav-admin-row { 
+            display: none !important; 
+        }
         
+        /* Muestra solo si el body tiene la clase is-admin */
+        body.is-admin .admin-only { display: inline-block !important; }
+        body.is-admin .btn-edit-floating { display: flex !important; }
+        body.is-admin .admin-controls { display: block !important; }
+        
+        /* CORRECCIÓN: Centrado y Visibilidad del Panel */
+        body.is-admin .admin-clean-wrapper { 
+            display: flex !important; 
+            justify-content: center !important; 
+            align-items: center; 
+            width: 100%; 
+            margin: 20px 0;
+        }
+        
+        body.is-admin .nav-admin-row { 
+            display: flex !important; 
+            justify-content: center !important; 
+            width: 100%;
+            padding: 5px 0;
+            background: rgba(0,0,0,0.3); /* Fondo oscuro suave para destacar el panel */
+            border-bottom: 1px solid var(--accent);
+        }
+
+        /* --- NAVEGACIÓN --- */
+        nav { background: var(--nav-gradient); position: sticky; top: 0; z-index: 10000; padding: 10px 0; border-bottom: 2px solid var(--accent); box-shadow: 0 4px 20px rgba(16,185,129,0.4); }
+        .nav-structure { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; position: relative; }
         .nav-top-row { display: flex; justify-content: center; align-items: center; width: 100%; gap: 40px; position: relative; }
+        
         .nav-floating-left { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); display: flex; gap: 10px; }
         .nav-floating-right { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); display: flex; gap: 10px; }
         
@@ -40,6 +82,7 @@
         
         .nav-logo-img { height: 95px; width: auto; cursor: pointer; transition: transform 0.3s; filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4)); }
         .nav-logo-img:hover { transform: scale(1.05); }
+        .logo-container { display: flex; flex-direction: column; align-items: center; justify-content: center; }
         
         .nav-bottom-row { margin-top: 10px; }
         .nav-link-home { color: white; font-weight: 800; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 2px; cursor: pointer; text-shadow: 0 0 10px var(--primary-dark); }
@@ -47,10 +90,6 @@
         .social-btn { color: white; font-size: 1.2rem; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; border-radius: 50%; background: rgba(255,255,255,0.1); }
         .social-btn:hover { background: var(--primary); color: black; transform: scale(1.1); box-shadow: 0 0 10px var(--primary); }
         
-        /* Botón logout original (oculto por defecto) */
-        .btn-logout { display: none; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        body.is-admin .btn-logout { display: block; }
-
         @media (max-width: 850px) {
             .nav-floating-right { position: static; transform: none; margin-top: 10px; }
             .nav-floating-left { position: static; transform: none; margin-bottom: 10px; }
@@ -61,19 +100,43 @@
             .nav-link-side { font-size: 0.75rem; text-align: center; max-width: 80px; } 
             .nav-logo-img { height: 75px; } 
             .nav-floating-right, .nav-floating-left { display: none; }
-            body.is-admin .nav-floating-left { display: block; position: absolute; left: 5px; top: 5px; transform: none; margin: 0; z-index: 1001; }
         }
 
-        .section-title { text-align: center; color: var(--accent); font-size: 1.8rem; margin-bottom: 1rem; text-transform: uppercase; font-weight: 800; line-height: 1.2; }
+        /* --- COMPONENTES UI --- */
+        .section-title { text-align: center; color: var(--accent); font-size: 1.6rem; margin-bottom: 1rem; text-transform: uppercase; font-weight: 800; line-height: 1.2; }
         .green-title { color: var(--primary-dark) !important; text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        
         .btn-action { background: var(--primary); color: white; padding: 8px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; display: inline-block; transition: 0.2s; }
         .btn-action:hover { background: var(--primary-dark); transform: translateY(-2px); }
         .page-view { display: none; animation: fade 0.4s; padding-bottom: 80px; }
         @keyframes fade { from {opacity:0;} to {opacity:1;} }
 
+        /* --- BOTÓN PANEL (CSS Mejorado) --- */
+        .btn-panel-rectangular { 
+            display: none; 
+            background: linear-gradient(90deg, var(--accent), #eab308); 
+            color: black; 
+            padding: 10px 30px; 
+            border-radius: 4px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+            border: 2px solid white; 
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3); 
+            font-size: 0.95rem; 
+            letter-spacing: 1px; 
+            transition: transform 0.2s, box-shadow 0.2s; 
+            text-decoration: none; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        .btn-panel-rectangular:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent); }
+        body.is-admin .btn-panel-rectangular { display: inline-flex !important; }
+
+        /* --- HERO & HOME --- */
         .hero { background: transparent; color: white; text-align: center; padding: 2rem 1rem 1rem; display: flex; flex-direction: column; align-items: center; }
         @keyframes urgentPulse { 0% { text-shadow: 0 0 15px #FFD700; transform: scale(1); } 50% { text-shadow: 0 0 30px #FFD700, 0 0 10px red; transform: scale(1.05); } 100% { text-shadow: 0 0 15px #FFD700; transform: scale(1); } }
-        .urgent-title { font-size: 2.8rem; font-weight: 900; color: white; margin-bottom: 5px; animation: urgentPulse 2s infinite ease-in-out; text-transform: uppercase; letter-spacing: 2px; line-height: 1.1; max-width: 800px; }
+        .urgent-title { font-size: 2.5rem; font-weight: 900; color: white; margin-bottom: 5px; animation: urgentPulse 2s infinite ease-in-out; text-transform: uppercase; letter-spacing: 2px; line-height: 1.1; max-width: 800px; }
         .short-desc { font-size: 1.1rem; max-width: 800px; margin-bottom: 1.5rem; color: #e5e7eb; text-shadow: 0 2px 4px black; }
         .home-events-container { width: 100%; max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
         
@@ -81,11 +144,16 @@
         .carousel-slide img { width: 100%; height: 300px; object-fit: cover; display: block; }
         .c-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; padding: 10px 15px; cursor: pointer; font-size: 1.5rem; transition: 0.3s; z-index: 10; } .prev { left: 0; } .next { right: 0; }
 
+        /* --- BIO SECTION --- */
         .bio-section { background: #fff; max-width: 950px; margin: 0 auto 2rem; padding: 2.5rem; border-radius: 8px; border-top: 6px solid var(--accent); box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: justify; }
-        .bio-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem; text-align: center; }
-        .bio-logo-small { height: 80px; width: auto; margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
-        .bio-title-main { font-size: 2.2rem; font-weight: 900; color: var(--primary-dark); text-transform: uppercase; margin: 0; white-space: nowrap; }
-        .bio-subtitle { color: var(--accent); font-weight: 700; font-size: 1.2rem; text-shadow: 0 1px 1px rgba(0,0,0,0.1); }
+        .bio-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 1.5rem; text-align: center; }
+        .bio-logo-small { height: 70px; width: auto; margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
+        
+        .bio-title-main { font-size: 1.8rem; font-weight: 900; color: var(--primary-dark); text-transform: uppercase; margin: 0; white-space: nowrap; text-align: center; letter-spacing: 1px; }
+        @media(max-width: 400px) { .bio-title-main { font-size: 1.4rem; white-space: normal; } }
+
+        .bio-subtitle-editable { color: var(--accent); font-weight: 700; font-size: 1.1rem; text-shadow: 0 1px 1px rgba(0,0,0,0.1); margin-top: 5px; min-height: 20px; display: block; }
+        
         .bio-text p { margin-bottom: 12px; color: #374151; font-size: 1rem; line-height: 1.6; }
         .bio-highlight { font-weight: 800; color: var(--primary-dark); font-size: 1.2rem; display: block; margin-top: 20px; border-bottom: 2px solid var(--accent); display: inline-block; }
         
@@ -99,6 +167,7 @@
         details[open] { border-left: 5px solid var(--primary); }
         .faq-ans { padding: 15px; color: #374151; text-align: justify; font-size: 0.95rem; line-height: 1.6; border-top: 1px solid #eee; }
 
+        /* --- CARDS & GRID --- */
         .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1000px; margin: 0 auto; }
         .event-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.3s; position: relative; display: flex; flex-direction: column; cursor: pointer; }
         .event-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); }
@@ -108,32 +177,16 @@
         .event-desc { font-size: 0.9rem; color: #666; margin-bottom: 15px; flex-grow: 1; }
         .event-price { font-size: 1.5rem; color: var(--primary); font-weight: 900; }
         .event-actions { margin-top: 15px; display: flex; gap: 10px; }
-        .btn-edit-event { background: #333; color: var(--accent); font-size: 0.8rem; padding: 5px 10px; border-radius: 5px; cursor: pointer; border: none; display: none; }
-        body.is-admin .btn-edit-event { display: block; }
-
-        .ticket-header { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto 20px auto; text-align: center; }
         
-        /* CORRECCIÓN: Estilos para Header de Evento Centrado y Estrecho */
-        #header-title {
-            text-align: center;
-            color: var(--primary-dark);
-            font-size: 1.8rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin: 15px auto 10px;
-            width: 100%;
+        .btn-edit-floating {
+            position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: var(--accent); border: 1px solid var(--accent); border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; z-index: 5; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
+        .btn-edit-floating:hover { transform: scale(1.1) rotate(15deg); background: var(--accent); color: black; }
 
-        #header-desc {
-            color: #555;
-            font-size: 1rem;
-            margin: 10px auto 20px;
-            max-width: 90%; /* Hace el texto más estrecho */
-            text-align: justify; /* Alinea los bordes rectos con la imagen */
-            line-height: 1.6;
-            padding: 0 5px;
-        }
-
+        /* --- TICKETS & SELECCION --- */
+        .ticket-header { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto 20px auto; text-align: center; }
+        #header-title { text-align: center; color: var(--primary-dark); font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin: 15px auto 10px; width: 100%; }
+        #header-desc { color: #555; font-size: 1rem; margin: 10px auto 20px; max-width: 90%; text-align: justify; line-height: 1.6; padding: 0 5px; }
         .leyenda { display: flex; justify-content: center; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
         .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; display: flex; align-items: center; gap: 5px; }
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 10px; max-width: 800px; margin: 0 auto; padding-bottom: 80px; }
@@ -144,75 +197,98 @@
         .ticket.apartado { background-color: #ffc107; border-color: #e0a800; color: #333; }
         .ticket.pagado { background-color: #dc3545; border-color: #c82333; color: white; opacity: 0.9; }
         .ticket.selected { background-color: var(--dark); border-color: var(--accent); color: var(--accent); transform: scale(1.1); box-shadow: 0 0 10px var(--accent); }
+        .ticket.range-text { font-size: 0.9rem; padding: 18px 0; }
+
         .selection-bar { position: fixed; bottom: -100px; left: 0; width: 100%; background: rgba(0,0,0,0.95); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: bottom 0.3s ease-in-out; z-index: 1000; border-top: 2px solid var(--accent); }
         .selection-bar.active { bottom: 0; }
         .selection-info { font-size: 1.2rem; font-weight: bold; }
 
-        .admin-controls { display: none; background: #fff; border-top: 5px solid var(--primary); box-shadow: 0 5px 20px rgba(0,0,0,0.1); padding: 20px; margin: 20px auto; border-radius: 10px; max-width: 900px; color: #333; text-align: left; }
-        body.is-admin .admin-controls { display: block; }
+        /* --- ADMIN CONTROLS --- */
+        .admin-controls { background: #fff; border-top: 5px solid var(--primary); box-shadow: 0 5px 20px rgba(0,0,0,0.1); padding: 20px; margin: 20px auto; border-radius: 10px; max-width: 900px; color: #333; text-align: left; }
+        
         .admin-title { color: var(--primary-dark); font-weight: 800; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .bank-edit-grid { display: grid; grid-template-columns: 1fr; gap: 10px; border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:10px; }
-        .bank-row-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        /* Form Inputs */
         .admin-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         .form-group { display: flex; flex-direction: column; }
         .form-group label { font-size: 0.8rem; font-weight: bold; color: #666; margin-bottom: 5px; }
         .form-control { padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; width: 100%; }
         @media(max-width:600px) { .admin-form-grid, .bank-row-inputs { grid-template-columns: 1fr; } }
         
+        .bank-edit-grid { display: grid; grid-template-columns: 1fr; gap: 10px; border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:10px; }
+        .bank-row-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        /* Dashboard Notifications */
         .admin-dashboard { max-height: 400px; overflow-y: auto; background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 5px; }
         .admin-group-card { background: white; border-left: 5px solid #ffc107; padding: 15px; margin-bottom: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .group-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .group-info h4 { margin: 0; color: var(--primary-dark); text-transform: uppercase; font-size: 1rem; }
-        .group-info span { font-size: 0.85rem; color: #666; }
         .group-tickets { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
         .ticket-chip { background: #eee; padding: 2px 8px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; }
         .btn-small { padding: 6px 12px; font-size: 0.85rem; border-radius: 4px; cursor: pointer; border: none; color: white; font-weight: bold; display: flex; align-items: center; gap: 5px; }
         .btn-approve { background: var(--primary); }
         .btn-free { background: #dc3545; }
+        
+        /* Switches & Sliders */
         .switch { position: relative; display: inline-block; width: 40px; height: 20px; margin-right: 10px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
         .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(20px); }
+        
         .admin-img-list { max-height: 100px; overflow-y: auto; background: white; border: 1px solid #ccc; padding: 5px; margin-top:5px; }
         .admin-img-item { display:flex; justify-content:space-between; font-size:0.8rem; border-bottom:1px solid #eee; padding:2px; color: black; }
+        
         .search-container { position: relative; margin: 20px 0; color: #333; }
         .search-input { width: 80%; padding: 10px; border-radius: 30px; border: 2px solid var(--primary); text-align: center; font-size: 1.1rem; }
         .search-icon { position: absolute; right: 15%; top: 50%; transform: translateY(-50%); color: var(--primary); }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; justify-content: center; align-items: center; overflow-y: auto; }
+        /* --- MODALES --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 12000; display: none; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
         .login-box { background: #111; border: 2px solid var(--primary); padding: 2rem; border-radius: 10px; color: white; width: 300px; text-align: center; }
-        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeIn 0.3s ease; text-align: center; color: #333; margin: 20px 0; position: relative; }
-        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #666; }
-        .terms-text { text-align: justify; max-height: 60vh; overflow-y: auto; font-size: 0.9rem; line-height: 1.6; padding-right: 5px; margin-bottom: 20px; }
-
-        #modal-lucky .modal-content { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        .modal-content { 
+            background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeIn 0.3s ease; text-align: center; color: #333; margin: 20px auto; position: relative; max-height: 85vh; overflow-y: auto; 
+        }
+        .close-btn { position: sticky; top: 0; float: right; font-size: 2rem; cursor: pointer; color: #dc3545; background: white; border-radius: 50%; width: 30px; height: 30px; line-height: 30px; text-align: center; z-index: 10; margin-top: -10px; margin-right: -10px; }
+        .terms-text { text-align: justify; overflow-y: visible; font-size: 0.9rem; line-height: 1.6; padding-right: 5px; margin-bottom: 20px; }
+        #modal-lucky .modal-content { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #222; border: 2px solid var(--accent); }
         .btn-lucky { background: linear-gradient(45deg, #FFD700, #ffb300); color: black; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 900; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); width: 80%; max-width: 400px; margin-bottom: 20px; animation: pulseGold 2s infinite; }
         
-        .roulette-wrapper { width: 280px; height: 280px; margin: 20px auto; position: relative; perspective: 1000px; border-radius: 50%; border: 5px solid var(--accent); box-shadow: 0 0 20px rgba(0,0,0,0.8); flex-shrink: 0; }
-        .roulette-wheel { width: 100%; height: 100%; background: conic-gradient(#e74c3c 0deg 36deg, #f1c40f 36deg 72deg, #2ecc71 72deg 108deg, #3498db 108deg 144deg, #9b59b6 144deg 180deg, #e67e22 180deg 216deg, #1abc9c 216deg 252deg, #34495e 252deg 288deg, #95a5a6 288deg 324deg, #e74c3c 324deg 360deg); border-radius: 50%; transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1); transform-style: preserve-3d; }
-        .roulette-number { position: absolute; top: 50%; left: 50%; transform-origin: center; font-weight: 900; font-size: 1.5rem; color: white; text-shadow: 1px 1px 2px black; width: 30px; height: 30px; line-height: 30px; text-align: center; margin-top: -15px; margin-left: -15px; }
-        .rn-0 { transform: rotate(18deg) translate(0, -110px) rotate(-18deg); }
-        .rn-1 { transform: rotate(54deg) translate(0, -110px) rotate(-54deg); }
-        .rn-2 { transform: rotate(90deg) translate(0, -110px) rotate(-90deg); }
-        .rn-3 { transform: rotate(126deg) translate(0, -110px) rotate(-126deg); }
-        .rn-4 { transform: rotate(162deg) translate(0, -110px) rotate(-162deg); }
-        .rn-5 { transform: rotate(198deg) translate(0, -110px) rotate(-198deg); }
-        .rn-6 { transform: rotate(234deg) translate(0, -110px) rotate(-234deg); }
-        .rn-7 { transform: rotate(270deg) translate(0, -110px) rotate(-270deg); }
-        .rn-8 { transform: rotate(306deg) translate(0, -110px) rotate(-306deg); }
-        .rn-9 { transform: rotate(342deg) translate(0, -110px) rotate(-342deg); }
-        .roulette-arrow { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid white; z-index: 10; filter: drop-shadow(0 2px 2px black); }
-        
-        .virtual-ticket-card { 
-            background: radial-gradient(circle, #064e3b 0%, #000 100%); 
-            color: var(--accent); padding: 20px; border-radius: 15px; 
-            border: 4px double var(--accent); text-align: center; position: relative; overflow: hidden; 
-            width: 90%; max-width: 380px; max-height: 85vh; /* Perfect Fit Mobile */
-            display: flex; flex-direction: column; justify-content: space-between;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); margin: 0 auto;
-        }
+        /* --- SLOT MACHINE --- */
+        .slot-machine-wrapper { width: 100%; max-width: 300px; height: 120px; background: #000; border: 5px solid var(--accent); border-radius: 10px; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px; margin: 20px auto; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5) inset; position: relative; }
+        .slot-machine-wrapper::before { content: ''; position: absolute; top: 50%; left: -10px; right: -10px; height: 2px; background: rgba(255,0,0,0.7); z-index: 20; pointer-events: none; }
+        .slot-column { width: 30%; height: 100%; background: white; border-radius: 5px; overflow: hidden; position: relative; text-align: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        .slot-numbers-strip { display: flex; flex-direction: column; transition: transform 0.1s linear; }
+        .spinning .slot-numbers-strip { animation: slotSpin 0.2s infinite linear; }
+        @keyframes slotSpin { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+        .slot-num-item { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 900; }
+        .sn-0 { color: #e74c3c; } .sn-1 { color: #3498db; } .sn-2 { color: #f1c40f; } .sn-3 { color: #2ecc71; } .sn-4 { color: #9b59b6; }
+        .sn-5 { color: #e67e22; } .sn-6 { color: #1abc9c; } .sn-7 { color: #34495e; } .sn-8 { color: #e91e63; } .sn-9 { color: #000; }
+
+        /* --- BANCOS & CARDS --- */
+        .cards-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 2rem; width: 100%; }
+        .bank-card { width: 320px; height: 190px; border-radius: 15px; padding: 20px; color: white; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s; display: none; font-family: 'Courier New', monospace; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+        .bank-card.visible { display: flex; }
+        .card-logo-img { height: 40px; max-width: 100px; object-fit: contain; filter: drop-shadow(0 0 2px white); }
+        .card-bbva { background: linear-gradient(135deg, #004481 0%, #002a52 100%); border: 1px solid rgba(255,255,255,0.3); }
+        .card-azteca { background: linear-gradient(135deg, #10b981 0%, #064e3b 100%); border: 1px solid var(--accent); }
+        .card-mp { background: linear-gradient(135deg, #009EE3 0%, #005F8F 100%); border: 1px solid rgba(255,255,255,0.3); }
+        .card-oxxo { background: linear-gradient(135deg, #e61b1b 0%, #fbd010 100%); color: white; border: 1px solid white; }
+        .card-banorte { background: linear-gradient(135deg, #eb0029 0%, #b1001f 100%); border: 1px solid rgba(255,255,255,0.3); }
+        .card-banamex { background: linear-gradient(135deg, #0056b3 0%, #002a52 100%); border: 1px solid rgba(255,255,255,0.3); }
+        .card-top { display: flex; justify-content: space-between; align-items: start; }
+        .card-chip { width: 45px; height: 35px; background: linear-gradient(135deg, #e0e0e0, #a0a0a0); border-radius: 5px; border:1px solid #999; box-shadow: 1px 1px 2px black inset; }
+        .card-number { font-size: 1.3rem; letter-spacing: 2px; text-align: center; font-weight: bold; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 5px; }
+        .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+        .card-holder { font-size: 0.9rem; text-transform: uppercase; font-weight: bold; }
+        .card-label { font-size: 0.6rem; opacity: 0.9; display: block; color: #ddd; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+        .copy-btn { background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 2px 8px; border-radius: 5px; cursor: pointer; margin-left: 10px; font-size: 0.7rem; vertical-align: middle; text-shadow: none; }
+        .copy-btn:hover { background: white; color: black; }
+
+        /* --- VIRTUAL TICKET --- */
+        .virtual-ticket-card { background: radial-gradient(circle, #064e3b 0%, #000 100%); color: var(--accent); padding: 20px; border-radius: 15px; border: 4px double var(--accent); text-align: center; position: relative; overflow: hidden; width: 90%; max-width: 380px; max-height: 85vh; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); margin: 0 auto; }
         .vt-logo { height: 50px; object-fit:contain; margin-bottom: 5px; filter: drop-shadow(0 0 5px white); flex-shrink: 0; }
         .vt-congrats { font-size: 1.4rem; font-weight: 900; text-transform: uppercase; margin-bottom: 0; color: white; line-height: 1.1; }
         .vt-msg { font-size: 0.8rem; color: #eee; margin-bottom: 10px; font-style: italic; }
@@ -223,220 +299,64 @@
         .vt-numbers { font-size: 2.2rem; font-weight: 900; background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 10px; margin: 5px 0; letter-spacing: 2px; color: #FFD700; text-shadow: 0 2px 4px black; word-wrap: break-word; line-height: 1.1; }
         .vt-footer { font-size: 0.6rem; color: #aaa; margin-top: 5px; flex-shrink: 0; }
         .vt-shine { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, transparent 40%, rgba(255,215,0,0.1) 50%, transparent 60%); pointer-events: none; }
-        
         .btn-whatsapp-share { background: #25D366; color: white; width: 100%; margin-top: 10px; border-radius: 25px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4); text-decoration: none; }
         .btn-whatsapp-share:hover { background: #1ebc57; transform: scale(1.02); }
 
-        footer { background: black; color: white; padding: 2rem; text-align: center; margin-top: auto; border-top: 1px solid var(--primary); }
-        .footer-socials { margin-bottom: 15px; display: flex; justify-content: center; gap: 20px; }
-        .footer-link { color: #999; text-decoration: none; font-size: 0.9rem; border-bottom: 1px dotted #666; transition: 0.3s; cursor: pointer; display: inline-block; margin-top: 10px; }
+        /* --- FOOTER & EXTRAS --- */
+        footer { background: black; color: white; padding: 10px 0; text-align: center; margin-top: auto; border-top: 1px solid var(--primary); }
+        .footer-socials { margin-bottom: 5px; display: flex; justify-content: center; gap: 20px; }
+        .footer-link { color: #999; text-decoration: none; font-size: 0.8rem; border-bottom: 1px dotted #666; transition: 0.3s; cursor: pointer; display: inline-block; margin-top: 5px; }
+        .footer-dev { font-size: 0.75rem; color: #666; margin-top: 5px; }
+        .footer-dev a { color: var(--accent); text-decoration: none; font-weight: bold; }
 
-        body.exclusive-mode nav, 
-        body.exclusive-mode footer, 
-        body.exclusive-mode #main-content-area { display: none !important; }
-
-        .overlay-fullscreen {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-elegant); z-index: 9999; flex-direction: column;
-            align-items: center; justify-content: center; overflow-y: auto; padding: 20px;
-        }
+        body.exclusive-mode nav, body.exclusive-mode footer, body.exclusive-mode #main-content-area { display: none !important; }
+        .overlay-fullscreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-elegant); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; overflow-y: auto; padding: 20px; }
         .overlay-fullscreen.active { display: flex !important; }
 
-        .cards-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 2rem; width: 100%; }
-        .bank-card { 
-            width: 320px; height: 190px; border-radius: 15px; padding: 20px; color: white; position: relative; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
-            display: flex; flex-direction: column; justify-content: space-between; 
-            transition: transform 0.3s; display: none; font-family: 'Courier New', monospace;
-        }
-        .bank-card.visible { display: flex; }
-        
-        .card-logo-img { height: 40px; max-width: 100px; object-fit: contain; filter: brightness(0) invert(1); }
-        .card-bbva { background: linear-gradient(135deg, #004481 0%, #002a52 100%); border: 1px solid rgba(255,255,255,0.2); }
-        .card-azteca { background: linear-gradient(135deg, #10b981 0%, #064e3b 100%); border: 1px solid var(--accent); }
-        .card-mp { background: linear-gradient(135deg, #009EE3 0%, #005F8F 100%); border: 1px solid rgba(255,255,255,0.2); }
-        
-        .card-top { display: flex; justify-content: space-between; align-items: start; }
-        .card-chip { width: 45px; height: 35px; background: linear-gradient(135deg, #e0e0e0, #a0a0a0); border-radius: 5px; border:1px solid #999; }
-        .card-number { font-size: 1.3rem; letter-spacing: 2px; text-align: center; font-weight: bold; margin: 10px 0; text-shadow: 1px 1px 1px black; }
-        .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
-        .card-holder { font-size: 0.9rem; text-transform: uppercase; opacity: 0.9; }
-        .card-label { font-size: 0.6rem; opacity: 0.7; display: block; }
-        .copy-btn { background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 2px 8px; border-radius: 5px; cursor: pointer; margin-left: 10px; font-size: 0.7rem; }
+        .admin-grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 10px; }
+        .admin-menu-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #333; }
+        .admin-menu-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .admin-menu-item i { font-size: 1.5rem; color: var(--primary); }
 
-        /* ==========================================================================
-           2. NUEVOS ESTILOS MEJORADOS (CMS, ADMIN, VISUAL)
-           ========================================================================== */
-        
-        /* BOTÓN DE CONFIGURACIÓN (ENGRANAJE) */
-        .btn-config-gear {
-            display: none; 
-            position: absolute;
-            top: 0;
-            right: -40px; /* Al lado del logo */
-            background: rgba(0,0,0,0.5);
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            animation: spinSlow 10s infinite linear;
-            z-index: 1002;
-        }
-        .btn-config-gear:hover { background: var(--accent); color: black; transform: rotate(90deg); }
-        body.is-admin .btn-config-gear { display: flex; }
-        @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        /* MODAL DE MENÚ CONFIGURACIÓN */
-        #settings-menu-content { 
-            background: #1a1a1a; color: white; border: 1px solid var(--accent); 
-            max-width: 300px; padding: 0; overflow: hidden;
-        }
-        .settings-header { background: var(--accent); color: black; padding: 15px; font-weight: 900; text-transform: uppercase; }
-        .settings-option { 
-            display: flex; align-items: center; gap: 15px; padding: 15px 20px; 
-            border-bottom: 1px solid #333; cursor: pointer; transition: 0.2s; 
-            text-align: left; color: #eee;
-        }
-        .settings-option:hover { background: #333; color: var(--accent); }
-        .settings-option i { width: 25px; text-align: center; color: var(--primary); }
-        .settings-option.logout { color: #ff6b6b; border-bottom: none; }
-        .settings-option.logout:hover { background: #2d0000; }
-        
-        /* 1. Lápices de Edición */
-        .cms-edit-btn {
-            display: none;
-            background-color: var(--accent);
-            color: #000;
-            border: 2px solid #fff;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            z-index: 100;
-            transition: transform 0.2s;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-        .cms-edit-btn:hover { transform: scale(1.1); background: white; }
-        body.is-admin .cms-edit-btn { display: inline-flex; }
-
-        /* CORRECCIÓN: Botón "Agregar FAQ" oculto para usuarios normales */
-        .btn-add-faq { display: none !important; }
-        body.is-admin .btn-add-faq { display: inline-flex !important; }
-
-        /* 2. Editor de Texto (Look & Feel Moderno) */
-        .cms-editor-textarea {
-            width: 100%;
-            height: 250px;
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 15px;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 1rem;
-            color: #333;
-            resize: vertical;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            line-height: 1.5;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .cms-editor-textarea:focus { outline: 2px solid var(--primary); border-color: transparent; }
-
-        /* 3. Panel Financiero */
-        .financial-panel {
-            display: none;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
+        .financial-panel { display: none; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
         body.is-admin .financial-panel { display: grid; }
-        .stat-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
+        .stat-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .stat-value { font-size: 1.4rem; font-weight: 800; color: var(--dark); }
         .stat-label { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
         .stat-money { color: var(--primary); }
         .stat-pending { color: #f59e0b; }
 
-        /* 4. Barra de Progreso */
         .progress-container { width: 100%; background: #e5e7eb; height: 12px; border-radius: 6px; overflow: hidden; margin: 15px 0; display: none; }
         body.is-admin .progress-container, .progress-container.public { display: block; }
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%); width: 0%; transition: width 0.5s ease; }
         .progress-text { font-size: 0.8rem; color: #666; margin-bottom: 5px; display: flex; justify-content: space-between; }
 
-        /* 5. Cuenta Regresiva */
-        .countdown-box { 
-            background: linear-gradient(45deg, #000, #333); color: white; 
-            padding: 15px; border-radius: 10px; margin-top: 15px; 
-            display: none; justify-content: center; gap: 20px; 
-            border: 1px solid var(--accent);
-        }
+        .countdown-box { background: linear-gradient(45deg, #000, #333); color: white; padding: 15px; border-radius: 10px; margin-top: 15px; display: none; justify-content: center; gap: 20px; border: 1px solid var(--accent); }
         .cd-item { text-align: center; }
         .cd-num { font-size: 1.5rem; font-weight: 900; color: var(--accent); line-height: 1; }
         .cd-label { font-size: 0.7rem; text-transform: uppercase; color: #ccc; }
 
-        /* 6. Modal de Captura de Pantalla */
-        #screenshot-clean-area {
-            background: radial-gradient(circle, #064e3b 0%, #000 100%);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            border: 4px solid var(--accent);
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
-        }
+        #screenshot-clean-area { background: radial-gradient(circle, #064e3b 0%, #000 100%); padding: 20px; border-radius: 10px; text-align: center; border: 4px solid var(--accent); width: 100%; max-width: 400px; margin: 0 auto; }
         .ss-header { display:flex; align-items:center; justify-content:center; gap:15px; margin-bottom:15px; }
-        .ss-logo { height:50px; filter:drop-shadow(0 0 5px white); }
+        .ss-logo { height:50px; max-width:80px; object-fit:contain; filter:drop-shadow(0 0 5px white); }
         .ss-title { color:white; font-weight:900; text-transform:uppercase; font-size:1.2rem; text-align:left; line-height:1.1; }
-        .screenshot-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            justify-content: center;
-            margin-top: 10px;
-        }
-        .screenshot-cell {
-            width: 25px;
-            height: 25px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            border-radius: 4px;
-            color: #fff;
-            text-shadow: 0 1px 2px black;
-        }
+        .screenshot-grid { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 10px; }
+        .screenshot-cell { width: 25px; height: 25px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 4px; color: #fff; text-shadow: 0 1px 2px black; }
         .ss-free { background: #28a745; border:1px solid #1e7e34; }
         .ss-reserved { background: #ffc107; color: #000; border:1px solid #d39e00; text-shadow:none; }
         .ss-paid { background: #dc3545; border:1px solid #bd2130; }
 
-        /* Ajustes Responsive para Nav con Engranaje */
+        .cms-term-list { max-height: 300px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #eee; padding: 5px; border-radius: 5px; }
+        .cms-term-item { background: #f9f9f9; padding: 10px; margin-bottom: 8px; border-radius: 5px; position: relative; border-left: 3px solid var(--primary); }
+        .cms-term-delete { position: absolute; top: 5px; right: 5px; color: #dc3545; cursor: pointer; font-size: 1.1rem; }
+        .cms-input-sm { width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.9rem; }
+        .color-selector-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 10px 0; }
+        .color-btn { width: 100%; height: 40px; border-radius: 5px; border: 2px solid #ddd; cursor: pointer; transition: transform 0.2s; }
+        .color-btn:hover { transform: scale(1.1); border-color: #333; }
         .logo-container { position: relative; display: inline-block; }
-        @media (max-width: 600px) {
-            .btn-config-gear { right: -10px; top: -10px; width: 30px; height: 30px; font-size: 0.9rem; }
-        }
-
     </style>
 </head>
 <body>
-
     <div id="overlay-ticket" class="overlay-fullscreen">
         </div>
 
@@ -446,42 +366,8 @@
         <p style="color:#eee; text-align:center; max-width:600px; margin-bottom:20px; padding:0 20px;">
             Por favor realiza el pago a cualquiera de las siguientes cuentas y envía tu comprobante.
         </p>
-
-        <div class="cards-grid">
-            <div id="card-bbva-link" class="bank-card card-bbva">
-                <div class="card-top">
-                    <div class="card-chip"></div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_BBVA.svg/2560px-Logo_BBVA.svg.png" class="card-logo-img" alt="BBVA">
-                </div>
-                <div class="card-number"><span id="view-num-bbva-link">...</span> <button class="copy-btn" onclick="copyText('view-num-bbva-link')">COPIAR</button></div>
-                <div class="card-bottom">
-                    <div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-bbva-link">...</div></div>
-                </div>
+        <div class="cards-grid" id="payment-overlay-cards">
             </div>
-
-            <div id="card-azteca-link" class="bank-card card-azteca">
-                <div class="card-top">
-                    <div class="card-chip"></div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Banco_Azteca_logo.png/1200px-Banco_Azteca_logo.png" class="card-logo-img" alt="Azteca">
-                </div>
-                <div class="card-number"><span id="view-num-azteca-link">...</span> <button class="copy-btn" onclick="copyText('view-num-azteca-link')">COPIAR</button></div>
-                <div class="card-bottom">
-                    <div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-azteca-link">...</div></div>
-                </div>
-            </div>
-
-            <div id="card-mp-link" class="bank-card card-mp">
-                <div class="card-top">
-                    <div class="card-chip"></div>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Mercado_Pago_logo.png/1024px-Mercado_Pago_logo.png" class="card-logo-img" alt="Mercado Pago">
-                </div>
-                <div class="card-number"><span id="view-num-mp-link">...</span> <button class="copy-btn" onclick="copyText('view-num-mp-link')">COPIAR</button></div>
-                <div class="card-bottom">
-                    <div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-mp-link">...</div></div>
-                </div>
-            </div>
-        </div>
-
         <button onclick="sendPaymentProof()" class="btn-whatsapp-share" style="max-width:300px; margin-top:30px;">
             <i class="fab fa-whatsapp"></i> Envía tu comprobante aquí
         </button>
@@ -489,127 +375,354 @@
     </div>
 
     <div id="modal-settings-menu" class="modal-overlay" onclick="closeModal('modal-settings-menu')">
-        <div id="settings-menu-content" class="modal-content" onclick="event.stopPropagation()">
-            <div class="settings-header">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width:500px;">
+            <div class="close-btn" onclick="closeModal('modal-settings-menu')">&times;</div>
+            <h3 style="color:var(--primary-dark); text-transform:uppercase; border-bottom:2px solid var(--accent); padding-bottom:10px; margin-bottom:20px;">
                 Panel de Control
+            </h3>
+            
+            <div class="admin-grid-menu">
+                <div class="admin-menu-item" onclick="openConfigTexts()">
+                    <i class="fas fa-edit"></i>
+                    <span>Editar Textos Web</span>
+                </div>
+                <div class="admin-menu-item" onclick="openConfigContact()">
+                    <i class="fas fa-address-book"></i>
+                    <span>Contacto y Redes</span>
+                </div>
+                <div class="admin-menu-item" onclick="openConfigTheme()">
+                    <i class="fas fa-palette"></i>
+                    <span>Tema / Color</span>
+                </div>
+                <div class="admin-menu-item" onclick="openTermsEditor()">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Términos</span>
+                </div>
+                <div class="admin-menu-item" onclick="openFaqEditor()">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Preguntas (FAQ)</span>
+                </div>
+                <div class="admin-menu-item" onclick="logoutAdmin()" style="border-color:#dc3545;">
+                    <i class="fas fa-sign-out-alt" style="color:#dc3545;"></i>
+                    <span style="color:#dc3545;">Cerrar Sesión</span>
+                </div>
             </div>
-            <div class="settings-option" onclick="closeModal('modal-settings-menu'); openLogin();">
-                 <i class="fas fa-user-shield"></i> Acceso Admin
+
+            <div style="margin-top:20px; font-size:0.8rem; color:#999;">
+                Sistema CMS V6.0 | Modo Administrador
             </div>
-            <div class="settings-option" onclick="alert('Configuración global próximamente')">
-                <i class="fas fa-sliders-h"></i> Configuración Sitio
+        </div>
+    </div>
+
+    <div id="modal-config-texts" class="modal-overlay">
+        <div class="modal-content" style="max-width:600px; text-align:left;">
+            <div class="close-btn" onclick="closeModal('modal-config-texts')">&times;</div>
+            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:15px;">Editar Contenidos</h3>
+            
+            <h4 style="color:var(--accent); margin-bottom:10px; border-bottom:1px solid #eee;">Sección Principal (Inicio)</h4>
+            <div class="form-group">
+                <label>Título Principal</label>
+                <input type="text" id="txt-hero-title" class="form-control" placeholder="¡PARTICIPA Y GANA!">
             </div>
-            <div class="settings-option logout" onclick="logoutAdmin()">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            <div class="form-group">
+                <label>Subtítulo / Oportunidad</label>
+                <input type="text" id="txt-hero-desc" class="form-control" placeholder="Tu oportunidad de ganar...">
             </div>
-            <div style="padding:10px; text-align:center; cursor:pointer; color:#666;" onclick="closeModal('modal-settings-menu')">
-                Cancelar
+
+            <h4 style="color:var(--accent); margin-top:20px; margin-bottom:10px; border-bottom:1px solid #eee;">Sección Quiénes Somos</h4>
+            <div class="form-group">
+                <label>Título / Saludo</label>
+                <input type="text" id="txt-bio-main" class="form-control" placeholder='"Hola! Bienvenido..."'>
             </div>
+            <div class="form-group">
+                <label>Subtítulo (Slogan)</label>
+                <input type="text" id="txt-bio-subtitle" class="form-control" placeholder="Tu Suerte Suma: Ganamos Todos">
+            </div>
+            <div class="form-group">
+                <label>Nuestra Historia (Texto)</label>
+                <textarea id="txt-bio-history" class="form-control" rows="4" placeholder="Escribe tu historia aquí..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>¿Por qué nace este proyecto? (Texto)</label>
+                <textarea id="txt-bio-why" class="form-control" rows="4" placeholder="Escribe el motivo aquí..."></textarea>
+            </div>
+
+            <button onclick="saveTextsConfig()" class="btn-action" style="width:100%; margin-top:15px;">💾 GUARDAR TEXTOS</button>
+        </div>
+    </div>
+
+    <div id="modal-config-contact" class="modal-overlay">
+        <div class="modal-content" style="max-width:450px; text-align:left;">
+            <div class="close-btn" onclick="closeModal('modal-config-contact')">&times;</div>
+            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:15px;">Contacto y Redes</h3>
+            <p style="font-size:0.85rem; color:#666; text-align:center; margin-bottom:20px;">
+                Estos enlaces aparecen en los iconos y en el mensaje de confirmación de WhatsApp.
+            </p>
+
+            <div class="form-group" style="margin-bottom:15px;">
+                <label>WhatsApp de Pedidos (Tu Número)</label>
+                <input type="text" id="cfg-wa-orders" class="form-control" placeholder="Ej: 5219999999999">
+            </div>
+
+            <div class="form-group" style="margin-bottom:15px;">
+                <label>Enlace Canal de WhatsApp</label>
+                <input type="text" id="cfg-wa-channel" class="form-control" placeholder="https://whatsapp.com/channel/...">
+            </div>
+
+            <div class="form-group" style="margin-bottom:15px;">
+                <label>Enlace Facebook</label>
+                <input type="text" id="cfg-fb-link" class="form-control" placeholder="https://facebook.com/...">
+            </div>
+
+            <button onclick="saveContactConfig()" class="btn-action" style="width:100%;">💾 GUARDAR CAMBIOS</button>
+        </div>
+    </div>
+
+    <div id="modal-config-theme" class="modal-overlay">
+        <div class="modal-content" style="max-width:400px;">
+            <div class="close-btn" onclick="closeModal('modal-config-theme')">&times;</div>
+            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:15px;">Color del Sitio</h3>
+            <div class="color-selector-grid">
+                <div class="color-btn" style="background: linear-gradient(135deg, #064e3b, #000);" onclick="applyTheme('default')" title="Verde Original"></div>
+                <div class="color-btn" style="background: linear-gradient(135deg, #800000, #000);" onclick="applyTheme('theme-maroon')" title="Vino"></div>
+                <div class="color-btn" style="background: linear-gradient(135deg, #004085, #000);" onclick="applyTheme('theme-blue')" title="Azul"></div>
+                <div class="color-btn" style="background: linear-gradient(135deg, #b91c1c, #000);" onclick="applyTheme('theme-red')" title="Rojo"></div>
+                <div class="color-btn" style="background: linear-gradient(135deg, #880e4f, #000);" onclick="applyTheme('theme-pink')" title="Rosa"></div>
+                <div class="color-btn" style="background: linear-gradient(135deg, #d35400, #000);" onclick="applyTheme('theme-orange')" title="Naranja"></div>
+                <div class="color-btn" style="background: linear-gradient(135deg, #b78a02, #000);" onclick="applyTheme('theme-yellow')" title="Dorado"></div>
+            </div>
+            <button onclick="saveThemeConfig()" class="btn-action" style="width:100%; margin-top:20px;">💾 GUARDAR TEMA</button>
+        </div>
+    </div>
+
+    <div id="modal-editor-terms" class="modal-overlay">
+        <div class="modal-content" style="max-width:600px; text-align:left;">
+            <div class="close-btn" onclick="closeModal('modal-editor-terms')">&times;</div>
+            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:15px;">Editar Términos</h3>
+            <div id="cms-terms-list-container" class="cms-term-list"></div>
+            <button onclick="addTermBlockUI()" class="btn-action" style="background:#333; margin-bottom:10px;">+ Agregar Nuevo Bloque</button>
+            <button onclick="saveTermsConfig()" class="btn-action" style="width:100%;">💾 GUARDAR CAMBIOS</button>
+        </div>
+    </div>
+
+    <div id="modal-editor-faq" class="modal-overlay">
+        <div class="modal-content" style="max-width:600px; text-align:left;">
+            <div class="close-btn" onclick="closeModal('modal-editor-faq')">&times;</div>
+            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:15px;">Preguntas Frecuentes</h3>
+            <div id="cms-faq-list-container" class="cms-term-list"></div>
+            <button onclick="addFaqBlockUI()" class="btn-action" style="background:#333; margin-bottom:10px;">+ Agregar Nueva Pregunta</button>
+            <button onclick="saveFaqConfig()" class="btn-action" style="width:100%;">💾 GUARDAR CAMBIOS</button>
         </div>
     </div>
 
     <div id="loginModal" class="modal-overlay" onclick="closeModal('loginModal')">
         <div class="login-box" onclick="event.stopPropagation()">
+            <div class="close-btn" onclick="closeModal('loginModal')" style="background:transparent; color:white;">&times;</div>
             <h3 style="color:var(--primary);">Admin Access</h3>
-            <input type="text" id="adminUser" placeholder="Correo de Admin" style="width:100%; padding:8px; margin-bottom:10px;">
-            <input type="password" id="adminPass" placeholder="Contraseña" style="width:100%; padding:8px; margin-bottom:10px;">
-            <button onclick="attemptLogin()" class="btn-action">ENTRAR</button>
+            <p style="color:#aaa; font-size:0.8rem; margin-bottom:15px;">Ingresa tus credenciales.</p>
+            <input type="text" id="adminUser" placeholder="Correo de Admin" style="width:100%; padding:8px; margin-bottom:10px; border-radius:5px; border:none;">
+            <input type="password" id="adminPass" placeholder="Contraseña" style="width:100%; padding:8px; margin-bottom:10px; border-radius:5px; border:none;">
+            <button onclick="attemptLogin()" class="btn-action" style="width:100%;">ENTRAR</button>
         </div>
     </div>
 
+    <div id="modal-event-config" class="modal-overlay" style="display:none;">
+        <div class="modal-content" style="max-width:500px; text-align:left;">
+            <div class="close-btn" onclick="closeModal('modal-event-config')">&times;</div>
+            
+            <h3 style="color:var(--primary-dark); text-align:center; margin-bottom:15px;">Configurar Evento</h3>
+            
+            <input type="hidden" id="edit-event-id">
+            
+            <div class="form-group">
+                <label>Nombre del Evento</label>
+                <input type="text" id="evt-title" class="form-control" placeholder="Ej: Rifa iPhone 15">
+            </div>
+
+            <div class="admin-form-grid" style="margin-top:10px;">
+                <div class="form-group">
+                    <label>Precio</label>
+                    <input type="number" id="evt-price" class="form-control" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label>Cantidad de Boletos (Oportunidades)</label>
+                    <select id="evt-qty" class="form-control">
+                        <option value="10">10 Boletos (1 boleto = 10 núm)</option>
+                        <option value="25">25 Boletos (1 boleto = 4 núm)</option>
+                        <option value="50">50 Boletos (1 boleto = 2 núm)</option>
+                        <option value="100">100 Boletos (00-99)</option>
+                        <option value="1000">1000 Boletos (000-999)</option>
+                        <option value="10000">10000 Boletos (0000-9999)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:15px;">
+                <label>Fecha Límite (Cuenta Regresiva)</label>
+                <input type="datetime-local" id="evt-date-end" class="form-control">
+                <small style="color:#666; font-size:0.75rem;">Dejar vacío para ocultar contador.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Imagen (URL)</label>
+                <input type="text" id="evt-img" class="form-control" placeholder="https://...">
+            </div>
+
+            <div class="form-group">
+                <label>Descripción Corta (Tarjeta)</label>
+                <input type="text" id="evt-desc-short" class="form-control" placeholder="Ej: Gran sorteo navideño...">
+            </div>
+
+            <div class="form-group">
+                <label>Descripción Larga (Detalles)</label>
+                <textarea id="evt-desc-long" class="form-control" rows="3" placeholder="Detalles completos..."></textarea>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button onclick="saveEventConfig()" class="btn-action" style="width:100%;">💾 GUARDAR EVENTO</button>
+                <button id="btn-delete-event" onclick="deleteCurrentEvent()" class="btn-action" style="background:#dc3545; display:none;">🗑️</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-lucky" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="close-btn" onclick="closeModal('modal-lucky')">&times;</div>
+            <h3 style="color:var(--accent);">🎰 Máquina de la Suerte</h3>
+            
+            <div id="lucky-step-1">
+                <p style="color:#eee;">Elige cuántos boletos quieres:</p>
+                <div style="display:flex; justify-content:center; gap:10px; margin:20px 0;">
+                    <button onclick="setLucky(2)" class="btn-action" style="width:auto; background:#333;">2</button>
+                    <button onclick="setLucky(5)" class="btn-action" style="width:auto; background:#333;">5</button>
+                    <input type="number" id="lucky-qty" class="form-control" placeholder="#" style="width:80px; text-align:center;">
+                </div>
+                <button onclick="spinRoulette()" class="btn-action" style="background:var(--accent); color:black; width:100%;">¡GIRAR!</button>
+            </div>
+            
+            <div id="lucky-step-2" style="display:none; width:100%;">
+                
+                <div class="slot-machine-wrapper">
+                    <div class="slot-column">
+                        <div class="slot-numbers-strip" id="slot-strip-1"></div>
+                    </div>
+                    <div class="slot-column">
+                        <div class="slot-numbers-strip" id="slot-strip-2"></div>
+                    </div>
+                    <div class="slot-column">
+                        <div class="slot-numbers-strip" id="slot-strip-3"></div>
+                    </div>
+                </div>
+
+                <h2 id="lucky-result-text" style="color:var(--primary); margin:15px 0; font-size:1.5rem; min-height:30px;">¡SUERTE!</h2>
+                
+                <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+                    <button onclick="resetLucky()" class="btn-action" style="background:#555;">Otra vez</button>
+                    <button onclick="confirmLucky()" class="btn-action">¡Los quiero!</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <nav>
         <div class="nav-structure">
             <div class="nav-top-row">
                 <div class="nav-floating-left">
-                     </div>
+                    </div>
 
                 <a onclick="showPage('pagos')" class="nav-link-side">Métodos de Pago</a>
                 
                 <div class="logo-container">
                     <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" alt="Logo" class="nav-logo-img" onclick="openLogin()">
-                    <div class="btn-config-gear" onclick="openSettingsMenu()">
-                        <i class="fas fa-cog"></i>
-                    </div>
                 </div>
 
                 <a onclick="showPage('sorteos')" class="nav-link-side">Sorteos Disponibles</a>
 
                 <div class="nav-floating-right">
-                    <a href="https://www.facebook.com/share/1DUjTsBKWM/" target="_blank" class="social-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://whatsapp.com/channel/0029Vb7DRuS0gcfD5rt89V3w" target="_blank" class="social-btn" title="Canal WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a id="social-fb-nav" href="#" target="_blank" class="social-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a id="social-wa-nav" href="#" target="_blank" class="social-btn" title="Canal WhatsApp"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
+
+            <div class="nav-admin-row admin-only">
+                <button onclick="openSettingsMenu()" class="btn-panel-rectangular">
+                    <i class="fas fa-cogs"></i> PANEL DE CONTROL
+                </button>
+            </div>
+
             <div class="nav-bottom-row">
                 <a onclick="showPage('inicio')" id="nav-inicio" class="nav-link-home">Inicio</a>
             </div>
         </div>
     </nav>
+
     <div id="main-content-area">
 
         <div id="page-inicio" class="page-view" style="display:block;">
+            
             <div class="hero">
-                <h1 class="urgent-title">¡PARTICIPA Y GANA!</h1>
-                <p class="short-desc">Tu oportunidad de ganar efectivo y apoyar una causa real.</p>
+                <h1 id="view-hero-title" class="urgent-title">¡PARTICIPA Y GANA!</h1>
+                <p id="view-hero-desc" class="short-desc">Tu oportunidad de ganar efectivo y apoyar una causa real.</p>
+                
+                <div class="nav-admin-row admin-only" style="margin-bottom:15px; background:transparent; border:none;">
+                    <button onclick="openConfigTexts()" class="btn-action" style="background:rgba(0,0,0,0.6); border:1px solid white; font-size:0.8rem;">
+                        ✏️ EDITAR TEXTOS
+                    </button>
+                </div>
                 
                 <h3 style="color:var(--accent); text-transform:uppercase; margin-bottom:15px; border-bottom:2px solid var(--accent); display:inline-block;">
                     🔥 Sorteos Activos 🔥
                 </h3>
+                
                 <div id="home-events-list" class="home-events-container">
                     <p style="color:white;">Cargando sorteos...</p>
                 </div>
             </div>
 
             <section class="bio-section">
-                
                 <div class="bio-header">
                     <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" alt="Logo" class="bio-logo-small">
                     
-                    <div style="position: relative; display: inline-block; width: 100%;">
-                        <div id="cms-bio-intro">
-                            <h2 class="bio-title-main">¿QUIÉNES SOMOS?</h2>
-                            <span class="bio-subtitle">Tu Suerte Suma: Ganamos Todos</span>
-                            <p><strong>"¡Hola! Bienvenido a Tu Suerte Suma. Mi nombre es Erick y soy el fundador de este proyecto."</strong></p>
+                    <div style="position: relative; display: inline-block; width: 100%; text-align: center;">
+                        <h2 class="bio-title-main">¿QUIÉNES SOMOS?</h2>
+                        
+                        <span id="view-bio-subtitle" class="bio-subtitle-editable">Tu Suerte Suma: Ganamos Todos</span>
+                        
+                        <div id="view-bio-main" style="margin-top:15px; font-weight:bold; font-style:italic;">
+                            "¡Hola! Bienvenido a Tu Suerte Suma..."
                         </div>
-                        <button class="cms-edit-btn" style="position: absolute; top: 0; right: 0;" onclick="openCmsEdit('cms-bio-intro')">✏️</button>
                     </div>
                 </div>
 
                 <div class="bio-text">
-                    <div style="position: relative; margin-bottom: 20px;">
-                        <div id="cms-bio-history">
-                            <span class="bio-highlight">Mi Historia:</span>
-                            <p>Desde febrero de 2025, mi vida dio un giro inesperado debido a un tema de salud que me ha mantenido en una batalla constante. He pasado por múltiples tratamientos, consultas y estudios que han sido física y económicamente agotadores. Mis padres han sido mis guerreros, cubriendo gastos enormes para verme bien, pero sé que es una carga pesada y mi mayor deseo es aligerarles ese peso.</p>
-                        </div>
-                        <button class="cms-edit-btn" style="position: absolute; top: 0; right: 0;" onclick="openCmsEdit('cms-bio-history')">✏️</button>
+                    <div style="margin-bottom: 20px;">
+                        <span class="bio-highlight">Mi Historia:</span>
+                        <p id="view-bio-history">Cargando información...</p>
                     </div>
 
-                    <div style="position: relative; margin-bottom: 20px;">
-                        <div id="cms-bio-why">
-                            <span class="bio-highlight">¿Por qué nace este proyecto?</span>
-                            <p>Como actualmente no puedo tener un empleo tradicional por mi condición, decidí emprender. Cree Tu Suerte Suma con un objetivo claro: generar los recursos necesarios para costear mis medicamentos y consultas, pero haciéndolo de una forma en la que tú también ganes.</p>
-                            <p>No te pido una donación, te ofrezco una oportunidad. Al comprar un boleto, no solo estás participando por premios increíbles y dinero en efectivo con total transparencia, sino que te conviertes en parte fundamental de mi equipo de recuperación.</p>
-                        </div>
-                        <button class="cms-edit-btn" style="position: absolute; top: 0; right: 0;" onclick="openCmsEdit('cms-bio-why')">✏️</button>
+                    <div style="margin-bottom: 20px;">
+                        <span class="bio-highlight">¿Por qué nace este proyecto?</span>
+                        <p id="view-bio-why">Cargando información...</p>
                     </div>
                     
-                    <div style="position: relative; text-align: center;">
-                        <div id="cms-bio-outro">
-                            <p style="font-style: italic; margin-top: 15px; color: var(--primary-dark);">"Gracias por confiar, gracias por jugar y, sobre todo, gracias por sumar."</p>
-                        </div>
-                        <button class="cms-edit-btn" style="position: absolute; top: 0; right: 0;" onclick="openCmsEdit('cms-bio-outro')">✏️</button>
+                    <div class="nav-admin-row admin-only" style="background:transparent; border:none;">
+                        <button onclick="openConfigTexts()" class="btn-action" style="background:#333; font-size:0.8rem;">
+                            ✏️ EDITAR BIOGRAFÍA
+                        </button>
                     </div>
                 </div>
             </section>
 
             <section class="evidence-section">
                 <h2 class="section-title green-title">Evidencia de Ganadores</h2>
-                <div id="evidenceTextDefault"><p style="color: #666;">Aún estamos preparando nuestro primer gran sorteo. ¡Pronto verás aquí a los felices ganadores!</p></div>
+                <div id="evidenceTextDefault"><p style="color: #666;">Aún estamos preparando nuestro primer gran sorteo.</p></div>
+                
                 <div id="evidenceCarouselContainer" class="carousel-container" style="background: white; border-color: #333;">
                     <button class="c-btn prev" onclick="moveCarousel('evidence', -1)">&#10094;</button>
                     <div id="evidenceCarouselImgWrapper" class="carousel-slide"></div>
                     <button class="c-btn next" onclick="moveCarousel('evidence', 1)">&#10095;</button>
                 </div>
-                <div class="admin-controls">
+                
+                <div class="admin-controls admin-only">
                     <div class="admin-title">🏆 Admin: Carrusel Evidencia</div>
                     <input type="text" id="imgEvidenceInput" class="form-control" placeholder="URL Imagen" style="width:70%; display:inline-block;">
                     <button onclick="addImage('evidence')" class="btn-action" style="width:25%;">Subir</button>
@@ -617,108 +730,55 @@
                 </div>
             </section>
 
-            <section class="faq-section" id="faq-container">
+            <section class="faq-section">
                 <h2 class="section-title green-title">Preguntas Frecuentes</h2>
                 
-                <details>
-                    <summary>
-                        <span id="faq-q-1">1. ¿Cómo se eligen a los ganadores?</span>
-                        <button class="cms-edit-btn" onclick="event.preventDefault(); openCmsEdit('faq-q-1')">✏️</button>
-                    </summary>
-                    <div class="faq-ans">
-                        <div id="faq-a-1">Para garantizar total transparencia y confianza, todos nuestros sorteos se basan en los resultados oficiales de la Lotería Nacional para la Asistencia Pública (México). <br><br> El ganador será quien tenga el boleto que coincida con las últimas 2 cifras del Premio Mayor del sorteo indicado. <br><br> ¡Aquí no hay mano negra! Si sale en la Lotería Nacional, ese es el número ganador.</div>
-                        <button class="cms-edit-btn" onclick="openCmsEdit('faq-a-1')">✏️</button>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>
-                        <span id="faq-q-2">2. ¿Cómo puedo pagar mis boletos?</span>
-                        <button class="cms-edit-btn" onclick="event.preventDefault(); openCmsEdit('faq-q-2')">✏️</button>
-                    </summary>
-                    <div class="faq-ans">
-                        <div id="faq-a-2">Aceptamos transferencias bancarias y depósitos en OXXO o ventanilla. Al seleccionar tu número y enviarnos mensaje por WhatsApp, te proporcionaremos los datos de la cuenta segura para realizar tu pago.</div>
-                        <button class="cms-edit-btn" onclick="openCmsEdit('faq-a-2')">✏️</button>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>
-                        <span id="faq-q-3">3. ¿Cómo sé si gané y cómo reclamo mi premio?</span>
-                        <button class="cms-edit-btn" onclick="event.preventDefault(); openCmsEdit('faq-q-3')">✏️</button>
-                    </summary>
-                    <div class="faq-ans">
-                        <div id="faq-a-3">Los resultados se publican inmediatamente en nuestra Página de Facebook y en nuestro Canal de WhatsApp oficial después del sorteo. <br><br> Si resultas ganador, nos pondremos en contacto contigo al número que registraste para pedirte tus datos bancarios y hacerte la transferencia del premio íntegro. ¡Pagamos al día siguiente!</div>
-                        <button class="cms-edit-btn" onclick="openCmsEdit('faq-a-3')">✏️</button>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>
-                        <span id="faq-q-4">4. ¿Qué pasa si el número ganador no se vendió?</span>
-                        <button class="cms-edit-btn" onclick="event.preventDefault(); openCmsEdit('faq-q-4')">✏️</button>
-                    </summary>
-                    <div class="faq-ans">
-                        <div id="faq-a-4">En Tu Suerte Suma siempre queremos que haya un ganador. Si las últimas 2 cifras del premio mayor caen en un boleto que no fue comprado, el sorteo se reprograma automáticamente para la siguiente fecha de la Lotería Nacional. ¡Tu boleto sigue participando hasta que haya un ganador!</div>
-                        <button class="cms-edit-btn" onclick="openCmsEdit('faq-a-4')">✏️</button>
-                    </div>
-                </details>
-
-                <details>
-                    <summary>
-                        <span id="faq-q-5">5. ¿Es confiable?</span>
-                        <button class="cms-edit-btn" onclick="event.preventDefault(); openCmsEdit('faq-q-5')">✏️</button>
-                    </summary>
-                    <div class="faq-ans">
-                        <div id="faq-a-5">Absolutamente. Este es un proyecto personal y familiar con una causa real. Mi reputación y mi salud dependen del éxito y transparencia de este sitio. Puedes ver testimonios y evidencias de pagos anteriores en nuestras redes sociales.</div>
-                        <button class="cms-edit-btn" onclick="openCmsEdit('faq-a-5')">✏️</button>
-                    </div>
-                </details>
+                <div id="faq-list-public">
+                    <p style="text-align:center; color:#666;">Cargando preguntas frecuentes...</p>
+                </div>
                 
-                <div style="text-align:center; margin-top:20px;">
-                     <button class="cms-edit-btn btn-add-faq" style="width:40px; height:40px; font-size:1.2rem; background:var(--dark); color:white; display:inline-flex;" onclick="addNewFaq()" title="Agregar Pregunta">+</button>
+                <div class="admin-controls admin-only" style="margin-top:20px; text-align:center; border:none; shadow:none; background:transparent;">
+                     <button class="btn-action" style="background:var(--dark);" onclick="openFaqEditor()">⚙️ Editar Preguntas</button>
                 </div>
             </section>
         </div>
-
         <div id="page-pagos" class="page-view">
             <div class="container" style="text-align:center; padding: 0 15px;">
                 
-                <div class="admin-controls">
-                    <div class="admin-title">💳 Admin: Editar Cuentas</div>
+                <div class="admin-controls admin-only">
+                    <div class="admin-title">💳 Admin: Editar Cuentas Bancarias</div>
+                    
                     <div class="bank-edit-grid">
-                        <div class="bank-row-header">
-                            <label class="switch"><input type="checkbox" id="checkBBVA" onchange="saveBank('bbva')"><span class="slider"></span></label>
-                            <span>BBVA</span>
-                        </div>
-                        <div class="bank-row-inputs">
-                            <input id="nameBBVA" class="form-control" placeholder="Titular">
-                            <input id="numBBVA" class="form-control" placeholder="Cuenta / CLABE">
-                        </div>
+                        <div class="bank-row-header"><label class="switch"><input type="checkbox" id="checkBBVA" onchange="saveBank('bbva')"><span class="slider"></span></label><span>BBVA</span></div>
+                        <div class="bank-row-inputs"><input id="nameBBVA" class="form-control" placeholder="Titular"><input id="numBBVA" class="form-control" placeholder="Cuenta / CLABE"></div>
                         <button onclick="saveBank('bbva')" class="btn-action" style="margin-top:5px;">Guardar BBVA</button>
                     </div>
                     <div class="bank-edit-grid">
-                        <div class="bank-row-header">
-                            <label class="switch"><input type="checkbox" id="checkAzteca" onchange="saveBank('azteca')"><span class="slider"></span></label>
-                            <span>Banco Azteca</span>
-                        </div>
-                        <div class="bank-row-inputs">
-                            <input id="nameAzteca" class="form-control" placeholder="Titular">
-                            <input id="numAzteca" class="form-control" placeholder="Cuenta / CLABE">
-                        </div>
+                        <div class="bank-row-header"><label class="switch"><input type="checkbox" id="checkAzteca" onchange="saveBank('azteca')"><span class="slider"></span></label><span>Banco Azteca</span></div>
+                        <div class="bank-row-inputs"><input id="nameAzteca" class="form-control" placeholder="Titular"><input id="numAzteca" class="form-control" placeholder="Cuenta / CLABE"></div>
                         <button onclick="saveBank('azteca')" class="btn-action" style="margin-top:5px;">Guardar Azteca</button>
                     </div>
-                    <div class="bank-edit-grid" style="border:none;">
-                        <div class="bank-row-header">
-                            <label class="switch"><input type="checkbox" id="checkMP" onchange="saveBank('mp')"><span class="slider"></span></label>
-                            <span>Mercado Pago</span>
-                        </div>
-                        <div class="bank-row-inputs">
-                            <input id="nameMP" class="form-control" placeholder="Titular">
-                            <input id="numMP" class="form-control" placeholder="Teléfono / Cuenta">
-                        </div>
+                    <div class="bank-edit-grid">
+                        <div class="bank-row-header"><label class="switch"><input type="checkbox" id="checkMP" onchange="saveBank('mp')"><span class="slider"></span></label><span>Mercado Pago</span></div>
+                        <div class="bank-row-inputs"><input id="nameMP" class="form-control" placeholder="Titular"><input id="numMP" class="form-control" placeholder="Teléfono / Cuenta"></div>
                         <button onclick="saveBank('mp')" class="btn-action" style="margin-top:5px;">Guardar MP</button>
                     </div>
+                    <div class="bank-edit-grid">
+                        <div class="bank-row-header"><label class="switch"><input type="checkbox" id="checkOxxo" onchange="saveBank('oxxo')"><span class="slider"></span></label><span>OXXO</span></div>
+                        <div class="bank-row-inputs"><input id="nameOxxo" class="form-control" placeholder="Titular"><input id="numOxxo" class="form-control" placeholder="Num. Tarjeta"></div>
+                        <button onclick="saveBank('oxxo')" class="btn-action" style="margin-top:5px;">Guardar OXXO</button>
+                    </div>
+                    <div class="bank-edit-grid">
+                        <div class="bank-row-header"><label class="switch"><input type="checkbox" id="checkBanorte" onchange="saveBank('banorte')"><span class="slider"></span></label><span>Banorte</span></div>
+                        <div class="bank-row-inputs"><input id="nameBanorte" class="form-control" placeholder="Titular"><input id="numBanorte" class="form-control" placeholder="Cuenta / CLABE"></div>
+                        <button onclick="saveBank('banorte')" class="btn-action" style="margin-top:5px;">Guardar Banorte</button>
+                    </div>
+                    <div class="bank-edit-grid">
+                        <div class="bank-row-header"><label class="switch"><input type="checkbox" id="checkBanamex" onchange="saveBank('banamex')"><span class="slider"></span></label><span>Banamex</span></div>
+                        <div class="bank-row-inputs"><input id="nameBanamex" class="form-control" placeholder="Titular"><input id="numBanamex" class="form-control" placeholder="Cuenta / CLABE"></div>
+                        <button onclick="saveBank('banamex')" class="btn-action" style="margin-top:5px;">Guardar Banamex</button>
+                    </div>
+
                     <div style="margin-top:20px; border-top:1px solid #ddd; padding-top:10px;">
                         <button onclick="sharePaymentLink()" class="btn-action" style="background:#333; width:100%;">
                             <i class="fas fa-share-alt"></i> COPIAR LINK DE PAGOS
@@ -730,33 +790,99 @@
                 <p style="color:#ddd; margin-bottom:2rem;">Selecciona, copia y envía tu comprobante.</p>
 
                 <div class="cards-grid">
+                    
                     <div id="card-bbva-main" class="bank-card card-bbva">
                         <div class="card-top">
                             <div class="card-chip"></div>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_BBVA.svg/2560px-Logo_BBVA.svg.png" class="card-logo-img" alt="BBVA">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Logo_BBVA.svg/2560px-Logo_BBVA.svg.png" class="card-logo-img">
                         </div>
-                        <div class="card-number"><span id="view-num-bbva-main">...</span> <button class="copy-btn" onclick="copyText('view-num-bbva-main')">COPIAR</button></div>
-                        <div class="card-bottom"><div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-bbva-main">...</div></div></div>
+                        <div class="card-number">
+                            <span id="view-num-bbva-main">...</span> 
+                            <button class="copy-btn" onclick="copyText('view-num-bbva-main')">COPIAR</button>
+                        </div>
+                        <div class="card-bottom">
+                            <div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-bbva-main">...</div></div>
+                            <div><span class="card-label">BANCO</span><div class="card-holder">BBVA</div></div>
+                        </div>
                     </div>
+
                     <div id="card-azteca-main" class="bank-card card-azteca">
                         <div class="card-top">
                             <div class="card-chip"></div>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Banco_Azteca_logo.png/1200px-Banco_Azteca_logo.png" class="card-logo-img" alt="Azteca">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Banco_Azteca_logo.png/1200px-Banco_Azteca_logo.png" class="card-logo-img">
                         </div>
-                        <div class="card-number"><span id="view-num-azteca-main">...</span> <button class="copy-btn" onclick="copyText('view-num-azteca-main')">COPIAR</button></div>
-                        <div class="card-bottom"><div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-azteca-main">...</div></div></div>
+                        <div class="card-number">
+                            <span id="view-num-azteca-main">...</span> 
+                            <button class="copy-btn" onclick="copyText('view-num-azteca-main')">COPIAR</button>
+                        </div>
+                        <div class="card-bottom">
+                            <div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-azteca-main">...</div></div>
+                            <div><span class="card-label">BANCO</span><div class="card-holder">AZTECA</div></div>
+                        </div>
                     </div>
+
                     <div id="card-mp-main" class="bank-card card-mp">
                         <div class="card-top">
                             <div class="card-chip"></div>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Mercado_Pago_logo.png/1024px-Mercado_Pago_logo.png" class="card-logo-img" alt="Mercado Pago">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Mercado_Pago_logo.png/1024px-Mercado_Pago_logo.png" class="card-logo-img">
                         </div>
-                        <div class="card-number"><span id="view-num-mp-main">...</span> <button class="copy-btn" onclick="copyText('view-num-mp-main')">COPIAR</button></div>
-                        <div class="card-bottom"><div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-mp-main">...</div></div></div>
+                        <div class="card-number">
+                            <span id="view-num-mp-main">...</span> 
+                            <button class="copy-btn" onclick="copyText('view-num-mp-main')">COPIAR</button>
+                        </div>
+                        <div class="card-bottom">
+                            <div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-mp-main">...</div></div>
+                            <div><span class="card-label">BANCO</span><div class="card-holder">MERCADO PAGO</div></div>
+                        </div>
+                    </div>
+
+                    <div id="card-oxxo-main" class="bank-card card-oxxo">
+                        <div class="card-top">
+                            <div class="card-chip"></div>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Oxxo_Logo.svg/1200px-Oxxo_Logo.svg.png" class="card-logo-img">
+                        </div>
+                        <div class="card-number">
+                            <span id="view-num-oxxo-main">...</span> 
+                            <button class="copy-btn" onclick="copyText('view-num-oxxo-main')">COPIAR</button>
+                        </div>
+                        <div class="card-bottom">
+                            <div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-oxxo-main">...</div></div>
+                            <div><span class="card-label">DEPÓSITO</span><div class="card-holder">OXXO</div></div>
+                        </div>
+                    </div>
+
+                    <div id="card-banorte-main" class="bank-card card-banorte">
+                        <div class="card-top">
+                            <div class="card-chip"></div>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Banorte_logo.png/1200px-Banorte_logo.png" class="card-logo-img" style="filter:brightness(0) invert(1);">
+                        </div>
+                        <div class="card-number">
+                            <span id="view-num-banorte-main">...</span> 
+                            <button class="copy-btn" onclick="copyText('view-num-banorte-main')">COPIAR</button>
+                        </div>
+                        <div class="card-bottom">
+                            <div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-banorte-main">...</div></div>
+                            <div><span class="card-label">BANCO</span><div class="card-holder">BANORTE</div></div>
+                        </div>
+                    </div>
+
+                    <div id="card-banamex-main" class="bank-card card-banamex">
+                        <div class="card-top">
+                            <div class="card-chip"></div>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Citibanamex_logo.svg/2560px-Citibanamex_logo.svg.png" class="card-logo-img" style="filter:brightness(0) invert(1);">
+                        </div>
+                        <div class="card-number">
+                            <span id="view-num-banamex-main">...</span> 
+                            <button class="copy-btn" onclick="copyText('view-num-banamex-main')">COPIAR</button>
+                        </div>
+                        <div class="card-bottom">
+                            <div><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-banamex-main">...</div></div>
+                            <div><span class="card-label">BANCO</span><div class="card-holder">BANAMEX</div></div>
+                        </div>
                     </div>
                 </div>
 
-                <a href="https://wa.me/5219712627585" class="btn-action" style="margin-top:30px; display:inline-flex; align-items:center; justify-content:center; gap:10px; width:auto; background:#25D366; padding:15px 30px; border-radius:50px;">
+                <a id="btn-wa-proof" href="#" target="_blank" class="btn-action" style="margin-top:30px; display:inline-flex; align-items:center; justify-content:center; gap:10px; width:auto; background:#25D366; padding:15px 30px; border-radius:50px;">
                     <i class="fab fa-whatsapp" style="font-size:1.5rem;"></i> Enviar Comprobante
                 </a>
             </div>
@@ -766,12 +892,10 @@
             <div class="container">
                 <h2 class="section-title">Sorteos Disponibles</h2>
                 
-                <div class="admin-controls" style="text-align:center; margin-bottom:20px;">
-                    <div class="admin-title">⚙️ GESTIÓN DE EVENTOS</div>
-                    <button onclick="openEventModal()" class="btn-action" style="font-size:1.1rem; padding:15px 30px; background:var(--dark); color:var(--accent); border:1px solid var(--accent);">
+                <div class="admin-clean-wrapper admin-only">
+                    <button onclick="openEventModal()" class="btn-action" style="font-size:1.1rem; padding:15px 30px; background:var(--dark); color:var(--accent); border:1px solid var(--accent); box-shadow: 0 4px 15px rgba(0,0,0,0.3); border-radius: 50px;">
                         <i class="fas fa-plus-circle"></i> PUBLICAR NUEVO EVENTO
                     </button>
-                    <p style="font-size:0.8rem; color:#666; margin-top:5px;">Crea múltiples sorteos simultáneos.</p>
                 </div>
 
                 <div id="events-grid" class="events-grid">
@@ -779,8 +903,8 @@
                 </div>
             </div>
         </div>
-
         <div id="page-boletos" class="page-view">
+            
             <div id="selection-bar" class="selection-bar">
                 <div class="selection-info">
                     <span id="bar-nums" style="color:var(--primary);">Ninguno</span> | <span id="bar-total">$0</span>
@@ -795,8 +919,8 @@
                     <i class="fas fa-arrow-left"></i> Volver a Sorteos
                 </button>
                 
-                <button class="btn-action btn-edit-event" onclick="shareCurrentEventLink()" style="float:right; margin-bottom:10px;">
-                    🔗 Copiar Link
+                <button class="btn-action admin-only" onclick="shareCurrentEventLink()" style="float:right; margin-bottom:10px; background: #333; border:1px solid white;">
+                    🔗 Copiar Link (Admin)
                 </button>
                 <div style="clear:both;"></div>
 
@@ -852,59 +976,47 @@
                     <span class="badge" style="color:black"><i class="fas fa-circle"></i> Tuyo</span>
                 </div>
                 
-                <div class="admin-controls" style="margin-top:20px;">
-                     <button class="btn-action" style="width:100%; background:#333; margin-bottom:15px; border:1px solid var(--accent);" onclick="openScreenshotModal()">
-                        📷 GENERAR TABLA PARA FOTO
+                <div class="admin-controls admin-only" style="margin-top:20px;">
+                     <button class="btn-action" style="width:100%; background:#333; margin-bottom:15px; border:1px solid var(--accent); padding: 15px;" onclick="openScreenshotModal()">
+                        <i class="fas fa-camera"></i> GENERAR TABLA PARA FOTO
                      </button>
-                     
                      <div class="admin-title">🔔 NOTIFICACIONES (Este Evento)</div>
-                     <div id="admin-notifications" class="admin-dashboard">
-                         <p style="text-align:center; color:#999;">Selecciona un evento para ver apartados.</p>
-                     </div>
+                     <div id="admin-notifications" class="admin-dashboard"></div>
                 </div>
             </div>
 
             <div id="grid-rifa" class="grid-container">Cargando...</div>
         </div>
 
-    </div>
-    <div id="modal-lucky" class="modal-overlay" style="display:none;">
-        <div class="modal-content">
-            <div class="close-btn" onclick="closeModal('modal-lucky')">&times;</div>
-            <h3 style="color:var(--accent);">🎰 Máquina de la Suerte</h3>
-            
-            <div id="lucky-step-1">
-                <p>Elige cuántos boletos quieres:</p>
-                <div style="display:flex; justify-content:center; gap:10px; margin:20px 0;">
-                    <button onclick="setLucky(2)" class="btn-action" style="width:auto; background:#333;">2</button>
-                    <button onclick="setLucky(5)" class="btn-action" style="width:auto; background:#333;">5</button>
-                    <input type="number" id="lucky-qty" class="form-control" placeholder="#" style="width:80px; text-align:center;">
-                </div>
-                <button onclick="spinRoulette()" class="btn-action" style="background:var(--accent); color:black; width:100%;">¡GIRAR!</button>
+    </div> <footer>
+        <div class="footer-socials">
+            <div style="display:inline-flex; align-items:center;">
+                <a id="footer-fb-link" href="#" target="_blank" class="social-btn"><i class="fab fa-facebook-f"></i></a>
             </div>
-            
-            <div id="lucky-step-2" style="display:none;">
-                <div class="roulette-wrapper">
-                    <div class="roulette-arrow"></div>
-                    <div id="roulette-wheel" class="roulette-wheel">
-                        <div class="roulette-number rn-0">0</div>
-                        <div class="roulette-number rn-1">1</div>
-                        <div class="roulette-number rn-2">2</div>
-                        <div class="roulette-number rn-3">3</div>
-                        <div class="roulette-number rn-4">4</div>
-                        <div class="roulette-number rn-5">5</div>
-                        <div class="roulette-number rn-6">6</div>
-                        <div class="roulette-number rn-7">7</div>
-                        <div class="roulette-number rn-8">8</div>
-                        <div class="roulette-number rn-9">9</div>
-                    </div>
-                </div>
-                <h2 id="lucky-result-text" style="color:var(--primary); margin:15px 0;">...</h2>
-                <div style="display:flex; gap:10px; justify-content:center;">
-                    <button onclick="resetLucky()" class="btn-action" style="background:#555;">Otra vez</button>
-                    <button onclick="confirmLucky()" class="btn-action">¡Los quiero!</button>
-                </div>
+            <div style="display:inline-flex; align-items:center; margin-left:15px;">
+                <a id="footer-wa-link" href="#" target="_blank" class="social-btn"><i class="fab fa-whatsapp"></i></a>
             </div>
+        </div>
+        
+        <p>&copy; 2026 Todos los derechos reservados.</p>
+        
+        <div style="margin-top:5px;">
+            <a onclick="openTermsPublic()" class="footer-link">Ver Términos y Condiciones</a>
+        </div>
+
+        <div class="footer-dev">
+            Esta página fue hecha por <a href="#" target="_blank">ZonaTecno</a>
+        </div>
+    </footer>
+
+    <div id="modal-terms" class="modal-overlay" onclick="closeModal('modal-terms')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="close-btn" onclick="closeModal('modal-terms')">&times;</div>
+            <h3 style="color:var(--primary-dark); text-transform:uppercase; border-bottom:2px solid var(--accent); padding-bottom:10px;">Términos y Condiciones</h3>
+            <div class="terms-text" id="terms-public-content">
+                <p>Cargando términos...</p>
+            </div>
+            <button onclick="closeModal('modal-terms')" class="btn-action" style="background: #333; width:100%;">Entendido y Acepto</button>
         </div>
     </div>
 
@@ -928,34 +1040,18 @@
 
     <div id="modal-virtual-ticket" class="modal-overlay" style="display:none;">
         <div class="modal-content" style="background:transparent; box-shadow:none; padding:0; width:100%; display:flex; flex-direction:column; align-items:center;">
-            
             <div class="virtual-ticket-card">
                 <div class="vt-shine"></div>
                 <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="vt-logo" alt="Logo">
                 <div class="vt-congrats">¡FELICIDADES!</div>
                 <p class="vt-msg">Participación confirmada.</p>
-                
                 <div class="vt-divider"></div>
-                
-                <div class="vt-data-row">
-                    <div class="vt-label">Participante</div>
-                    <div id="vt-client" class="vt-value">NOMBRE CLIENTE</div>
-                </div>
-
-                <div class="vt-data-row">
-                    <div class="vt-label">Tus Números</div>
-                    <div id="vt-num" class="vt-numbers">00, 00</div>
-                </div>
-
-                <div class="vt-data-row">
-                    <div class="vt-label">Sorteo</div>
-                    <div id="vt-event-name" style="color:white; font-size:0.9rem;">Nombre Evento</div>
-                </div>
-
+                <div class="vt-data-row"><div class="vt-label">Participante</div><div id="vt-client" class="vt-value">NOMBRE CLIENTE</div></div>
+                <div class="vt-data-row"><div class="vt-label">Tus Números</div><div id="vt-num" class="vt-numbers">00, 00</div></div>
+                <div class="vt-data-row"><div class="vt-label">Sorteo</div><div id="vt-event-name" style="color:white; font-size:0.9rem;">Nombre Evento</div></div>
                 <div class="vt-divider"></div>
                 <div class="vt-footer">Tu Suerte Suma | Sorteos Transparentes</div>
             </div>
-
             <div style="background:white; padding:15px; border-radius:15px; margin-top:10px; text-align:center; width:90%; max-width:380px;">
                 <p style="color:#666; font-size:0.8rem; margin-bottom:5px;">Enviar al cliente:</p>
                 <button onclick="shareTicketWhatsApp()" class="btn-whatsapp-share" style="margin-top:0;">
@@ -980,113 +1076,6 @@
         </div>
     </div>
 
-    <div id="modal-event-config" class="modal-overlay" style="display:none;">
-        <div class="modal-content" style="max-width:500px; text-align:left;">
-            <div class="close-btn" onclick="closeModal('modal-event-config')">&times;</div>
-            <h3 style="color:var(--primary-dark); text-align:center; margin-bottom:15px;">Configurar Evento</h3>
-            
-            <input type="hidden" id="edit-event-id">
-            <div class="form-group">
-                <label>Nombre del Evento</label>
-                <input type="text" id="evt-title" class="form-control" placeholder="Ej: Rifa iPhone 15">
-            </div>
-
-            <div class="admin-form-grid" style="margin-top:10px;">
-                <div class="form-group">
-                    <label>Precio</label>
-                    <input type="number" id="evt-price" class="form-control" placeholder="0.00">
-                </div>
-                <div class="form-group">
-                    <label>Boletos</label>
-                    <select id="evt-qty" class="form-control">
-                        <option value="100">100 (00-99)</option>
-                        <option value="1000">1000 (000-999)</option>
-                        <option value="10000">10000 (0000-9999)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group" style="margin-bottom:15px;">
-                <label>Fecha Límite (Activa Cuenta Regresiva)</label>
-                <input type="datetime-local" id="evt-date-end" class="form-control">
-                <small style="color:#666; font-size:0.75rem;">Dejar vacío para ocultar contador.</small>
-            </div>
-
-            <div class="form-group">
-                <label>Imagen (URL)</label>
-                <input type="text" id="evt-img" class="form-control" placeholder="https://...">
-            </div>
-
-            <div class="form-group">
-                <label>Descripción Corta (Tarjeta)</label>
-                <input type="text" id="evt-desc-short" class="form-control" placeholder="Ej: Gran sorteo navideño...">
-            </div>
-
-            <div class="form-group">
-                <label>Descripción Larga (Detalles)</label>
-                <textarea id="evt-desc-long" class="form-control" rows="3" placeholder="Detalles completos..."></textarea>
-            </div>
-
-            <div style="display:flex; gap:10px; margin-top:20px;">
-                <button onclick="saveEventConfig()" class="btn-action" style="width:100%;">💾 GUARDAR</button>
-                <button id="btn-delete-event" onclick="deleteCurrentEvent()" class="btn-action" style="background:#dc3545; display:none;">🗑️</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-terms" class="modal-overlay" style="display:none;" onclick="closeModal('modal-terms')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="close-btn" onclick="closeModal('modal-terms')">&times;</div>
-            <h3 style="color:var(--primary-dark); text-transform:uppercase; border-bottom:2px solid var(--accent); padding-bottom:10px;">Términos y Condiciones</h3>
-            
-            <div class="terms-text" id="terms-list-container">
-                <div style="margin-bottom:15px;">
-                    <h4 id="term-title-1">1. Actividad entre Particulares</h4> <button class="cms-edit-btn" onclick="openCmsEdit('term-title-1')">✏️</button>
-                    <div id="term-desc-1"><p>Tu Suerte Suma es una iniciativa privada sin fines de lucro comercial masivo, destinada a recaudación de fondos para apoyo de salud personal y familiar.</p></div> <button class="cms-edit-btn" onclick="openCmsEdit('term-desc-1')">✏️</button>
-                </div>
-                <div style="margin-bottom:15px;">
-                    <h4 id="term-title-2">2. Mecánica del Sorteo</h4> <button class="cms-edit-btn" onclick="openCmsEdit('term-title-2')">✏️</button>
-                    <div id="term-desc-2"><p>Todos los sorteos se realizan con base en los resultados oficiales de la Lotería Nacional de México. El ganador se determina por las últimas cifras del Premio Mayor.</p></div> <button class="cms-edit-btn" onclick="openCmsEdit('term-desc-2')">✏️</button>
-                </div>
-                <div style="margin-bottom:15px;">
-                    <h4 id="term-title-3">3. Reclamación de Premios</h4> <button class="cms-edit-btn" onclick="openCmsEdit('term-title-3')">✏️</button>
-                    <div id="term-desc-3"><p>El ganador cuenta con 10 días naturales para reclamar su premio presentando comprobante e identificación.</p></div> <button class="cms-edit-btn" onclick="openCmsEdit('term-desc-3')">✏️</button>
-                </div>
-                <div style="margin-bottom:15px;">
-                    <h4 id="term-title-4">4. Datos Personales</h4> <button class="cms-edit-btn" onclick="openCmsEdit('term-title-4')">✏️</button>
-                    <div id="term-desc-4"><p>Tus datos se utilizan exclusivamente para contacto y control interno.</p></div> <button class="cms-edit-btn" onclick="openCmsEdit('term-desc-4')">✏️</button>
-                </div>
-                <div style="margin-bottom:15px;">
-                    <h4 id="term-title-5">5. Pagos y Reembolsos</h4> <button class="cms-edit-btn" onclick="openCmsEdit('term-title-5')">✏️</button>
-                    <div id="term-desc-5"><p>No existen cancelaciones ni reembolsos. Boletos apartados y no pagados se liberan en 12-24hrs.</p></div> <button class="cms-edit-btn" onclick="openCmsEdit('term-desc-5')">✏️</button>
-                </div>
-            </div>
-
-            <div style="text-align:center; margin-bottom:15px;">
-                <button class="cms-edit-btn" style="width:100%; border-radius:5px; height:auto; padding:5px; background:#eee;" onclick="addNewTerm()">+ Agregar Término</button>
-            </div>
-
-            <button onclick="closeModal('modal-terms')" class="btn-action" style="background: #333; width:100%;">Entendido y Acepto</button>
-        </div>
-    </div>
-
-    <div id="modal-cms-edit" class="modal-overlay" style="display:none;">
-        <div class="modal-content" style="max-width:600px; text-align:left;">
-            <div class="close-btn" onclick="closeModal('modal-cms-edit')">&times;</div>
-            <h3 style="color:var(--primary-dark); text-align:center; margin-bottom:15px;">✏️ Editar Contenido</h3>
-            
-            <p style="font-size:0.8rem; color:#666; margin-bottom:5px;">Edita el texto a continuación. Se guarda automáticamente en tiempo real al confirmar.</p>
-            
-            <input type="hidden" id="cms-target-id">
-            <textarea id="cms-input-content" class="cms-editor-textarea"></textarea>
-            
-            <div style="display:flex; gap:10px;">
-                <button onclick="closeModal('modal-cms-edit')" class="btn-action" style="background:#555;">Cancelar</button>
-                <button onclick="saveCmsContent()" class="btn-action" style="width:100%;">💾 GUARDAR CAMBIOS</button>
-            </div>
-        </div>
-    </div>
-
     <div id="modal-screenshot" class="modal-overlay" style="display:none; align-items:flex-start; padding-top:50px; overflow-y:auto;">
         <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
             
@@ -1108,26 +1097,22 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer-socials">
-            <div style="display:inline-flex; align-items:center;">
-                <a id="link-fb" href="https://www.facebook.com/share/1DUjTsBKWM/" target="_blank" class="social-btn"><i class="fab fa-facebook-f"></i></a>
-                <button class="cms-edit-btn" style="width:20px; height:20px; font-size:0.7rem;" onclick="editSocialLink('fb')">✏️</button>
-            </div>
-            
-            <div style="display:inline-flex; align-items:center; margin-left:15px;">
-                <a id="link-wa" href="https://whatsapp.com/channel/0029Vb7DRuS0gcfD5rt89V3w" target="_blank" class="social-btn"><i class="fab fa-whatsapp"></i></a>
-                <button class="cms-edit-btn" style="width:20px; height:20px; font-size:0.7rem;" onclick="editSocialLink('wa')">✏️</button>
+    <div id="modal-cms-edit" class="modal-overlay" style="display:none;">
+        <div class="modal-content" style="max-width:600px; text-align:left;">
+            <div class="close-btn" onclick="closeModal('modal-cms-edit')">&times;</div>
+            <h3 style="color:var(--primary-dark); text-align:center; margin-bottom:15px;">✏️ Editar Contenido</h3>
+            <input type="hidden" id="cms-target-id">
+            <textarea id="cms-input-content" class="cms-editor-textarea" rows="5" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></textarea>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button onclick="closeModal('modal-cms-edit')" class="btn-action" style="background:#555;">Cancelar</button>
+                <button onclick="saveCmsContent()" class="btn-action" style="width:100%;">💾 GUARDAR</button>
             </div>
         </div>
-        <p>&copy; 2026 Tu Suerte Suma. Todos los derechos reservados.</p>
-        <div style="margin-top:10px;">
-            <a onclick="document.getElementById('modal-terms').style.display='flex'" class="footer-link">Ver Términos y Condiciones</a>
-        </div>
-    </footer>
+    </div>
+
     <script>
         // ==========================================
-        // 1. CONFIGURACIÓN DE FIREBASE (ORIGINAL)
+        // 1. CONFIGURACIÓN DE FIREBASE
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyD5IfOyP599UgaKkZL6RDwv-6AwXwT51J4",
@@ -1139,356 +1124,189 @@
             appId: "1:1059006672469:web:2a5aac116a060ff8016edc"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        // Inicializar Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.database();
         const auth = firebase.auth();
         
         // ==========================================
         // 2. VARIABLES GLOBALES
         // ==========================================
-        const ADMIN_WA = "5219712627585"; 
+        let siteConfig = {
+            waOrders: "5215500000000", 
+            waChannel: "#",
+            fbLink: "#",
+            theme: "default",
+            terms: [], 
+            faqs: [],
+            texts: {}
+        };
         
         let currentEventId = null; 
         let currentEventConfig = {}; 
         let currentEventTickets = {}; 
-        
         let selected = [];
-        let tempPicks = [];
-        let currentVtData = { name: '', nums: [], phone: '', eventName: '' }; 
-
+        let tempPicks = []; 
+        let countdownInterval = null;
         let carouselData = { evidence: [] };
         let carouselIdx = { evidence: 0 };
-        
-        // Variables CMS y Sistema
-        let currentCmsTarget = null;
-        let countdownInterval = null;
 
         // ==========================================
-        // 3. INICIO Y DETECCIÓN DE MODO
+        // 3. INICIALIZACIÓN Y SEGURIDAD ADMIN
         // ==========================================
-        
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             
-            // A) MODO BOLETO DIGITAL
+            // DETECTOR DE ADMIN (Controla la visibilidad de botones .admin-only)
+            auth.onAuthStateChanged((user) => { 
+                if (user) {
+                    document.body.classList.add('is-admin'); 
+                    console.log("Modo Admin: ACTIVO");
+                } else {
+                    document.body.classList.remove('is-admin');
+                    console.log("Modo Admin: INACTIVO");
+                }
+            });
+
+            // Modos de Vista Especiales
             if(urlParams.get('viewTicket') === 'true') {
                 activateOverlayMode('overlay-ticket');
-                const evtId = urlParams.get('id');
-                const tNum = urlParams.get('num');
-                loadDigitalTicketMode(evtId, tNum);
-            } 
-            // B) MODO LINK DE PAGOS
-            else if(urlParams.get('viewPayment') === 'true') {
+                loadDigitalTicketMode(urlParams.get('id'), urlParams.get('num'));
+            } else if(urlParams.get('viewPayment') === 'true') {
                 activateOverlayMode('overlay-payment');
                 db.ref('banks').on('value', (snap) => updateBankUI(snap.val() || {}));
-            }
-            // C) MODO NORMAL
-            else {
+            } else {
                 initAppNormal();
-                
-                // D) LINK DIRECTO A EVENTO (?evt=ID)
                 const directEventId = urlParams.get('evt');
-                if(directEventId) {
-                    setTimeout(() => { selectEvent(directEventId); }, 1500);
-                }
+                if(directEventId) setTimeout(() => selectEvent(directEventId), 1000);
             }
         };
 
-        function activateOverlayMode(overlayId) {
+        function activateOverlayMode(id) {
             document.querySelector('nav').style.display = 'none';
             document.querySelector('footer').style.display = 'none';
             document.getElementById('main-content-area').style.display = 'none';
-            const overlay = document.getElementById(overlayId);
-            if(overlay) overlay.classList.add('active');
+            const el = document.getElementById(id);
+            if(el) el.classList.add('active');
         }
 
         function initAppNormal() {
-            // Escuchar cambios en la DB
+            loadSiteConfig();
             db.ref('banks').on('value', (snap) => updateBankUI(snap.val() || {}));
             db.ref('images/evidence').on('value', (snap) => updateEvidenceUI(snap.val() || {}));
             db.ref('events').on('value', (snap) => renderEventsList(snap.val() || {}));
-            
-            // Cargar contenido editable del CMS
-            loadCmsContent();
         }
 
         // ==========================================
-        // 4. LÓGICA CMS (TEXTOS EDITABLES)
+        // 4. CMS: TEXTOS Y CONFIGURACIÓN
         // ==========================================
-
-        function loadCmsContent() {
+        function loadSiteConfig() {
             db.ref('site_config').on('value', (snap) => {
                 const data = snap.val() || {};
                 
-                // Actualizar textos generales
-                Object.keys(data).forEach(key => {
-                    if(key.startsWith('link-')) {
-                        // Es un enlace (footer)
-                        const el = document.getElementById(key);
-                        if(el) el.href = data[key];
-                    } else {
-                        // Es texto/html
-                        const el = document.getElementById(key);
-                        if(el) el.innerHTML = data[key];
-                    }
-                });
+                // General & Redes
+                if(data.general) {
+                    siteConfig.waOrders = data.general.waOrders;
+                    siteConfig.waChannel = data.general.waChannel;
+                    siteConfig.fbLink = data.general.fbLink;
+                    applyTheme(data.general.theme || "default");
+                    updateSocialLinksUI();
+                }
+                
+                // Textos Editables
+                if(data.texts) {
+                    siteConfig.texts = data.texts;
+                    updateTextsUI();
+                }
+                
+                // Listas
+                siteConfig.terms = data.terms || [];
+                siteConfig.faqs = data.faqs || [];
+                renderFaqPublic();
             });
         }
 
-        function openCmsEdit(elementId) {
-            currentCmsTarget = elementId;
-            const el = document.getElementById(elementId);
-            if(!el) return;
-
-            // Si es un enlace, tomamos el href, si es texto, el innerHTML
-            let content = "";
-            if(elementId.startsWith('link-')) content = el.href;
-            else content = el.innerHTML;
-            
-            // Limpiar espacios para edición cómoda
-            document.getElementById('cms-input-content').value = content.trim();
-            document.getElementById('cms-target-id').value = elementId;
-            
-            document.getElementById('modal-cms-edit').style.display = 'flex';
+        function updateSocialLinksUI() {
+            const fbs = [document.getElementById('social-fb-nav'), document.getElementById('footer-fb-link')];
+            const was = [document.getElementById('social-wa-nav'), document.getElementById('footer-wa-link')];
+            fbs.forEach(e => { if(e) e.href = siteConfig.fbLink || "#"; });
+            was.forEach(e => { if(e) e.href = siteConfig.waChannel || "#"; });
         }
 
-        function saveCmsContent() {
-            const newContent = document.getElementById('cms-input-content').value;
-            const targetId = document.getElementById('cms-target-id').value;
-
-            if(!targetId) return;
-
-            // Guardar en Firebase
-            db.ref(`site_config/${targetId}`).set(newContent).then(() => {
-                closeModal('modal-cms-edit');
-                Swal.fire({
-                    toast: true, position: 'top-end', icon: 'success', 
-                    title: 'Guardado', showConfirmButton: false, timer: 1000
-                });
-            }).catch(err => Swal.fire("Error", "No se pudo guardar", "error"));
+        function applyTheme(t) {
+            document.body.classList.remove('theme-maroon', 'theme-blue', 'theme-red', 'theme-pink', 'theme-orange', 'theme-yellow');
+            if(t !== 'default') document.body.classList.add(t);
         }
 
-        // Función para agregar nuevas Preguntas Frecuentes
-        function addNewFaq() {
-            Swal.fire({
-                title: 'Nueva Pregunta',
-                html: '<input id="swal-q" class="swal2-input" placeholder="Pregunta"><textarea id="swal-a" class="swal2-textarea" placeholder="Respuesta"></textarea>',
-                showCancelButton: true,
-                confirmButtonText: 'Agregar'
-            }).then((result) => {
-                if(result.isConfirmed) {
-                    const q = document.getElementById('swal-q').value;
-                    const a = document.getElementById('swal-a').value;
-                    const id = Date.now(); // ID único
-                    
-                    const container = document.getElementById('faq-container');
-                    
-                    // Inyectar HTML en el DOM
-                    const newHTML = `
-                        <details>
-                            <summary><span id="faq-q-${id}">${q}</span> <button class="cms-edit-btn" onclick="event.preventDefault(); openCmsEdit('faq-q-${id}')">✏️</button></summary>
-                            <div class="faq-ans"><div id="faq-a-${id}">${a}</div> <button class="cms-edit-btn" onclick="openCmsEdit('faq-a-${id}')">✏️</button></div>
-                        </details>`;
-                    
-                    // Nota: Para una persistencia completa estructural se requeriría guardar el array en DB.
-                    // Aquí guardamos el contenido para editar. En una implementación real completa, 
-                    // deberíamos reconstruir el HTML desde un array en Firebase. 
-                    // Por ahora, lo inyectamos visualmente y guardamos el contenido editable.
-                    container.insertAdjacentHTML('beforeend', newHTML);
-
-                    // Guardar los textos iniciales
-                    db.ref(`site_config/faq-q-${id}`).set(q);
-                    db.ref(`site_config/faq-a-${id}`).set(a);
-                }
-            });
+        function updateTextsUI() {
+            const t = siteConfig.texts || {};
+            if(document.getElementById('view-hero-title')) document.getElementById('view-hero-title').innerText = t.heroTitle || "¡PARTICIPA Y GANA!";
+            if(document.getElementById('view-hero-desc')) document.getElementById('view-hero-desc').innerText = t.heroDesc || "Tu oportunidad...";
+            if(document.getElementById('view-bio-main')) document.getElementById('view-bio-main').innerText = t.bioMain || "Hola...";
+            if(document.getElementById('view-bio-subtitle')) document.getElementById('view-bio-subtitle').innerText = t.bioSubtitle || "Tu Suerte Suma: Ganamos Todos";
+            if(document.getElementById('view-bio-history')) document.getElementById('view-bio-history').innerText = t.bioHistory || "...";
+            if(document.getElementById('view-bio-why')) document.getElementById('view-bio-why').innerText = t.bioWhy || "...";
         }
 
-        // Función para agregar nuevos Términos
-        function addNewTerm() {
-            Swal.fire({
-                title: 'Nuevo Término',
-                html: '<input id="swal-t-title" class="swal2-input" placeholder="Título (Ej: 6. Reintegros)"><textarea id="swal-t-desc" class="swal2-textarea" placeholder="Descripción"></textarea>',
-                showCancelButton: true,
-                confirmButtonText: 'Agregar'
-            }).then((result) => {
-                if(result.isConfirmed) {
-                    const title = document.getElementById('swal-t-title').value;
-                    const desc = document.getElementById('swal-t-desc').value;
-                    const id = Date.now();
-                    
-                    const container = document.getElementById('terms-list-container');
-                    const newHTML = `
-                        <div style="margin-bottom:15px;">
-                            <h4 id="term-title-${id}">${title}</h4> <button class="cms-edit-btn" onclick="openCmsEdit('term-title-${id}')">✏️</button>
-                            <div id="term-desc-${id}"><p>${desc}</p></div> <button class="cms-edit-btn" onclick="openCmsEdit('term-desc-${id}')">✏️</button>
-                        </div>`;
-                    
-                    container.insertAdjacentHTML('beforeend', newHTML);
-                    db.ref(`site_config/term-title-${id}`).set(title);
-                    db.ref(`site_config/term-desc-${id}`).set(`<p>${desc}</p>`);
-                }
-            });
+        // Funciones CMS (Guardar Textos)
+        function openConfigTexts() { 
+            closeModal('modal-settings-menu'); 
+            const t = siteConfig.texts || {}; 
+            document.getElementById('txt-hero-title').value = t.heroTitle || ""; 
+            document.getElementById('txt-hero-desc').value = t.heroDesc || ""; 
+            document.getElementById('txt-bio-main').value = t.bioMain || ""; 
+            document.getElementById('txt-bio-subtitle').value = t.bioSubtitle || ""; 
+            document.getElementById('txt-bio-history').value = t.bioHistory || ""; 
+            document.getElementById('txt-bio-why').value = t.bioWhy || ""; 
+            document.getElementById('modal-config-texts').style.display='flex'; 
         }
 
-        function editSocialLink(type) {
-            openCmsEdit(`link-${type}`);
+        function saveTextsConfig() { 
+            db.ref('site_config/texts').set({ 
+                heroTitle: document.getElementById('txt-hero-title').value, 
+                heroDesc: document.getElementById('txt-hero-desc').value, 
+                bioMain: document.getElementById('txt-bio-main').value, 
+                bioSubtitle: document.getElementById('txt-bio-subtitle').value,
+                bioHistory: document.getElementById('txt-bio-history').value, 
+                bioWhy: document.getElementById('txt-bio-why').value 
+            }).then(()=>{ 
+                closeModal('modal-config-texts'); 
+                Swal.fire({toast:true, icon:'success', title:'Textos Actualizados'}); 
+            }); 
         }
 
         // ==========================================
-        // 5. NUEVAS FUNCIONES: FINANZAS Y CUENTA REGRESIVA
+        // 5. LÓGICA DE EVENTOS (CORE)
         // ==========================================
-
-        function startCountdown(dateString) {
-            if(countdownInterval) clearInterval(countdownInterval);
-            const display = document.getElementById('countdown-display');
-            
-            if(!dateString) {
-                display.style.display = 'none';
-                return;
-            }
-
-            const endDate = new Date(dateString).getTime();
-            if(isNaN(endDate)) {
-                display.style.display = 'none';
-                return;
-            }
-
-            display.style.display = 'flex'; // Mostrar si hay fecha
-
-            countdownInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = endDate - now;
-
-                if (distance < 0) {
-                    clearInterval(countdownInterval);
-                    display.innerHTML = "<h3 style='color:red; width:100%; text-align:center;'>¡TIEMPO AGOTADO!</h3>";
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById("cd-d").innerText = days.toString().padStart(2,'0');
-                document.getElementById("cd-h").innerText = hours.toString().padStart(2,'0');
-                document.getElementById("cd-m").innerText = minutes.toString().padStart(2,'0');
-                document.getElementById("cd-s").innerText = seconds.toString().padStart(2,'0');
-            }, 1000);
-        }
-
-        function updateFinancialPanel(tickets, price) {
-            let totalPaid = 0;
-            let totalPending = 0;
-            let soldCount = 0;
-            const totalTickets = parseInt(currentEventConfig.qty || 100);
-
-            if(tickets) {
-                Object.values(tickets).forEach(t => {
-                    if(t.status === 'pagado') {
-                        totalPaid += parseFloat(price);
-                        soldCount++;
-                    } else if (t.status === 'apartado') {
-                        totalPending += parseFloat(price);
-                        soldCount++; // Contamos apartados como "vendidos" para la barra de progreso visual
-                    }
-                });
-            }
-
-            // Actualizar Tarjetas Financieras
-            document.getElementById('stat-raised').innerText = `$${totalPaid.toLocaleString()}`;
-            document.getElementById('stat-pending').innerText = `$${totalPending.toLocaleString()}`;
-
-            // Actualizar Barra de Progreso
-            const percent = Math.floor((soldCount / totalTickets) * 100);
-            const bar = document.getElementById('public-progress-bar');
-            bar.style.width = `${percent}%`;
-            document.getElementById('progress-percent-txt').innerText = `${percent}% Vendido`;
-            
-            // Cambio de color de barra según urgencia
-            if(percent > 80) bar.style.background = "linear-gradient(90deg, #ff5722, #ff0000)";
-            else bar.style.background = "linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%)";
-        }
-
-        // ==========================================
-        // 6. MENÚ DE CONFIGURACIÓN & AUTH
-        // ==========================================
-        
-        function openSettingsMenu() {
-            document.getElementById('modal-settings-menu').style.display = 'flex';
-        }
-
-        function openLogin() {
-            // Si ya es admin, avisamos
-            if(document.body.classList.contains('is-admin')) {
-                Swal.fire("Ya eres Admin", "Sesión activa", "info");
-            } else {
-                document.getElementById('loginModal').style.display='flex';
-            }
-        }
-
-        function attemptLogin() {
-            const email = document.getElementById('adminUser').value;
-            const pass = document.getElementById('adminPass').value;
-            auth.signInWithEmailAndPassword(email, pass).then(() => {
-                closeModal('loginModal'); 
-                Swal.fire({
-                    title: "¡Bienvenido!", 
-                    text: "Modo Administrador Activado", 
-                    icon: "success",
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            }).catch(e => Swal.fire("Error", "Datos incorrectos", "error"));
-        }
-
-        function logoutAdmin() { 
-            auth.signOut().then(() => location.reload()); 
-        }
-
-        auth.onAuthStateChanged((user) => {
-            if (user) document.body.classList.add('is-admin');
-            else document.body.classList.remove('is-admin');
-        });
-        
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        
-        function copyText(id) { 
-            navigator.clipboard.writeText(document.getElementById(id).innerText)
-                .then(() => Swal.fire({toast:true, icon:'success', title:'Copiado'}));
-        }
-        // ==========================================
-        // 7. GESTIÓN DE EVENTOS & UI
-        // ==========================================
-
         function renderEventsList(events) {
-            const gridSorteos = document.getElementById('events-grid');
-            const listHome = document.getElementById('home-events-list');
-            gridSorteos.innerHTML = ''; listHome.innerHTML = '';
+            const grid = document.getElementById('events-grid');
+            const list = document.getElementById('home-events-list');
+            grid.innerHTML = ''; list.innerHTML = '';
             
-            const eventIds = Object.keys(events);
-            if(eventIds.length === 0) {
-                const noEvents = '<p style="grid-column:1/-1; text-align:center; color:white;">No hay sorteos activos por el momento.</p>';
-                gridSorteos.innerHTML = noEvents; listHome.innerHTML = noEvents; return;
+            if(!events || Object.keys(events).length === 0) {
+                const msg = '<p style="grid-column:1/-1; text-align:center; color:white;">No hay sorteos activos.</p>';
+                grid.innerHTML = msg; list.innerHTML = msg; return;
             }
 
-            eventIds.forEach(id => {
-                const ev = events[id].config;
-                const cardHTML = `
+            Object.entries(events).forEach(([id, data]) => {
+                const ev = data.config;
+                const html = `
                     <div class="event-card" onclick="selectEvent('${id}')">
+                        <div class="btn-edit-floating admin-only" onclick="event.stopPropagation(); openEditEvent('${id}')">
+                            <i class="fas fa-pencil-alt"></i>
+                        </div>
                         <img src="${ev.img || 'https://via.placeholder.com/300'}" class="event-img">
                         <div class="event-body">
                             <div><div class="event-title">${ev.title}</div><div class="event-desc">${ev.descShort || ''}</div></div>
                             <div>
                                 <div class="event-price">$${ev.price}</div>
                                 <button class="btn-action" style="width:100%; margin-top:10px;">VER BOLETOS</button>
-                                <div class="event-actions">
-                                    <button onclick="event.stopPropagation(); openEditEvent('${id}')" class="btn-edit-event">✏️ Editar</button>
-                                </div>
                             </div>
                         </div>
                     </div>`;
-                gridSorteos.innerHTML += cardHTML; listHome.innerHTML += cardHTML;
+                grid.innerHTML += html; list.innerHTML += html;
             });
         }
 
@@ -1497,38 +1315,25 @@
             selected = [];
             updateBar();
             
-            // Listener en tiempo real para el evento seleccionado
             db.ref(`events/${id}`).on('value', (snap) => {
-                const data = snap.val();
-                if(!data) return;
+                const d = snap.val();
+                if(!d) return;
+                currentEventConfig = d.config;
+                currentEventTickets = d.tickets || {};
                 
-                currentEventConfig = data.config;
-                currentEventTickets = data.tickets || {};
-                
-                // Actualizar UI Header
                 document.getElementById('header-title').innerText = currentEventConfig.title;
                 document.getElementById('header-price').innerText = `$${currentEventConfig.price}`;
-                // La descripción ahora respeta el CSS "estrecho y justificado" de la Parte 2
-                document.getElementById('header-desc').innerText = currentEventConfig.descLong || currentEventConfig.descShort || "";
+                document.getElementById('header-desc').innerText = currentEventConfig.descLong || "";
                 
-                if(currentEventConfig.img) {
-                    document.getElementById('header-img').src = currentEventConfig.img;
-                    document.getElementById('header-img').style.display = 'block';
-                } else {
-                    document.getElementById('header-img').style.display = 'none';
-                }
+                const img = document.getElementById('header-img');
+                if(currentEventConfig.img) { img.src = currentEventConfig.img; img.style.display='block'; } 
+                else { img.style.display='none'; }
                 
-                // [NUEVO] Activar Cuenta Regresiva (si hay fecha configurada)
                 startCountdown(currentEventConfig.dateEnd);
-
-                // [NUEVO] Actualizar Panel Financiero y Barra de Progreso
-                updateFinancialPanel(currentEventTickets, currentEventConfig.price);
-                
+                updateFinancialPanel();
                 createGrid();
                 
-                if(document.body.classList.contains('is-admin')) {
-                    renderGroupedNotifications();
-                }
+                if(document.body.classList.contains('is-admin')) renderGroupedNotifications();
             });
             showPage('boletos');
         }
@@ -1536,34 +1341,46 @@
         function createGrid() {
             const grid = document.getElementById('grid-rifa');
             grid.innerHTML = '';
-            const total = parseInt(currentEventConfig.qty);
-            const pad = total > 100 ? (total > 1000 ? 4 : 3) : 2;
+            
+            const totalBoletos = parseInt(currentEventConfig.qty || 100);
+            let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+            let rangeSize = Math.floor(baseNums / totalBoletos);
 
-            for(let i=0; i<total; i++) {
+            let pad = 2;
+            if(baseNums > 100) pad = 3; 
+            if(baseNums > 1000) pad = 4;
+
+            for(let i=0; i<totalBoletos; i++) {
                 let d = document.createElement('div');
                 d.className = 'ticket';
                 d.id = 't-'+i;
-                d.innerText = i.toString().padStart(pad, '0');
                 d.onclick = () => clickTicket(i);
-                
+
+                if(rangeSize > 1) {
+                    let start = i * rangeSize;
+                    let end = start + rangeSize - 1;
+                    let startStr = start.toString().padStart(pad, '0');
+                    let endStr = end.toString().padStart(pad, '0');
+                    d.innerHTML = `<span style="font-size:1.3rem;">${i+1}</span><br><span style="font-size:0.7rem; opacity:0.8;">(${startStr}-${endStr})</span>`;
+                    d.classList.add('range-text');
+                } else {
+                    d.innerText = i.toString().padStart(pad, '0');
+                }
+
                 if(currentEventTickets[i]) d.classList.add(currentEventTickets[i].status);
                 else if(selected.includes(i)) d.classList.add('selected');
                 else d.classList.add('disponible');
-                
+
                 grid.appendChild(d);
             }
         }
 
         function clickTicket(i) {
-            // Si es admin y el boleto está ocupado, abrir gestión individual
             if(document.body.classList.contains('is-admin') && currentEventTickets[i]) {
-                openAdminTicket(i);
-                return;
+                openAdminTicket(i); return;
             }
-            // Si está ocupado (y no soy admin gestionando), no hacer nada
-            if(currentEventTickets[i]) return; 
+            if(currentEventTickets[i]) return;
             
-            // Selección Normal de usuario
             if(selected.includes(i)) {
                 selected = selected.filter(n => n!==i);
                 document.getElementById('t-'+i).classList.remove('selected');
@@ -1580,499 +1397,513 @@
             const bar = document.getElementById('selection-bar');
             if(selected.length > 0) {
                 bar.classList.add('active');
-                const pad = parseInt(currentEventConfig.qty) > 100 ? (parseInt(currentEventConfig.qty) > 1000 ? 4 : 3) : 2;
-                document.getElementById('bar-nums').innerText = selected.map(n=>n.toString().padStart(pad,'0')).join(', ');
+                
+                const totalBoletos = parseInt(currentEventConfig.qty || 100);
+                let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+                let rangeSize = Math.floor(baseNums / totalBoletos);
+                let displayTxt = "";
+
+                if(rangeSize > 1) {
+                    displayTxt = selected.map(n => `#${n+1}`).join(', ');
+                } else {
+                    let pad = (baseNums > 100) ? (baseNums > 1000 ? 4 : 3) : 2;
+                    displayTxt = selected.map(n => n.toString().padStart(pad, '0')).join(', ');
+                }
+
+                document.getElementById('bar-nums').innerText = displayTxt;
                 document.getElementById('bar-total').innerText = `$${selected.length * currentEventConfig.price}`;
             } else {
                 bar.classList.remove('active');
             }
         }
 
-        function highlightTicket(val) {
-            if(!val) return;
-            const targetId = 't-' + parseInt(val);
-            const el = document.getElementById(targetId);
-            if(el) { 
-                el.scrollIntoView({behavior:'smooth', block:'center'}); 
-                el.style.border = '2px solid red'; el.style.transform = 'scale(1.2)';
-                setTimeout(() => { el.style.border = '2px solid transparent'; el.style.transform = 'scale(1)'; }, 2000); 
-            }
-        }
-
-        function openFormModal() {
-            const pad = parseInt(currentEventConfig.qty) > 100 ? (parseInt(currentEventConfig.qty) > 1000 ? 4 : 3) : 2;
-            document.getElementById('form-nums').innerText = selected.map(n=>n.toString().padStart(pad,'0')).join(', ');
-            document.getElementById('form-total').innerText = `$${selected.length * currentEventConfig.price}`;
-            document.getElementById('modal-form').style.display='flex';
-        }
-
         // ==========================================
-        // 8. ADMIN DASHBOARD & NOTIFICACIONES
+        // 6. MÁQUINA DE LA SUERTE (SLOT ANIMATION)
         // ==========================================
-        function renderGroupedNotifications() {
-            const container = document.getElementById('admin-notifications');
-            container.innerHTML = '';
-            
-            if(!currentEventId) return;
-
-            const groups = {};
-            const pad = parseInt(currentEventConfig.qty) > 100 ? (parseInt(currentEventConfig.qty) > 1000 ? 4 : 3) : 2;
-
-            Object.entries(currentEventTickets).forEach(([ticketNum, data]) => {
-                if (data.status === 'apartado') {
-                    const phone = data.phone || 'Desconocido';
-                    if (!groups[phone]) groups[phone] = { owner: data.owner, tickets: [], date: data.date };
-                    groups[phone].tickets.push(ticketNum.toString().padStart(pad, '0'));
-                }
-            });
-
-            const phones = Object.keys(groups);
-            if (phones.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#999; font-style:italic;">No hay apartados pendientes para este evento.</p>';
-                return;
-            }
-
-            phones.forEach(phone => {
-                const g = groups[phone];
-                const ticketChips = g.tickets.map(t => `<span class="ticket-chip">${t}</span>`).join('');
-                
-                const html = `
-                    <div class="admin-group-card">
-                        <div class="group-header">
-                            <div><h4>${g.owner}</h4><span style="font-size:0.8rem; color:#666;">${phone}</span></div>
-                            <div style="text-align:right;"><span class="badge" style="background:#ffc107; color:black; font-size:0.7rem;">PENDIENTE</span></div>
-                        </div>
-                        <div class="group-tickets">${ticketChips}</div>
-                        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
-                            <button onclick="freeGroup('${phone}')" class="btn-small btn-free"><i class="fas fa-trash"></i></button>
-                            <button onclick="approveGroup('${phone}')" class="btn-small btn-approve">CONFIRMAR PAGO <i class="fas fa-check"></i></button>
-                        </div>
-                    </div>`;
-                container.innerHTML += html;
-            });
-        }
-
-        function approveGroup(phone) {
-            const updates = {};
-            const numsToApprove = [];
-            let ownerName = "";
-            const pad = parseInt(currentEventConfig.qty) > 100 ? (parseInt(currentEventConfig.qty) > 1000 ? 4 : 3) : 2;
-
-            Object.entries(currentEventTickets).forEach(([k,v]) => {
-                if(v.phone === phone && v.status === 'apartado') {
-                    updates[`events/${currentEventId}/tickets/${k}/status`] = 'pagado';
-                    numsToApprove.push(k.toString().padStart(pad, '0'));
-                    ownerName = v.owner;
-                }
-            });
-
-            db.ref().update(updates).then(() => {
-                Swal.fire({toast:true, icon:'success', title:'Pagos registrados'});
-                // Preparamos datos para ticket virtual inmediato
-                currentVtData = { name: ownerName, nums: numsToApprove, phone: phone, eventName: currentEventConfig.title };
-                document.getElementById('vt-client').innerText = ownerName;
-                document.getElementById('vt-num').innerText = numsToApprove.join(', ');
-                document.getElementById('vt-event-name').innerText = currentEventConfig.title;
-                document.getElementById('modal-virtual-ticket').style.display = 'flex';
-            });
-        }
-
-        function freeGroup(phone) {
-            Swal.fire({title: '¿Liberar boletos?', showCancelButton: true, confirmButtonText: 'Sí'}).then((r) => {
-                if (r.isConfirmed) {
-                    const updates = {};
-                    Object.entries(currentEventTickets).forEach(([k,v]) => {
-                        if(v.phone === phone && v.status === 'apartado') updates[`events/${currentEventId}/tickets/${k}`] = null;
-                    });
-                    db.ref().update(updates);
-                }
-            });
-        }
-
-        // ==========================================
-        // 9. WHATSAPP & BOLETO DIGITAL
-        // ==========================================
-
-        function loadDigitalTicketMode(evtId, tNum) {
-            db.ref(`events/${evtId}`).once('value').then(snap => {
-                const data = snap.val();
-                const container = document.getElementById('overlay-ticket'); 
-
-                if(!data || !data.tickets || !data.tickets[tNum]) {
-                    container.innerHTML = `<h2 style="color:white; text-align:center; margin-top:50px;">Boleto no encontrado.</h2>`;
-                    return;
-                }
-
-                const ticketData = data.tickets[tNum];
-                const configData = data.config;
-                const owner = ticketData.owner;
-                
-                let allNums = [];
-                const pad = parseInt(configData.qty) > 100 ? (parseInt(configData.qty) > 1000 ? 4 : 3) : 2;
-                Object.entries(data.tickets).forEach(([k, v]) => {
-                    if(v.owner === owner && v.status === 'pagado') {
-                        allNums.push(k.toString().padStart(pad, '0'));
-                    }
-                });
-
-                container.innerHTML = `
-                    <div class="virtual-ticket-card">
-                        <div class="vt-shine"></div>
-                        <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="vt-logo" alt="Logo">
-                        <div class="vt-congrats">¡FELICIDADES!</div>
-                        <p class="vt-msg">Participación confirmada.</p>
-                        <div class="vt-divider"></div>
-                        <div class="vt-data-row"><div class="vt-label">Participante</div><div class="vt-value">${owner}</div></div>
-                        <div class="vt-data-row"><div class="vt-label">Tus Números</div><div class="vt-numbers">${allNums.join(', ')}</div></div>
-                        <div class="vt-data-row"><div class="vt-label">Sorteo</div><div class="vt-value" style="font-size:1rem;">${configData.title}</div></div>
-                        <div class="vt-divider"></div>
-                        <div class="vt-footer">Tu Suerte Suma | Sorteos Transparentes</div>
-                        <a href="${window.location.href.split('?')[0]}" style="color:var(--accent); text-decoration:none; font-size:0.8rem; margin-top:10px; border:1px solid var(--accent); padding:5px; border-radius:10px;">VER MÁS SORTEOS</a>
-                    </div>
-                `;
-            });
-        }
-
-        function sendWhatsApp() {
-            const name = document.getElementById('user-name').value.trim();
-            const state = document.getElementById('user-state').value.trim();
-            const phone = document.getElementById('user-phone').value.trim();
-            
-            if(!name || !phone || !state) return Swal.fire("Faltan datos","Por favor llena todos los campos","warning");
-            
-            const updates = {};
-            const timestamp = new Date().toISOString();
-            
-            selected.forEach(n => { 
-                updates[`events/${currentEventId}/tickets/${n}`] = { 
-                    status: 'apartado', owner: name, state: state, phone: phone, date: timestamp 
-                }; 
-            });
-            
-            db.ref().update(updates).then(() => {
-                const pad = parseInt(currentEventConfig.qty) > 100 ? (parseInt(currentEventConfig.qty) > 1000 ? 4 : 3) : 2;
-                const numsStr = selected.map(n=>n.toString().padStart(pad,'0')).join(', ');
-                const total = selected.length * currentEventConfig.price;
-                const eventName = currentEventConfig.title;
-                
-                const rawMsg = `👋 Hola, buen día. Mi nombre es ${name} y me comunico desde el estado de ${state}. 🎉 Deseo participar en el evento “${eventName}”. 🎫 Números seleccionados: 👉 ${numsStr} 💰 Total a pagar: $${total} 📱 Número de contacto: ${phone}. Quedo atento a que me compartan los datos de pago para confirmar mi apartado a la brevedad. ¡Muchas gracias y excelente día! ✨`;
-                
-                window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(rawMsg)}`, '_blank');
-                
-                selected=[]; updateBar(); closeModal('modal-form'); showPage('pagos');
-                Swal.fire("¡Apartado!", "Tus boletos han sido reservados.", "success");
-            }).catch(err => Swal.fire("Error", "Revisa tu conexión", "error"));
-        }
-
-        function sendPaymentProof() {
-            const rawMsg = "👋 Hola, buen día. Te informo que ya realicé el pago correspondiente a mis boletos. 🧾 📎 Adjunto la captura de comprobante de pago para su verificación. Quedo atento a la confirmación cuando sea validado. ¡Muchas gracias! ✨";
-            window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(rawMsg)}`, '_blank');
-        }
-
-        function sharePaymentLink() {
-            const link = window.location.href.split('?')[0] + "?viewPayment=true";
-            navigator.clipboard.writeText(link).then(() => Swal.fire({toast:true, icon:'success', title:'Link copiado'}));
-        }
-
-        function shareTicketWhatsApp() {
-            const { name, nums, phone, eventName } = currentVtData;
-            const baseUrl = window.location.href.split('?')[0];
-            const ticketLink = `${baseUrl}?viewTicket=true&id=${currentEventId}&num=${nums[0]}`;
-            const cleanPhone = phone.replace(/\D/g,'');
-            
-            const rawText = `🌟 ¡FELICIDADES, ${name}! 🌟 ¡Excelente noticia! 🎉 Tu participación en el Gran Sorteo ${eventName} ha sido confirmada con éxito. ✅ 🎫 Números Oficiales Asignados: 👉 ${nums.join(', ')} 🍀 Te enviamos la mejor de las suertes y toda la buena vibra. Gracias por confiar y ser parte de esta experiencia donde tu suerte también suma. 🙌✨ 👇 Accede aquí a tu Boleto Digital Oficial (Guárdalo y consérvalo para cualquier consulta): 🔗 ${ticketLink} 📡 Mantente al tanto de novedades, resultados y próximos sorteos: 📘 Facebook: https://www.facebook.com/share/1DUjTsBKWM/ 💬 WhatsApp: https://whatsapp.com/channel/0029Vb7DRuS0gcfD5rt89V3w ✨ ¡Mucho éxito y gracias por participar! ✨`;
-            
-            const url = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(rawText)}` : `https://wa.me/?text=${encodeURIComponent(rawText)}`;
-            window.open(url, '_blank');
-        }
-        
-        // Copiar Link Directo de Evento
-        function shareCurrentEventLink() {
-            if(!currentEventId) return;
-            const baseUrl = window.location.href.split('?')[0];
-            const directLink = `${baseUrl}?evt=${currentEventId}`;
-            navigator.clipboard.writeText(directLink).then(() => {
-                Swal.fire({title: '¡Link Copiado!', text: 'Compártelo para que tus clientes entren directo a este sorteo.', icon: 'success'});
-            });
-        }
-
-        // ==========================================
-        // 10. UTILIDADES Y OTROS
-        // ==========================================
-
-        function showPage(id) {
-            document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
-            document.getElementById('page-'+id).style.display = 'block';
-            window.scrollTo({top:0, behavior:'smooth'});
-            document.getElementById('nav-inicio').classList.remove('active');
-            if(id === 'inicio') document.getElementById('nav-inicio').classList.add('active');
-        }
-
-        // --- RULETA ---
         function openLuckyModal() { 
             document.getElementById('modal-lucky').style.display='flex'; 
             document.getElementById('lucky-step-1').style.display='block'; 
             document.getElementById('lucky-step-2').style.display='none'; 
-            document.getElementById('lucky-qty').value = '';
         }
+        
         function setLucky(n) { document.getElementById('lucky-qty').value = n; }
-
+        
         function spinRoulette() {
             let qty = parseInt(document.getElementById('lucky-qty').value);
-            if(!qty || qty <= 0) return Swal.fire("Error","Cantidad inválida","warning");
+            if(!qty) return;
+            
             let free = [];
-            for(let i=0; i<parseInt(currentEventConfig.qty); i++) { 
-                if(!currentEventTickets[i] && !selected.includes(i)) free.push(i); 
-            }
-            if(free.length < qty) return Swal.fire("Lo siento","No quedan suficientes boletos libres","error");
+            const total = parseInt(currentEventConfig.qty || 100);
+            for(let i=0; i<total; i++) { if(!currentEventTickets[i] && !selected.includes(i)) free.push(i); }
+            
+            if(free.length < qty) return Swal.fire("Ups","No hay suficientes boletos libres","error");
             
             document.getElementById('lucky-step-1').style.display='none';
             document.getElementById('lucky-step-2').style.display='block';
-            document.getElementById('lucky-result-text').innerText = "Girando...";
-            const wheel = document.getElementById('roulette-wheel');
-            wheel.style.transition = 'none'; wheel.style.transform = 'rotate(0deg)';
+            document.getElementById('lucky-result-text').innerText = "¡SUERTE!";
             
-            setTimeout(() => {
-                const randomRotation = 1800 + Math.floor(Math.random() * 360);
-                wheel.style.transition = 'transform 3s cubic-bezier(0.1, 0.9, 0.2, 1)';
-                wheel.style.transform = `rotate(${randomRotation}deg)`;
-            }, 50);
-            
-            setTimeout(() => {
-                let picks = [];
-                for(let k=0; k<qty; k++){ let r = Math.floor(Math.random()*free.length); picks.push(free[r]); free.splice(r,1); }
-                const pad = parseInt(currentEventConfig.qty) > 100 ? (parseInt(currentEventConfig.qty) > 1000 ? 4 : 3) : 2;
-                document.getElementById('lucky-result-text').innerText = picks.map(n=>n.toString().padStart(pad,'0')).join(', ');
-                tempPicks = picks;
-            }, 3050);
-        }
-
-        function resetLucky() { document.getElementById('lucky-step-2').style.display='none'; document.getElementById('lucky-step-1').style.display='block'; }
-        function confirmLucky() { 
-            if(tempPicks.length > 0) { selected = [...selected, ...tempPicks]; updateGridStyles(); updateBar(); closeModal('modal-lucky'); } 
-        }
-        function updateGridStyles() {
-            const total = parseInt(currentEventConfig.qty);
-            for(let i=0; i<total; i++) {
-                let d = document.getElementById('t-'+i);
-                if(!d) continue;
-                d.className = 'ticket';
-                if(currentEventTickets[i]) d.classList.add(currentEventTickets[i].status);
-                else if(selected.includes(i)) d.classList.add('selected');
-                else d.classList.add('disponible');
+            tempPicks = [];
+            for(let k=0; k<qty; k++) {
+                let r = Math.floor(Math.random()*free.length);
+                tempPicks.push(free[r]);
+                free.splice(r,1);
             }
-        }
 
-        // --- BANCOS ---
-        function updateBankUI(banks) {
-            ['bbva','azteca','mp'].forEach(k => {
-                const b = banks[k] || {};
-                updateSingleCard(k, 'link', b);
-                updateSingleCard(k, 'main', b);
-                if(document.body.classList.contains('is-admin')) {
-                    const base = k.toUpperCase().replace('BBVA','BBVA').replace('AZTECA','Azteca').replace('MP','MP');
-                    const chk = document.getElementById('check'+base);
-                    if(chk) chk.checked = b.active;
-                    const nm = document.getElementById('name'+base);
-                    if(nm) nm.value = b.name || '';
-                    const nm2 = document.getElementById('num'+base);
-                    if(nm2) nm2.value = b.num || '';
+            const strips = [
+                document.getElementById('slot-strip-1'),
+                document.getElementById('slot-strip-2'),
+                document.getElementById('slot-strip-3')
+            ];
+
+            strips.forEach(strip => {
+                let html = '';
+                for(let j=0; j<20; j++) {
+                    let rand = Math.floor(Math.random()*10);
+                    html += `<div class="slot-num-item sn-${rand}">${rand}</div>`;
                 }
+                strip.innerHTML = html;
+                strip.parentElement.classList.add('spinning'); 
             });
-        }
-        function updateSingleCard(bankKey, suffix, data) {
-            const card = document.getElementById(`card-${bankKey}-${suffix}`);
-            if(card) {
-                if(data.active) {
-                    card.classList.add('visible');
-                    document.getElementById(`view-name-${bankKey}-${suffix}`).innerText = data.name || '...';
-                    document.getElementById(`view-num-${bankKey}-${suffix}`).innerText = data.num || '...';
-                } else {
-                    card.classList.remove('visible');
-                }
-            }
-        }
-        function saveBank(t) {
-            const base = t.toUpperCase().replace('BBVA','BBVA').replace('AZTECA','Azteca').replace('MP','MP');
-            db.ref(`banks/${t}`).update({
-                name: document.getElementById('name'+base).value,
-                num: document.getElementById('num'+base).value,
-                active: document.getElementById('check'+base).checked
-            }).then(()=>Swal.fire({toast:true, icon:'success', title:'Guardado'}));
+
+            setTimeout(() => { stopSlot(0); }, 1000);
+            setTimeout(() => { stopSlot(1); }, 1500);
+            setTimeout(() => { stopSlot(2); showFinalResult(qty, total); }, 2000);
         }
 
-        // --- CARRUSEL EVIDENCIA ---
-        function updateEvidenceUI(imgs) {
-            carouselData.evidence = imgs ? Object.values(imgs) : [];
-            renderCarousel('evidence');
-            updateAdminList('evidence', imgs);
+        function stopSlot(index) {
+            const strips = [document.getElementById('slot-strip-1'), document.getElementById('slot-strip-2'), document.getElementById('slot-strip-3')];
+            const strip = strips[index];
+            strip.parentElement.classList.remove('spinning');
+            let finalNum = Math.floor(Math.random()*10); 
+            strip.innerHTML = `<div class="slot-num-item sn-${finalNum}" style="height:100%;">${finalNum}</div>`;
         }
-        function renderCarousel(type) {
-            const container = document.getElementById(type+'CarouselContainer');
-            const wrapper = document.getElementById(type+'CarouselImgWrapper');
-            const list = carouselData[type];
-            if(list.length > 0) {
-                container.style.display = 'block';
-                if(carouselIdx[type] >= list.length) carouselIdx[type] = 0;
-                wrapper.innerHTML = `<img src="${list[carouselIdx[type]]}" style="width:100%; height:300px; object-fit:cover; border-radius:10px;">`;
-                if(type === 'evidence') document.getElementById('evidenceTextDefault').style.display = 'none';
+
+        function showFinalResult(qty, total) {
+            let baseNums = (total <= 100) ? 100 : total;
+            let rangeSize = Math.floor(baseNums / total);
+            let resultText = "";
+
+            if(rangeSize > 1) {
+                resultText = tempPicks.map(n => `Bol #${n+1}`).join(', ');
             } else {
-                container.style.display = 'none';
-                if(type === 'evidence') document.getElementById('evidenceTextDefault').style.display = 'block';
+                resultText = tempPicks.map(n => n.toString().padStart(2,'0')).join(', ');
             }
-        }
-        function moveCarousel(type, direction) {
-            carouselIdx[type] += direction;
-            if(carouselIdx[type] < 0) carouselIdx[type] = carouselData[type].length - 1;
-            renderCarousel(type);
-        }
-        function addImage(type) {
-            const input = document.getElementById('imgEvidenceInput');
-            if(input.value) { 
-                db.ref(`images/evidence`).push(input.value).then(() => { input.value = ''; Swal.fire({toast:true, icon:'success', title:'Imagen agregada'}); });
-            }
-        }
-        function delImg(type, key) { db.ref(`images/evidence/${key}`).remove(); }
-        function updateAdminList(type, data) {
-            const el = document.getElementById('evidenceImgList');
-            if(!el) return;
-            el.innerHTML = '';
-            if(!data) return;
-            Object.entries(data).forEach(([k,u]) => {
-                const shortUrl = u.length > 20 ? '...' + u.slice(-15) : u;
-                el.innerHTML += `<div class="admin-img-item"><span>${shortUrl}</span><b style="color:red; cursor:pointer;" onclick="delImg('evidence','${k}')">&times;</b></div>`;
+
+            document.getElementById('lucky-result-text').innerText = "TUS NÚMEROS: " + resultText;
+            
+            const Toast = Swal.mixin({
+                toast: true, position: 'top-end', showConfirmButton: false, timer: 3000
             });
+            Toast.fire({ icon: 'success', title: '¡Números generados!' });
         }
 
-        // --- EVENTOS (CREAR/EDITAR) ---
+        function confirmLucky() {
+            if(tempPicks.length > 0) {
+                selected = [...selected, ...tempPicks];
+                createGrid(); updateBar(); closeModal('modal-lucky');
+            }
+        }
+        function resetLucky() {
+             document.getElementById('lucky-step-2').style.display='none';
+             document.getElementById('lucky-step-1').style.display='block';
+        }
+
+        // ==========================================
+        // 7. BANCOS Y PAGOS
+        // ==========================================
+        function updateBankUI(banks) {
+             const list = ['bbva','azteca','mp','oxxo','banorte','banamex'];
+             list.forEach(k => {
+                 const b = banks[k] || {};
+                 const active = b.active;
+                 
+                 const cardMain = document.getElementById(`card-${k}-main`);
+                 if(cardMain) cardMain.classList.toggle('visible', !!active);
+
+                 if(active) {
+                     const nameEl = document.getElementById(`view-name-${k}-main`);
+                     const numEl = document.getElementById(`view-num-${k}-main`);
+                     if(nameEl) nameEl.innerText = b.name || "NO DEFINIDO";
+                     if(numEl) numEl.innerText = b.num || "0000";
+                 }
+
+                 if(document.body.classList.contains('is-admin')) {
+                     let K = k.charAt(0).toUpperCase() + k.slice(1);
+                     if(k=='bbva') K='BBVA'; if(k=='mp') K='MP';
+                     const chk = document.getElementById('check'+K);
+                     if(chk) chk.checked = active;
+                     const ni = document.getElementById('name'+K);
+                     if(ni) ni.value = b.name||'';
+                     const nui = document.getElementById('num'+K);
+                     if(nui) nui.value = b.num||'';
+                 }
+             });
+        }
+
+        function saveBank(k) {
+            let K = k.charAt(0).toUpperCase() + k.slice(1);
+            if(k=='bbva') K='BBVA'; if(k=='mp') K='MP';
+            const data = {
+                name: document.getElementById('name'+K).value,
+                num: document.getElementById('num'+K).value,
+                active: document.getElementById('check'+K).checked
+            };
+            db.ref(`banks/${k}`).update(data);
+            Swal.fire({toast:true, icon:'success', title: K + ' Actualizado'});
+        }
+
+        // ==========================================
+        // 8. OTRAS UTILIDADES
+        // ==========================================
+        function showPage(id) {
+            document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
+            document.getElementById('page-'+id).style.display = 'block';
+            window.scrollTo({top:0, behavior:'smooth'});
+        }
+
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function openSettingsMenu() { document.getElementById('modal-settings-menu').style.display = 'flex'; }
+        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>Swal.fire({toast:true, icon:'success', title:'Copiado'})); }
+        
+        function openLogin() { if(!document.body.classList.contains('is-admin')) document.getElementById('loginModal').style.display='flex'; }
+        function attemptLogin() { auth.signInWithEmailAndPassword(document.getElementById('adminUser').value, document.getElementById('adminPass').value).then(()=>{ closeModal('loginModal'); }).catch(()=>Swal.fire("Error","Datos incorrectos","error")); }
+        function logoutAdmin() { auth.signOut().then(()=>location.reload()); }
+        
+        // Formulario WhatsApp
+        function openFormModal() {
+            document.getElementById('form-total').innerText = `$${selected.length * currentEventConfig.price}`;
+            const totalBoletos = parseInt(currentEventConfig.qty || 100);
+            let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+            let rangeSize = Math.floor(baseNums / totalBoletos);
+            let displayTxt = "";
+            
+            if(rangeSize > 1) displayTxt = selected.map(n => `#${n+1}`).join(', ');
+            else {
+                let pad = (baseNums > 100) ? (baseNums > 1000 ? 4 : 3) : 2;
+                displayTxt = selected.map(n => n.toString().padStart(pad, '0')).join(', ');
+            }
+            document.getElementById('form-nums').innerText = displayTxt;
+            document.getElementById('modal-form').style.display='flex';
+        }
+
+        function sendWhatsApp() {
+            const name = document.getElementById('user-name').value;
+            const phone = document.getElementById('user-phone').value;
+            const state = document.getElementById('user-state').value;
+            
+            if(!name || !phone) return Swal.fire("Error","Llena los campos","warning");
+            
+            const updates = {};
+            const now = new Date().toISOString();
+            selected.forEach(i => {
+                updates[`events/${currentEventId}/tickets/${i}`] = { status:'apartado', owner:name, phone:phone, state:state, date:now };
+            });
+            
+            db.ref().update(updates).then(() => {
+                const totalBoletos = parseInt(currentEventConfig.qty || 100);
+                let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+                let rangeSize = Math.floor(baseNums / totalBoletos);
+                let numMsg = "";
+                
+                if(rangeSize > 1) {
+                    numMsg = selected.map(n => {
+                        let start = n*rangeSize; 
+                        let end = start+rangeSize-1;
+                        return `Boleto #${n+1} (Nums: ${start}-${end})`; 
+                    }).join(', ');
+                } else {
+                    let pad = (baseNums > 100) ? 3 : 2;
+                    numMsg = selected.map(n => n.toString().padStart(pad,'0')).join(', ');
+                }
+                
+                const total = selected.length * currentEventConfig.price;
+                const txt = `Hola, soy ${name}. Quiero participar en "${currentEventConfig.title}".\n\n🎟️ Seleccioné: ${numMsg}\n💰 Total: $${total}\n📱 Mi Tel: ${phone}\n\nEspero datos de cuenta.`;
+                
+                window.open(`https://wa.me/${siteConfig.waOrders}?text=${encodeURIComponent(txt)}`, '_blank');
+                
+                selected=[]; updateBar(); closeModal('modal-form'); showPage('pagos');
+            });
+        }
+        
+        function shareCurrentEventLink() {
+            if(!currentEventId) return;
+            navigator.clipboard.writeText(window.location.href.split('?')[0]+"?evt="+currentEventId)
+            .then(()=>Swal.fire({toast:true, icon:'success', title:'Link Copiado'}));
+        }
+
+        function startCountdown(date) {
+            if(countdownInterval) clearInterval(countdownInterval);
+            const disp = document.getElementById('countdown-display');
+            if(!date) { disp.style.display='none'; return; }
+            const end = new Date(date).getTime();
+            if(isNaN(end)) { disp.style.display='none'; return; }
+            disp.style.display='flex';
+            
+            countdownInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const d = end - now;
+                if(d < 0) { clearInterval(countdownInterval); disp.innerHTML="<h3>¡CERRADO!</h3>"; return; }
+                document.getElementById("cd-d").innerText = Math.floor(d/(1000*60*60*24)).toString().padStart(2,'0');
+                document.getElementById("cd-h").innerText = Math.floor((d%(1000*60*60*24))/(1000*60*60)).toString().padStart(2,'0');
+                document.getElementById("cd-m").innerText = Math.floor((d%(1000*60*60))/(1000*60)).toString().padStart(2,'0');
+                document.getElementById("cd-s").innerText = Math.floor((d%(1000*60))/1000).toString().padStart(2,'0');
+            }, 1000);
+        }
+
+        function updateFinancialPanel() {
+            let sold=0, pending=0;
+            if(currentEventTickets) {
+                Object.values(currentEventTickets).forEach(t => {
+                    if(t.status==='pagado') sold++;
+                    else if(t.status==='apartado') pending++;
+                });
+            }
+            const price = parseFloat(currentEventConfig.price || 0);
+            document.getElementById('stat-raised').innerText = `$${(sold*price).toLocaleString()}`;
+            document.getElementById('stat-pending').innerText = `$${(pending*price).toLocaleString()}`;
+            
+            const total = parseInt(currentEventConfig.qty || 100);
+            const pct = Math.floor((sold/total)*100);
+            document.getElementById('public-progress-bar').style.width = pct+'%';
+            document.getElementById('progress-percent-txt').innerText = pct+'% Vendido';
+        }
+
+        // Admin Notification Rendering
+        function renderGroupedNotifications() { 
+            const c=document.getElementById('admin-notifications'); c.innerHTML=''; 
+            const groups = {};
+            if(currentEventTickets) {
+                Object.entries(currentEventTickets).forEach(([idx, ticket]) => {
+                    if(ticket.status === 'apartado') {
+                        if(!groups[ticket.phone]) groups[ticket.phone] = { name: ticket.owner, idxs: [] };
+                        groups[ticket.phone].idxs.push(idx);
+                    }
+                });
+            }
+            if(Object.keys(groups).length === 0) { c.innerHTML='<p style="text-align:center; color:#999;">Sin apartados.</p>'; return; }
+            
+            Object.entries(groups).forEach(([phone, dat]) => {
+                const totalBoletos = parseInt(currentEventConfig.qty || 100);
+                let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+                let rangeSize = Math.floor(baseNums / totalBoletos);
+                let chips = "";
+                if(rangeSize > 1) chips = dat.idxs.map(i => `<span class="ticket-chip">#${parseInt(i)+1}</span>`).join(' ');
+                else chips = dat.idxs.map(i => `<span class="ticket-chip">${i}</span>`).join(' ');
+                
+                const html = `
+                <div class="admin-group-card">
+                    <div class="group-header"><h4>${dat.name}</h4><span>${phone}</span></div>
+                    <div class="group-tickets">${chips}</div>
+                    <div style="display:flex; justify-content:end; gap:5px;">
+                        <button class="btn-small btn-free" onclick="freeG('${phone}')">LIBERAR</button>
+                        <button class="btn-small btn-approve" onclick="payG('${phone}')">PAGADO</button>
+                    </div>
+                </div>`;
+                c.innerHTML += html;
+            });
+        }
+        function payG(phone) {
+             const updates={};
+             let clientName = "";
+             let nums = [];
+             Object.entries(currentEventTickets).forEach(([i, t]) => {
+                 if(t.phone === phone && t.status === 'apartado') {
+                     updates[`events/${currentEventId}/tickets/${i}/status`] = 'pagado';
+                     clientName = t.owner;
+                     nums.push(i);
+                 }
+             });
+             db.ref().update(updates).then(()=>{
+                 Swal.fire({toast:true,icon:'success',title:'Confirmado'});
+                 const totalBoletos = parseInt(currentEventConfig.qty || 100);
+                 let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+                 let rangeSize = Math.floor(baseNums / totalBoletos);
+                 let displayNums = "";
+                 if(rangeSize > 1) {
+                     displayNums = nums.map(n => {
+                        let start = parseInt(n)*rangeSize;
+                        let end = start+rangeSize-1;
+                        return `#${parseInt(n)+1} (${start}-${end})`;
+                     }).join(', ');
+                 } else {
+                     displayNums = nums.join(', ');
+                 }
+                 document.getElementById('vt-client').innerText = clientName;
+                 document.getElementById('vt-num').innerText = displayNums;
+                 document.getElementById('vt-event-name').innerText = currentEventConfig.title;
+                 document.getElementById('modal-virtual-ticket').style.display='flex';
+             });
+        }
+        function freeG(phone) {
+             const updates={};
+             Object.entries(currentEventTickets).forEach(([i, t]) => {
+                 if(t.phone === phone && t.status === 'apartado') updates[`events/${currentEventId}/tickets/${i}`] = null;
+             });
+             db.ref().update(updates);
+        }
+        function openScreenshotModal() {
+            const t = document.getElementById('screenshot-grid-target'); t.innerHTML='';
+            const total = parseInt(currentEventConfig.qty || 100);
+            for(let i=0; i<total; i++) {
+                const d = document.createElement('div'); d.className='screenshot-cell';
+                const tick = currentEventTickets[i];
+                if(tick) {
+                    if(tick.status==='pagado') d.classList.add('ss-paid');
+                    else { d.classList.add('ss-reserved'); d.innerText=(i+1); }
+                } else {
+                    d.classList.add('ss-free'); d.innerText=(i+1);
+                }
+                t.appendChild(d);
+            }
+            document.getElementById('ss-event-title').innerText = currentEventConfig.title;
+            document.getElementById('modal-screenshot').style.display='flex';
+        }
         function openEventModal() {
-            document.getElementById('edit-event-id').value = ''; 
-            document.getElementById('evt-title').value = '';
-            document.getElementById('evt-price').value = '';
-            document.getElementById('evt-qty').value = '100';
-            document.getElementById('evt-img').value = '';
-            document.getElementById('evt-desc-short').value = '';
-            document.getElementById('evt-desc-long').value = '';
-            document.getElementById('evt-date-end').value = ''; // Limpiar fecha
-            document.getElementById('btn-delete-event').style.display = 'none';
-            document.getElementById('modal-event-config').style.display = 'flex';
+            document.getElementById('edit-event-id').value='';
+            document.getElementById('evt-title').value='';
+            document.getElementById('evt-price').value='';
+            document.getElementById('evt-qty').value='100';
+            document.getElementById('evt-img').value='';
+            document.getElementById('evt-desc-short').value='';
+            document.getElementById('evt-desc-long').value='';
+            document.getElementById('evt-date-end').value='';
+            document.getElementById('btn-delete-event').style.display='none';
+            document.getElementById('modal-event-config').style.display='flex';
         }
-
         function openEditEvent(id) {
-            db.ref(`events/${id}/config`).once('value').then(snap => {
-                const c = snap.val();
-                document.getElementById('edit-event-id').value = id;
-                document.getElementById('evt-title').value = c.title;
-                document.getElementById('evt-price').value = c.price;
-                document.getElementById('evt-qty').value = c.qty;
-                document.getElementById('evt-img').value = c.img;
-                document.getElementById('evt-desc-short').value = c.descShort;
-                document.getElementById('evt-desc-long').value = c.descLong;
-                document.getElementById('evt-date-end').value = c.dateEnd || ''; // Cargar fecha
-                document.getElementById('btn-delete-event').style.display = 'inline-block';
-                document.getElementById('modal-event-config').style.display = 'flex';
+            db.ref(`events/${id}/config`).once('value').then(s=>{
+                const c = s.val();
+                document.getElementById('edit-event-id').value=id;
+                document.getElementById('evt-title').value=c.title;
+                document.getElementById('evt-price').value=c.price;
+                document.getElementById('evt-qty').value=c.qty || '100';
+                document.getElementById('evt-img').value=c.img;
+                document.getElementById('evt-desc-short').value=c.descShort;
+                document.getElementById('evt-desc-long').value=c.descLong;
+                document.getElementById('evt-date-end').value=c.dateEnd||'';
+                document.getElementById('btn-delete-event').style.display='inline-block';
+                document.getElementById('modal-event-config').style.display='flex';
             });
         }
-
         function saveEventConfig() {
             const id = document.getElementById('edit-event-id').value;
-            const configData = {
+            const config = {
                 title: document.getElementById('evt-title').value,
                 price: document.getElementById('evt-price').value,
                 qty: document.getElementById('evt-qty').value,
                 img: document.getElementById('evt-img').value,
                 descShort: document.getElementById('evt-desc-short').value,
                 descLong: document.getElementById('evt-desc-long').value,
-                dateEnd: document.getElementById('evt-date-end').value // Guardar fecha
+                dateEnd: document.getElementById('evt-date-end').value
             };
-            if(!configData.title || !configData.price) return Swal.fire("Error","Faltan datos básicos","error");
-
-            if(id) {
-                db.ref(`events/${id}/config`).update(configData).then(() => {
-                    closeModal('modal-event-config'); Swal.fire("Actualizado", "Evento modificado", "success");
-                });
-            } else {
-                db.ref('events').push({ config: configData }).then(() => {
-                    closeModal('modal-event-config'); Swal.fire("Creado", "Nuevo evento publicado", "success");
-                });
-            }
+            if(!config.title) return Swal.fire("Error","Falta título","error");
+            if(id) db.ref(`events/${id}/config`).update(config);
+            else db.ref('events').push({config});
+            closeModal('modal-event-config');
+            Swal.fire({toast:true, icon:'success', title:'Evento Guardado'});
         }
-
         function deleteCurrentEvent() {
             const id = document.getElementById('edit-event-id').value;
-            if(!id) return;
-            Swal.fire({
-                title: '¿ELIMINAR EVENTO?', text: "Se borrará el sorteo y todos sus boletos.", icon: 'warning',
-                showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Sí, eliminar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    db.ref(`events/${id}`).remove().then(() => {
-                        closeModal('modal-event-config'); Swal.fire("Eliminado", "", "success");
-                    });
-                }
+            Swal.fire({title:'Eliminar?', showCancelButton:true}).then(r=>{
+                if(r.isConfirmed){ db.ref(`events/${id}`).remove(); closeModal('modal-event-config'); }
             });
         }
-
-        // --- CAPTURA PANTALLA ---
-        function openScreenshotModal() {
-            if(!currentEventId || !currentEventConfig.qty) return;
-
-            document.getElementById('ss-event-title').innerText = currentEventConfig.title;
-            const gridTarget = document.getElementById('screenshot-grid-target');
-            gridTarget.innerHTML = '';
-
-            const total = parseInt(currentEventConfig.qty);
-            const pad = total > 100 ? (total > 1000 ? 4 : 3) : 2;
-
-            for(let i=0; i<total; i++) {
-                const div = document.createElement('div');
-                div.className = 'screenshot-cell';
-                if(currentEventTickets[i]) {
-                    if(currentEventTickets[i].status === 'pagado') {
-                        div.classList.add('ss-paid');
-                        div.innerText = "";
-                    } else if (currentEventTickets[i].status === 'apartado') {
-                        div.classList.add('ss-reserved');
-                        div.innerText = i.toString().padStart(pad, '0');
-                    }
-                } else {
-                    div.classList.add('ss-free');
-                    div.innerText = i.toString().padStart(pad, '0');
-                }
-                gridTarget.appendChild(div);
-            }
-            document.getElementById('modal-screenshot').style.display = 'flex';
+        function saveContactConfig() { db.ref('site_config/general').update({ waOrders:document.getElementById('cfg-wa-orders').value, waChannel:document.getElementById('cfg-wa-channel').value, fbLink:document.getElementById('cfg-fb-link').value }).then(()=>{ closeModal('modal-config-contact'); Swal.fire({toast:true,icon:'success',title:'Guardado'}); }); }
+        function openConfigContact() { closeModal('modal-settings-menu'); document.getElementById('cfg-wa-orders').value=siteConfig.waOrders; document.getElementById('cfg-wa-channel').value=siteConfig.waChannel; document.getElementById('cfg-fb-link').value=siteConfig.fbLink; document.getElementById('modal-config-contact').style.display='flex'; }
+        function openConfigTheme() { closeModal('modal-settings-menu'); document.getElementById('modal-config-theme').style.display='flex'; }
+        function saveThemeConfig() { closeModal('modal-config-theme'); }
+        function openFaqEditor() { closeModal('modal-settings-menu'); renderFaqEditor(); document.getElementById('modal-editor-faq').style.display='flex'; }
+        function renderFaqEditor() { const c=document.getElementById('cms-faq-list-container'); c.innerHTML=''; (siteConfig.faqs||[]).forEach((f,i)=>{ const d=document.createElement('div'); d.className='cms-term-item'; d.innerHTML=`<div class="cms-term-delete" onclick="delFaq(${i})">&times;</div><input class="cms-input-sm fq" value="${f.q}"><textarea class="cms-input-sm fa">${f.a}</textarea>`; c.appendChild(d); }); }
+        function addFaqBlockUI() { if(!siteConfig.faqs) siteConfig.faqs=[]; siteConfig.faqs.push({q:'',a:''}); renderFaqEditor(); }
+        function delFaq(i) { siteConfig.faqs.splice(i,1); renderFaqEditor(); }
+        function saveFaqConfig() { const qs=document.querySelectorAll('.fq'); const as=document.querySelectorAll('.fa'); const arr=[]; qs.forEach((q,i)=>{ if(q.value) arr.push({q:q.value, a:as[i].value}); }); db.ref('site_config/faqs').set(arr).then(()=>{ closeModal('modal-editor-faq'); Swal.fire({toast:true,icon:'success',title:'Guardado'}); }); }
+        function renderFaqPublic() { const c=document.getElementById('faq-list-public'); if(!c)return; c.innerHTML=(siteConfig.faqs||[]).map((f,i)=>`<details><summary>${i+1}. ${f.q}</summary><div class="faq-ans">${f.a}</div></details>`).join(''); }
+        function openTermsPublic() {
+            const c = document.getElementById('terms-public-content');
+            if(!siteConfig.terms || siteConfig.terms.length === 0) c.innerHTML = '<p style="text-align:center;">Sin términos registrados.</p>';
+            else c.innerHTML = siteConfig.terms.map(t => `<div style="margin-bottom:15px;"><strong>${t.title}</strong><p>${t.desc}</p></div>`).join('');
+            document.getElementById('modal-terms').style.display = 'flex';
         }
-
-        // --- GESTIÓN BOLETOS ADMIN ---
+        function openTermsEditor() { closeModal('modal-settings-menu'); renderTermsEditor(); document.getElementById('modal-editor-terms').style.display = 'flex'; }
+        function renderTermsEditor() {
+            const c = document.getElementById('cms-terms-list-container'); c.innerHTML = '';
+            (siteConfig.terms || []).forEach((t, i) => {
+                const d = document.createElement('div'); d.className = 'cms-term-item';
+                d.innerHTML = `<div class="cms-term-delete" onclick="delTerm(${i})">&times;</div><input class="cms-input-sm tt" value="${t.title}" placeholder="Título"><textarea class="cms-input-sm td">${t.desc}</textarea>`;
+                c.appendChild(d);
+            });
+        }
+        function addTermBlockUI() { if(!siteConfig.terms) siteConfig.terms=[]; siteConfig.terms.push({title:'',desc:''}); renderTermsEditor(); }
+        function delTerm(i) { siteConfig.terms.splice(i,1); renderTermsEditor(); }
+        function saveTermsConfig() {
+            const titles = document.querySelectorAll('.tt'); const descs = document.querySelectorAll('.td'); const arr=[];
+            titles.forEach((t,i) => { if(t.value) arr.push({title:t.value, desc:descs[i].value}); });
+            db.ref('site_config/terms').set(arr).then(()=>{ closeModal('modal-editor-terms'); Swal.fire({toast:true, icon:'success', title:'Guardado'}); });
+        }
         function openAdminTicket(i) {
-            if(!currentEventTickets[i]) return;
-            const t = currentEventTickets[i];
-            const pad = parseInt(currentEventConfig.qty) > 100 ? (parseInt(currentEventConfig.qty) > 1000 ? 4 : 3) : 2;
-            document.getElementById('adm-ticket-num').innerText = i.toString().padStart(pad, '0');
-            document.getElementById('adm-client').innerText = t.owner;
-            document.getElementById('adm-phone').innerText = t.phone;
-            document.getElementById('adm-status').innerText = t.status.toUpperCase();
-            document.getElementById('modal-admin-ticket').style.display='flex';
-            window.singleTicketTarget = i;
+             window.targetTicketIdx = i;
+             const t = currentEventTickets[i];
+             document.getElementById('adm-client').innerText = t.owner;
+             document.getElementById('adm-phone').innerText = t.phone;
+             document.getElementById('adm-status').innerText = t.status.toUpperCase();
+             document.getElementById('modal-admin-ticket').style.display='flex';
         }
-        
-        function changeStatus(st) {
-            const i = window.singleTicketTarget;
-            if(st === 'disponible') {
-                db.ref(`events/${currentEventId}/tickets/${i}`).remove().then(() => closeModal('modal-admin-ticket'));
-            } else if (st === 'pagado') {
-                db.ref(`events/${currentEventId}/tickets/${i}`).update({status:'pagado'}).then(() => {
-                    closeModal('modal-admin-ticket');
-                    const t = currentEventTickets[i];
-                    const pad = parseInt(currentEventConfig.qty) > 100 ? (parseInt(currentEventConfig.qty) > 1000 ? 4 : 3) : 2;
-                    currentVtData = { name: t.owner, nums: [i.toString().padStart(pad,'0')], phone: t.phone, eventName: currentEventConfig.title };
-                    document.getElementById('vt-client').innerText = t.owner;
-                    document.getElementById('vt-num').innerText = currentVtData.nums[0];
-                    document.getElementById('vt-event-name').innerText = currentEventConfig.title;
-                    document.getElementById('modal-virtual-ticket').style.display='flex';
-                });
+        function changeStatus(s) {
+            const i = window.targetTicketIdx;
+            if(s==='disponible') db.ref(`events/${currentEventId}/tickets/${i}`).remove();
+            else db.ref(`events/${currentEventId}/tickets/${i}`).update({status:s});
+            closeModal('modal-admin-ticket');
+        }
+        function sharePaymentLink() {
+             navigator.clipboard.writeText(window.location.href.split('?')[0]+"?viewPayment=true")
+            .then(()=>Swal.fire({toast:true, icon:'success', title:'Enlace Copiado'}));
+        }
+        function shareTicketWhatsApp() {
+            const txt = `Hola! Aquí está tu boleto digital:\nEvento: ${document.getElementById('vt-event-name').innerText}\nNúmeros: ${document.getElementById('vt-num').innerText}\nGracias por participar!`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank');
+        }
+        function highlightTicket(val) {
+            const el = document.getElementById('t-'+val) || document.getElementById('t-'+(parseInt(val)-1));
+            if(el) {
+                el.scrollIntoView({behavior:'smooth', block:'center'});
+                el.style.border='2px solid red'; el.style.transform='scale(1.2)';
+                setTimeout(()=>{ el.style.border='2px solid #ddd'; el.style.transform='scale(1)'; }, 2000);
             }
+        }
+        function loadDigitalTicketMode(id, num) {
+            // Lógica para mostrar ticket solo (Placeholder, en real se conectaría a DB)
+            document.body.innerHTML = "<h1>Cargando Boleto...</h1>"; 
+        }
+        function addImage(type) {
+             const url = document.getElementById('imgEvidenceInput').value;
+             if(url) db.ref('images/evidence').push({url});
+        }
+        function updateEvidenceUI(images) {
+            const w = document.getElementById('evidenceCarouselImgWrapper');
+            const list = document.getElementById('evidenceImgList');
+            if(!w) return;
+            w.innerHTML = ''; list.innerHTML = '';
+            carouselData.evidence = [];
+            Object.entries(images).forEach(([key, val]) => {
+                carouselData.evidence.push(val.url);
+                w.innerHTML += `<img src="${val.url}">`;
+                list.innerHTML += `<div class="admin-img-item"><span>Img...${key.substr(-4)}</span><span onclick="db.ref('images/evidence/${key}').remove()" style="color:red;cursor:pointer;">&times;</span></div>`;
+            });
+            if(carouselData.evidence.length > 0) {
+                w.children[0].style.display = 'block';
+            } else {
+                w.innerHTML = '<p style="text-align:center; padding:50px;">Sin evidencia aún.</p>';
+            }
+        }
+        function moveCarousel(type, dir) {
+            const w = document.getElementById(type+'CarouselImgWrapper');
+            const imgs = w.querySelectorAll('img');
+            if(imgs.length === 0) return;
+            imgs[carouselIdx[type]].style.display = 'none';
+            carouselIdx[type] += dir;
+            if(carouselIdx[type] >= imgs.length) carouselIdx[type] = 0;
+            if(carouselIdx[type] < 0) carouselIdx[type] = imgs.length - 1;
+            imgs[carouselIdx[type]].style.display = 'block';
         }
     </script>
 </body>
