@@ -17,20 +17,19 @@
            1. ESTILOS BASE Y TEMAS (CMS CONFIGURABLE)
            ========================================================================== */
         :root {
-            /* Variables de Color Predeterminado (Verde) */
             --primary: #10b981; 
             --primary-dark: #065f46; 
-            --accent: #FFD700; /* Dorado para destaques */
+            --accent: #FFD700; 
             --dark: #000000; 
             --light: #f8fafc;
             --nav-gradient: linear-gradient(180deg, #000000 30%, #064e3b 100%);
             --bg-elegant: radial-gradient(circle at center, #064e3b 0%, #022c22 40%, #000000 100%);
             --sold-out: #ef4444; 
             --closed-gray: #4b5563;
-            --glass-bg: rgba(0, 0, 0, 0.75); /* Nuevo fondo elegante */
+            --glass-bg: rgba(0, 0, 0, 0.75);
         }
 
-        /* --- TEMAS DE COLOR (Sistema para el Comprador) --- */
+        /* --- TEMAS DE COLOR --- */
         body.theme-maroon { --primary: #800000; --primary-dark: #4a0404; --accent: #ffcc00; --nav-gradient: linear-gradient(180deg, #000000 30%, #4a0404 100%); --bg-elegant: radial-gradient(circle at center, #5c0b0b 0%, #2b0202 40%, #000000 100%); }
         body.theme-blue { --primary: #007bff; --primary-dark: #004085; --accent: #00d4ff; --nav-gradient: linear-gradient(180deg, #000000 30%, #004085 100%); --bg-elegant: radial-gradient(circle at center, #004085 0%, #001f3f 40%, #000000 100%); }
         body.theme-red { --primary: #dc3545; --primary-dark: #8a1c26; --accent: #ffdd00; --nav-gradient: linear-gradient(180deg, #000000 30%, #8a1c26 100%); --bg-elegant: radial-gradient(circle at center, #b91c1c 0%, #580a0a 40%, #000000 100%); }
@@ -42,7 +41,7 @@
         body { background: var(--bg-elegant); color: #1f2937; line-height: 1.5; min-height: 100vh; background-attachment: fixed; transition: background 0.5s ease; }
 
         /* ==========================================================================
-           2. SKELETON LOADER (NUEVO)
+           2. SKELETON LOADER
            ========================================================================== */
         #skeleton-loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -125,63 +124,87 @@
         .btn-panel-rectangular { 
             display: none; 
             background: linear-gradient(90deg, var(--accent), #eab308); 
-            color: black; 
-            padding: 10px 30px; 
-            border-radius: 4px; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            border: 2px solid white; 
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3); 
-            font-size: 0.95rem; 
-            letter-spacing: 1px; 
-            transition: transform 0.2s, box-shadow 0.2s; 
-            text-decoration: none; 
+            color: black; padding: 10px 30px; border-radius: 4px; font-weight: 800; text-transform: uppercase; cursor: pointer; 
+            border: 2px solid white; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3); font-size: 0.95rem; 
+            letter-spacing: 1px; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; 
             align-items: center; gap: 10px; 
         }
         .btn-panel-rectangular:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent); }
         body.is-admin .btn-panel-rectangular { display: inline-flex !important; }
 
-        /* --- HERO & HOME --- */
+        /* --- HERO & HOME & CARRUSEL MEJORADO (FEATURE 1) --- */
         .hero { background: transparent; color: white; text-align: center; padding: 2rem 1rem 1rem; display: flex; flex-direction: column; align-items: center; }
         @keyframes urgentPulse { 0% { text-shadow: 0 0 15px #FFD700; transform: scale(1); } 50% { text-shadow: 0 0 30px #FFD700, 0 0 10px red; transform: scale(1.05); } 100% { text-shadow: 0 0 15px #FFD700; transform: scale(1); } }
         .urgent-title { font-size: 2.5rem; font-weight: 900; color: white; margin-bottom: 5px; animation: urgentPulse 2s infinite ease-in-out; text-transform: uppercase; letter-spacing: 2px; line-height: 1.1; max-width: 800px; }
         .short-desc { font-size: 1.1rem; max-width: 800px; margin-bottom: 1.5rem; color: #e5e7eb; text-shadow: 0 2px 4px black; }
-        .home-events-container { width: 100%; max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
         
-        .carousel-container { width: 100%; max-width: 900px; margin: 0 auto 2rem; position: relative; border-radius: 15px; overflow: hidden; border: 2px solid var(--primary); box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); background: black; display: none; }
-        .carousel-slide img { width: 100%; height: 300px; object-fit: cover; display: block; }
-        .c-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; padding: 10px 15px; cursor: pointer; font-size: 1.5rem; transition: 0.3s; z-index: 10; } .prev { left: 0; } .next { right: 0; }
+        /* Contenedor relativo para posicionar botones del carrusel */
+        .home-carousel-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
-        /* --- BIO SECTION (REDISEÑADA ELEGANTE) --- */
-        .bio-section { 
-            background: var(--glass-bg); /* Nuevo fondo oscuro transparente */
-            max-width: 950px; margin: 0 auto 2rem; padding: 2.5rem; 
-            border-radius: 15px; /* Bordes más redondeados */
-            border: 1px solid var(--accent); /* Borde dorado */
-            box-shadow: 0 0 15px rgba(0,0,0,0.5); 
-            text-align: justify; color: #fff; /* Texto blanco */
+        .home-events-container { 
+            display: flex; /* Flex para scroll horizontal */
+            overflow-x: auto; /* Scroll táctil */
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* Suavidad en iOS */
+            gap: 20px;
+            padding: 20px 5px;
+            width: 100%;
+            white-space: nowrap;
+            scrollbar-width: none; /* Ocultar barra scroll Firefox */
+        }
+        .home-events-container::-webkit-scrollbar { display: none; /* Ocultar barra scroll Chrome */ }
+
+        /* Botones de navegación del carrusel */
+        .carousel-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.8);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 20;
+            display: none; /* Se activan con JS si hay scroll */
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: all 0.3s;
+        }
+        .carousel-nav-btn:hover { background: var(--accent); color: black; transform: translateY(-50%) scale(1.1); }
+        .carousel-nav-btn.prev { left: -15px; }
+        .carousel-nav-btn.next { right: -15px; }
+
+        @media(max-width: 768px) {
+            .carousel-nav-btn.prev { left: 5px; }
+            .carousel-nav-btn.next { right: 5px; }
+        }
+
+        /* --- BIO, EVIDENCIA, FAQ --- */
+        .bio-section, .evidence-section, .faq-section { 
+            background: var(--glass-bg); max-width: 950px; margin: 0 auto 2rem; padding: 2.5rem; 
+            border-radius: 15px; border: 1px solid var(--accent); box-shadow: 0 0 15px rgba(0,0,0,0.5); 
+            text-align: justify; color: #fff;
         }
         .bio-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 1.5rem; text-align: center; }
         .bio-logo-small { height: 70px; width: auto; margin-bottom: 10px; filter: drop-shadow(0 0 5px white); }
-        
         .bio-title-main { font-size: 1.8rem; font-weight: 900; color: var(--accent); text-transform: uppercase; margin: 0; white-space: nowrap; text-align: center; letter-spacing: 1px; }
-        @media(max-width: 400px) { .bio-title-main { font-size: 1.4rem; white-space: normal; } }
-
         .bio-subtitle-editable { color: #ccc; font-weight: 700; font-size: 1.1rem; margin-top: 5px; min-height: 20px; display: block; font-style: italic; }
-        
         .bio-text p { margin-bottom: 12px; color: #e5e7eb; font-size: 1rem; line-height: 1.6; }
         .bio-highlight { font-weight: 800; color: var(--primary); font-size: 1.2rem; display: block; margin-top: 20px; border-bottom: 2px solid var(--accent); display: inline-block; }
+
+        .carousel-container { width: 100%; max-width: 900px; margin: 0 auto 2rem; position: relative; border-radius: 15px; overflow: hidden; border: 2px solid var(--primary); box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); background: black; display: none; }
+        .carousel-slide img { width: 100%; height: 300px; object-fit: cover; display: block; }
+        .c-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; padding: 10px 15px; cursor: pointer; font-size: 1.5rem; transition: 0.3s; z-index: 10; } .prev { left: 0; } .next { right: 0; }
         
-        /* --- EVIDENCIA & FAQ (REDISEÑADAS ELEGANTES) --- */
-        .evidence-section, .faq-section { 
-            background: var(--glass-bg); /* Fondo oscuro consistente */
-            max-width: 950px; margin: 0 auto 2rem; padding: 2rem; 
-            border-radius: 15px; border: 1px solid var(--accent); 
-            text-align: center; color: white;
-        }
-        
-        details { background: rgba(255,255,255,0.1); margin-bottom: 10px; border-radius: 5px; box-shadow: none; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+        details { background: rgba(255,255,255,0.1); margin-bottom: 10px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.2); }
         summary { padding: 15px; cursor: pointer; font-weight: 700; color: var(--accent); list-style: none; display: flex; justify-content: space-between; align-items: center; }
         summary::after { content: '+'; font-size: 1.5rem; color: var(--primary); }
         details[open] summary::after { content: '-'; color: var(--primary-dark); }
@@ -190,18 +213,19 @@
 
         /* --- CARDS & GRID --- */
         .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1000px; margin: 0 auto; }
-        .event-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.3s; position: relative; display: flex; flex-direction: column; cursor: pointer; }
+        .event-card { 
+            background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+            transition: transform 0.3s; position: relative; display: inline-flex; flex-direction: column; cursor: pointer; 
+            width: 280px; flex-shrink: 0; white-space: normal; vertical-align: top; margin: 0 auto;
+        }
         .event-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); }
         .event-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 3px solid var(--accent); }
         .event-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .event-title { font-size: 1.2rem; font-weight: 800; color: var(--dark); margin-bottom: 5px; line-height: 1.2; text-transform: uppercase; }
         .event-desc { font-size: 0.9rem; color: #666; margin-bottom: 15px; flex-grow: 1; }
         .event-price { font-size: 1.5rem; color: var(--primary); font-weight: 900; }
-        .event-actions { margin-top: 15px; display: flex; gap: 10px; }
         
-        .btn-edit-floating {
-            position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: var(--accent); border: 1px solid var(--accent); border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; z-index: 5; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
+        .btn-edit-floating { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: var(--accent); border: 1px solid var(--accent); border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; z-index: 5; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .btn-edit-floating:hover { transform: scale(1.1) rotate(15deg); background: var(--accent); color: black; }
 
         /* --- TICKETS & SELECCION --- */
@@ -211,8 +235,6 @@
         .leyenda { display: flex; justify-content: center; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
         .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; display: flex; align-items: center; gap: 5px; }
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 10px; max-width: 800px; margin: 0 auto; padding-bottom: 80px; }
-        
-        /* BLOQUEO VISUAL POR TIEMPO O SOLD OUT */
         .grid-container.locked { pointer-events: none; filter: grayscale(1); opacity: 0.6; position: relative; }
 
         .ticket { background: white; border: 2px solid #ddd; border-radius: 12px; padding: 15px 0; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: all 0.2s; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center; color: #333; }
@@ -238,106 +260,43 @@
         
         .bank-edit-grid { display: grid; grid-template-columns: 1fr; gap: 10px; border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:10px; }
         .bank-row-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-        /* Dashboard Notifications */
-        .admin-dashboard { max-height: 400px; overflow-y: auto; background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 5px; }
-        .admin-group-card { background: white; border-left: 5px solid #ffc107; padding: 15px; margin-bottom: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .group-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .group-info h4 { margin: 0; color: var(--primary-dark); text-transform: uppercase; font-size: 1rem; }
-        .group-tickets { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-        .ticket-chip { background: #eee; padding: 2px 8px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; }
-        .btn-small { padding: 6px 12px; font-size: 0.85rem; border-radius: 4px; cursor: pointer; border: none; color: white; font-weight: bold; display: flex; align-items: center; gap: 5px; }
-        .btn-approve { background: var(--primary); }
-        .btn-free { background: #dc3545; }
-        
         .switch { position: relative; display: inline-block; width: 40px; height: 20px; margin-right: 10px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
         .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(20px); }
-        
-        .admin-img-list { max-height: 100px; overflow-y: auto; background: white; border: 1px solid #ccc; padding: 5px; margin-top:5px; }
-        .admin-img-item { display:flex; justify-content:space-between; font-size:0.8rem; border-bottom:1px solid #eee; padding:2px; color: black; }
-        
-        .search-container { position: relative; margin: 20px 0; color: #333; display: flex; gap: 10px; justify-content: center; }
-        .search-input { width: 70%; padding: 10px; border-radius: 30px; border: 2px solid var(--primary); text-align: center; font-size: 1.1rem; }
-        .search-icon { position: absolute; right: 15%; top: 50%; transform: translateY(-50%); color: var(--primary); }
-        
-        .verifier-container { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #ddd; }
-        .verifier-input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin-top: 10px; text-align: center; }
 
         /* --- MODALES --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 12000; display: none; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
-        .login-box { background: #111; border: 2px solid var(--primary); padding: 2rem; border-radius: 10px; color: white; width: 300px; text-align: center; }
-        
-        .modal-content { 
-            background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeIn 0.3s ease; text-align: center; color: #333; margin: 20px auto; position: relative; max-height: 85vh; overflow-y: auto; 
-        }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeIn 0.3s ease; text-align: center; color: #333; margin: 20px auto; position: relative; max-height: 85vh; overflow-y: auto; }
         .close-btn { position: sticky; top: 0; float: right; font-size: 2rem; cursor: pointer; color: #dc3545; background: white; border-radius: 50%; width: 30px; height: 30px; line-height: 30px; text-align: center; z-index: 10; margin-top: -10px; margin-right: -10px; }
-        .terms-text { text-align: justify; overflow-y: visible; font-size: 0.9rem; line-height: 1.6; padding-right: 5px; margin-bottom: 20px; }
-        #modal-lucky .modal-content { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #222; border: 2px solid var(--accent); }
-        .btn-lucky { background: linear-gradient(45deg, #FFD700, #ffb300); color: black; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 900; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); width: 80%; max-width: 400px; margin-bottom: 20px; animation: pulseGold 2s infinite; }
-        
         .admin-detail-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; font-size: 0.9rem; }
         .admin-detail-label { font-weight: bold; color: #666; }
         .admin-detail-value { font-weight: bold; color: #333; text-align: right; }
 
-        /* --- SLOT MACHINE --- */
-        .slot-machine-wrapper { width: 100%; max-width: 300px; height: 120px; background: #000; border: 5px solid var(--accent); border-radius: 10px; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px; margin: 20px auto; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5) inset; position: relative; }
-        .slot-machine-wrapper::before { content: ''; position: absolute; top: 50%; left: -10px; right: -10px; height: 2px; background: rgba(255,0,0,0.7); z-index: 20; pointer-events: none; }
-        .slot-column { width: 30%; height: 100%; background: white; border-radius: 5px; overflow: hidden; position: relative; text-align: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
-        .slot-numbers-strip { display: flex; flex-direction: column; transition: transform 0.1s linear; }
-        .spinning .slot-numbers-strip { animation: slotSpin 0.2s infinite linear; }
-        @keyframes slotSpin { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
-        .slot-num-item { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 900; }
-        .sn-0 { color: #e74c3c; } .sn-1 { color: #3498db; } .sn-2 { color: #f1c40f; } .sn-3 { color: #2ecc71; } .sn-4 { color: #9b59b6; }
-        .sn-5 { color: #e67e22; } .sn-6 { color: #1abc9c; } .sn-7 { color: #34495e; } .sn-8 { color: #e91e63; } .sn-9 { color: #000; }
-
-        /* --- BANCOS & CARDS (MEJORADAS - LOGOS Y OVERFLOW) --- */
+        /* --- BANCOS & CARDS --- */
         .cards-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 2rem; width: 100%; }
-        .bank-card { 
-            width: 320px; height: 190px; border-radius: 15px; padding: 20px; color: white; position: relative; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: space-between; 
-            transition: transform 0.3s; display: none; font-family: 'Courier New', monospace; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            overflow: hidden; /* Evita que el texto salga de la tarjeta */
-        }
+        .bank-card { width: 320px; height: 190px; border-radius: 15px; padding: 20px; color: white; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s; display: none; font-family: 'Courier New', monospace; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); overflow: hidden; }
         .bank-card.visible { display: flex; }
         .card-logo-img { height: 40px; max-width: 100px; object-fit: contain; filter: drop-shadow(0 0 2px white); }
-        
-        /* Estilo para el logo específico que reemplaza al chip */
         .card-logo-bank-icon { width: 50px; height: 50px; object-fit: contain; }
-
         .card-bbva { background: linear-gradient(135deg, #004481 0%, #002a52 100%); border: 1px solid rgba(255,255,255,0.3); }
         .card-azteca { background: linear-gradient(135deg, #10b981 0%, #064e3b 100%); border: 1px solid var(--accent); }
         .card-mp { background: linear-gradient(135deg, #009EE3 0%, #005F8F 100%); border: 1px solid rgba(255,255,255,0.3); }
         .card-oxxo { background: linear-gradient(135deg, #e61b1b 0%, #fbd010 100%); color: white; border: 1px solid white; }
         .card-banorte { background: linear-gradient(135deg, #eb0029 0%, #b1001f 100%); border: 1px solid rgba(255,255,255,0.3); }
         .card-banamex { background: linear-gradient(135deg, #0056b3 0%, #002a52 100%); border: 1px solid rgba(255,255,255,0.3); }
-        
         .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
-        .card-number { 
-            font-size: 1.3rem; letter-spacing: 2px; text-align: center; font-weight: bold; margin: 15px 0; 
-            background: rgba(0,0,0,0.2); padding: 5px; border-radius: 5px;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* Previene desborde */
-        }
+        .card-number { font-size: 1.3rem; letter-spacing: 2px; text-align: center; font-weight: bold; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
-        .card-holder { 
-            font-size: 0.9rem; text-transform: uppercase; font-weight: bold; 
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; /* Previene desborde */
-        }
+        .card-holder { font-size: 0.9rem; text-transform: uppercase; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
         .card-label { font-size: 0.6rem; opacity: 0.9; display: block; color: #ddd; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
         .copy-btn { background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 2px 8px; border-radius: 5px; cursor: pointer; margin-left: 10px; font-size: 0.7rem; vertical-align: middle; text-shadow: none; }
         .copy-btn:hover { background: white; color: black; }
 
         /* --- VIRTUAL TICKET --- */
-        .virtual-ticket-card { 
-            background: radial-gradient(circle, #064e3b 0%, #000 100%); 
-            color: var(--accent); padding: 20px; border-radius: 15px; border: 4px double var(--accent); 
-            text-align: center; position: relative; overflow: hidden; width: 90%; max-width: 380px; 
-            min-height: 500px; display: flex; flex-direction: column; justify-content: space-between; 
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); margin: 0 auto; 
-        }
+        .virtual-ticket-card { background: radial-gradient(circle, #064e3b 0%, #000 100%); color: var(--accent); padding: 20px; border-radius: 15px; border: 4px double var(--accent); text-align: center; position: relative; overflow: hidden; width: 90%; max-width: 380px; min-height: 500px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); margin: 0 auto; }
         .vt-logo { height: 50px; object-fit:contain; margin-bottom: 5px; filter: drop-shadow(0 0 5px white); flex-shrink: 0; }
         .vt-congrats { font-size: 1.4rem; font-weight: 900; text-transform: uppercase; margin-bottom: 0; color: white; line-height: 1.1; }
         .vt-msg { font-size: 0.8rem; color: #eee; margin-bottom: 10px; font-style: italic; }
@@ -359,9 +318,29 @@
         .footer-dev { font-size: 0.75rem; color: #666; margin-top: 5px; }
         .footer-dev a { color: var(--accent); text-decoration: none; font-weight: bold; }
 
+        /* --- OVERLAYS CORREGIDOS (FEATURE 3 - SCROLL) --- */
         body.exclusive-mode nav, body.exclusive-mode footer, body.exclusive-mode #main-content-area { display: none !important; }
-        .overlay-fullscreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-elegant); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; overflow-y: auto; padding: 20px; }
+        
+        .overlay-fullscreen { 
+            display: none; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--bg-elegant); 
+            z-index: 9999; 
+            flex-direction: column; 
+            align-items: center; /* Centrar horizontalmente */
+            justify-content: flex-start; /* Permitir scroll desde arriba */
+            overflow-y: auto; /* Scroll permitido */
+            padding: 20px; 
+            padding-top: 50px; /* Espacio arriba para no pegar al borde */
+        }
         .overlay-fullscreen.active { display: flex !important; }
+
+        /* Corrección específica para que las tarjetas de pago no se corten */
+        #payment-overlay-cards {
+            max-height: none;
+            overflow: visible;
+            padding-bottom: 40px;
+        }
 
         .admin-grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 10px; }
         .admin-menu-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px 10px; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #333; }
@@ -403,8 +382,40 @@
         .cms-input-sm { width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 5px; font-size: 0.9rem; }
         .color-selector-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 10px 0; }
         .color-btn { width: 100%; height: 40px; border-radius: 5px; border: 2px solid #ddd; cursor: pointer; transition: transform 0.2s; }
-        .color-btn:hover { transform: scale(1.1); border-color: #333; }
         .logo-container { position: relative; display: inline-block; }
+
+        /* Slot Machine */
+        .slot-machine-wrapper { width: 100%; max-width: 300px; height: 120px; background: #000; border: 5px solid var(--accent); border-radius: 10px; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px; margin: 20px auto; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5) inset; position: relative; }
+        .slot-machine-wrapper::before { content: ''; position: absolute; top: 50%; left: -10px; right: -10px; height: 2px; background: rgba(255,0,0,0.7); z-index: 20; pointer-events: none; }
+        .slot-column { width: 30%; height: 100%; background: white; border-radius: 5px; overflow: hidden; position: relative; text-align: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        .slot-numbers-strip { display: flex; flex-direction: column; transition: transform 0.1s linear; }
+        .spinning .slot-numbers-strip { animation: slotSpin 0.2s infinite linear; }
+        @keyframes slotSpin { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+        .slot-num-item { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 900; }
+        .sn-0 { color: #e74c3c; } .sn-1 { color: #3498db; } .sn-2 { color: #f1c40f; } .sn-3 { color: #2ecc71; } .sn-4 { color: #9b59b6; }
+        .sn-5 { color: #e67e22; } .sn-6 { color: #1abc9c; } .sn-7 { color: #34495e; } .sn-8 { color: #e91e63; } .sn-9 { color: #000; }
+        .admin-dashboard { max-height: 400px; overflow-y: auto; background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 5px; }
+        .admin-group-card { background: white; border-left: 5px solid #ffc107; padding: 15px; margin-bottom: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .group-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .group-tickets { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+        .ticket-chip { background: #eee; padding: 2px 8px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; }
+        .btn-small { padding: 6px 12px; font-size: 0.85rem; border-radius: 4px; cursor: pointer; border: none; color: white; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+        .btn-approve { background: var(--primary); }
+        .btn-free { background: #dc3545; }
+        .admin-img-list { max-height: 100px; overflow-y: auto; background: white; border: 1px solid #ccc; padding: 5px; margin-top:5px; }
+        .admin-img-item { display:flex; justify-content:space-between; font-size:0.8rem; border-bottom:1px solid #eee; padding:2px; color: black; }
+        .search-container { position: relative; margin: 20px 0; color: #333; display: flex; gap: 10px; justify-content: center; }
+        .search-input { width: 70%; padding: 10px; border-radius: 30px; border: 2px solid var(--primary); text-align: center; font-size: 1.1rem; }
+        .search-icon { position: absolute; right: 15%; top: 50%; transform: translateY(-50%); color: var(--primary); }
+        .verifier-container { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #ddd; }
+        .verifier-input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin-top: 10px; text-align: center; }
+        .login-box { background: #111; border: 2px solid var(--primary); padding: 2rem; border-radius: 10px; color: white; width: 300px; text-align: center; }
+        #modal-lucky .modal-content { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #222; border: 2px solid var(--accent); }
+        .btn-lucky { background: linear-gradient(45deg, #FFD700, #ffb300); color: black; border: none; padding: 15px 30px; border-radius: 50px; font-weight: 900; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); width: 80%; max-width: 400px; margin-bottom: 20px; animation: pulseGold 2s infinite; }
+        .vt-numbers.small-text { font-size: 1.1rem; line-height: 1.3; letter-spacing: 1px; }
+        .btn-keep-buying { background: transparent; border: 1px solid #aaa; color: #aaa; width: 100%; margin-top: 5px; border-radius: 25px; padding: 8px; font-size: 0.8rem; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
+        .btn-keep-buying:hover { background: #333; color: white; border-color: white; }
+
     </style>
 </head>
 <body>
@@ -468,7 +479,6 @@
         </button>
         <p style="color:#999; font-size:0.8rem; margin-top:15px;">Tu Suerte Suma | Pagos Seguros</p>
     </div>
-
     <div id="modal-settings-menu" class="modal-overlay" onclick="closeModal('modal-settings-menu')">
         <div class="modal-content" onclick="event.stopPropagation()" style="max-width:500px;">
             <div class="close-btn" onclick="closeModal('modal-settings-menu')">&times;</div>
@@ -642,10 +652,10 @@
                 <div class="form-group">
                     <label>Cantidad de Boletos (Oportunidades)</label>
                     <select id="evt-qty" class="form-control">
-                        <option value="10">10 Boletos (1 boleto = 10 núm)</option>
-                        <option value="25">25 Boletos (1 boleto = 4 núm)</option>
-                        <option value="50">50 Boletos (1 boleto = 2 núm)</option>
-                        <option value="100">100 Boletos (00-99)</option>
+                        <option value="100">100 Oportunidades (Normal 00-99)</option>
+                        <option value="50">50 Oportunidades (Doble)</option>
+                        <option value="25">25 Oportunidades (Cuádruple)</option>
+                        <option value="10">10 Oportunidades (x10)</option>
                         <option value="1000">1000 Boletos (000-999)</option>
                         <option value="10000">10000 Boletos (0000-9999)</option>
                     </select>
@@ -764,6 +774,9 @@
                 <button onclick="shareTicketWhatsApp()" class="btn-whatsapp-share" style="margin-top:0;">
                     <i class="fab fa-whatsapp"></i> ENVIAR CONFIRMACIÓN
                 </button>
+                <button onclick="closeModal('modal-virtual-ticket'); showPage('inicio')" class="btn-keep-buying">
+                    <i class="fas fa-undo"></i> Seguir Comprando
+                </button>
                 <button onclick="closeModal('modal-virtual-ticket')" style="background:transparent; border:none; color:#666; text-decoration:underline; cursor:pointer; margin-top:10px; font-size:0.8rem;">Cerrar</button>
             </div>
         </div>
@@ -798,7 +811,9 @@
                 <div id="adm-all-tickets" style="background:#eee; padding:5px; border-radius:5px; font-weight:bold; word-wrap:break-word; font-size:0.9rem;">...</div>
             </div>
 
-            <button onclick="changeStatus('pagado')" class="btn-action" style="background:var(--dark); color:#FFD700; margin-bottom:5px; width:100%;">MARCAR PAGADO Y CONFIRMAR</button>
+            <button onclick="confirmPaymentAndSend()" class="btn-action" style="background:var(--dark); color:#FFD700; margin-bottom:5px; width:100%; border:1px solid var(--accent);">
+                <i class="fab fa-whatsapp"></i> MARCAR PAGADO Y ENVIAR WA
+            </button>
             <button onclick="changeStatus('disponible')" class="btn-action" style="background:#ef4444; width:100%;">LIBERAR (BORRAR)</button>
             
             <a id="adm-wa-link" href="#" target="_blank" class="btn-action" style="background:#25D366; width:100%; margin-top:5px; text-align:center;">
@@ -839,7 +854,6 @@
             </div>
         </div>
     </div>
-
     <nav>
         <div class="nav-structure">
             <div class="nav-top-row">
@@ -870,6 +884,7 @@
             </div>
         </div>
     </nav>
+    
     <div id="main-content-area">
 
         <div id="page-inicio" class="page-view" style="display:block;">
@@ -888,8 +903,20 @@
                     🔥 Sorteos Activos 🔥
                 </h3>
                 
-                <div id="home-events-list" class="home-events-container">
-                    <p style="color:white;">Cargando sorteos...</p>
+                <div class="home-carousel-wrapper">
+                    <button class="carousel-nav-btn prev" id="home-prev-btn" onclick="scrollHomeCarousel(-1)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="home-events-container" id="home-events-scroll-area">
+                        <div id="home-events-track" class="carousel-track">
+                            <p style="color:white; width:100%; text-align:center;">Cargando sorteos...</p>
+                        </div>
+                    </div>
+
+                    <button class="carousel-nav-btn next" id="home-next-btn" onclick="scrollHomeCarousel(1)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
 
@@ -1249,7 +1276,6 @@
             appId: "1:1059006672469:web:2a5aac116a060ff8016edc"
         };
 
-        // Inicializar Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
@@ -1257,12 +1283,12 @@
         const auth = firebase.auth();
         
         // ==========================================
-        // 2. VARIABLES GLOBALES (ESTADO DE LA APP)
+        // 2. VARIABLES GLOBALES
         // ==========================================
         let siteConfig = {
-            waOrders: "5215500000000", 
-            waChannel: "https://whatsapp.com/channel/...", 
-            fbLink: "https://facebook.com/...",
+            waOrders: "", 
+            waChannel: "", 
+            fbLink: "",
             theme: "default",
             terms: [], 
             faqs: [],
@@ -1280,12 +1306,12 @@
         let isEventClosed = false; 
 
         // ==========================================
-        // 3. INICIALIZACIÓN, SKELETON Y SEGURIDAD
+        // 3. INICIALIZACIÓN Y RUTAS
         // ==========================================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             
-            // 3.1 DETECTOR DE ADMIN
+            // Detector de Admin
             auth.onAuthStateChanged((user) => { 
                 if (user) {
                     document.body.classList.add('is-admin'); 
@@ -1294,22 +1320,22 @@
                 }
             });
 
-            // 3.2 ENRUTAMIENTO DE MODOS (Ticket, Pago, Normal)
-            
-            // MODO: BOLETO DIGITAL
+            // MODO: BOLETO DIGITAL (Vista Cliente)
             if(urlParams.get('viewTicket') === 'true') {
                 activateOverlayMode('overlay-ticket');
                 setTimeout(() => {
                     loadDigitalTicketMode(urlParams.get('id'), urlParams.get('num'));
-                    removeSkeleton(); // Quitar carga
+                    removeSkeleton();
                 }, 1000);
             
-            // MODO: LINK DE PAGOS (SOLUCIÓN TARJETAS VACÍAS)
+            // MODO: LINK DE PAGOS (Vista Cliente)
             } else if(urlParams.get('viewPayment') === 'true') {
                 activateOverlayMode('overlay-payment');
+                // Cargar bancos y configuración para asegurar que el WA funcione
+                loadSiteConfig(); 
                 db.ref('banks').on('value', (snap) => {
                     updateBankUI(snap.val() || {});
-                    removeSkeleton(); // Quitar carga cuando lleguen los bancos
+                    removeSkeleton();
                 });
             
             // MODO: NORMAL APP
@@ -1319,12 +1345,10 @@
                 if(directEventId) {
                     setTimeout(() => selectEvent(directEventId), 1000);
                 }
-                // Damos un tiempo prudente para quitar el skeleton si no hay datos pesados
                 setTimeout(removeSkeleton, 1500); 
             }
         };
 
-        // Función para desvanecer el Skeleton Loader
         function removeSkeleton() {
             const sk = document.getElementById('skeleton-loader');
             if(sk) {
@@ -1350,77 +1374,7 @@
         }
 
         // ==========================================
-        // 4. LÓGICA DE BANCOS (CORREGIDA PARA OVERLAY)
-        // ==========================================
-        function updateBankUI(banks) {
-             const list = ['bbva','azteca','mp','oxxo','banorte','banamex'];
-             const overlayContainer = document.getElementById('payment-overlay-cards');
-             if(overlayContainer) overlayContainer.innerHTML = ''; // Limpiar overlay previo
-
-             list.forEach(k => {
-                 const b = banks[k] || {};
-                 const active = b.active;
-                 
-                 // 1. Actualizar Tarjeta en Página Principal
-                 const cardMain = document.getElementById(`card-${k}-main`);
-                 if(cardMain) {
-                     cardMain.classList.toggle('visible', !!active);
-                     if(active) {
-                         const nameEl = document.getElementById(`view-name-${k}-main`);
-                         const numEl = document.getElementById(`view-num-${k}-main`);
-                         if(nameEl) nameEl.innerText = b.name || "NO DEFINIDO";
-                         if(numEl) numEl.innerText = b.num || "0000";
-
-                         // 2. SOLUCIÓN LINK DE PAGOS: Si está activa, clonarla al overlay
-                         if(overlayContainer) {
-                             const clone = cardMain.cloneNode(true); // Clonar tarjeta
-                             clone.id = ""; // Quitar ID para evitar duplicados
-                             clone.style.display = "flex"; // Asegurar que se vea
-                             clone.style.margin = "10px auto"; // Centrado
-                             // Re-vincular el botón de copiar del clon (porque el onclick apunta al ID original)
-                             const btn = clone.querySelector('.copy-btn');
-                             if(btn) {
-                                 // Creamos un closure para copiar el texto correcto
-                                 btn.onclick = function() { 
-                                     navigator.clipboard.writeText(b.num || "").then(()=>Swal.fire({toast:true, icon:'success', title:'Copiado'}));
-                                 };
-                             }
-                             overlayContainer.appendChild(clone);
-                         }
-                     }
-                 }
-
-                 // 3. Actualizar Inputs Admin
-                 if(document.body.classList.contains('is-admin')) {
-                     let K = k.charAt(0).toUpperCase() + k.slice(1);
-                     if(k=='bbva') K='BBVA'; if(k=='mp') K='MP'; 
-                     
-                     const chk = document.getElementById('check'+K);
-                     if(chk) chk.checked = active;
-                     const ni = document.getElementById('name'+K);
-                     if(ni) ni.value = b.name||'';
-                     const nui = document.getElementById('num'+K);
-                     if(nui) nui.value = b.num||'';
-                 }
-             });
-        }
-
-        function saveBank(k) {
-            let K = k.charAt(0).toUpperCase() + k.slice(1);
-            if(k=='bbva') K='BBVA'; if(k=='mp') K='MP';
-            
-            const data = {
-                name: document.getElementById('name'+K).value,
-                num: document.getElementById('num'+K).value,
-                active: document.getElementById('check'+K).checked
-            };
-            db.ref(`banks/${k}`).update(data).then(() => {
-                Swal.fire({toast:true, icon:'success', title: K + ' Actualizado'});
-            });
-        }
-
-        // ==========================================
-        // 5. CMS & TEXTOS
+        // 4. LÓGICA CMS (TEXTOS, BANCOS, CONFIG)
         // ==========================================
         function loadSiteConfig() {
             db.ref('site_config').on('value', (snap) => {
@@ -1474,6 +1428,143 @@
         function openConfigTheme() { closeModal('modal-settings-menu'); document.getElementById('modal-config-theme').style.display='flex'; }
         function saveThemeConfig() { const currentThemeClass = document.body.className.split(' ').find(c => c.startsWith('theme-')) || 'default'; db.ref('site_config/general/theme').set(currentThemeClass).then(() => { closeModal('modal-config-theme'); Swal.fire({toast:true, icon:'success', title:'Tema Actualizado'}); }); }
 
+        // --- Lógica Bancos ---
+        function updateBankUI(banks) {
+             const list = ['bbva','azteca','mp','oxxo','banorte','banamex'];
+             // Overlay Container para Link de Pagos
+             const overlayContainer = document.getElementById('payment-overlay-cards');
+             if(overlayContainer) overlayContainer.innerHTML = ''; 
+
+             list.forEach(k => {
+                 const b = banks[k] || {};
+                 const active = b.active;
+                 
+                 // 1. Vista Principal
+                 const cardMain = document.getElementById(`card-${k}-main`);
+                 if(cardMain) {
+                     cardMain.classList.toggle('visible', !!active);
+                     if(active) {
+                         const nameEl = document.getElementById(`view-name-${k}-main`);
+                         const numEl = document.getElementById(`view-num-${k}-main`);
+                         if(nameEl) nameEl.innerText = b.name || "NO DEFINIDO";
+                         if(numEl) numEl.innerText = b.num || "0000";
+
+                         // 2. Vista Overlay (Link de Pagos)
+                         if(overlayContainer) {
+                             const clone = cardMain.cloneNode(true); 
+                             clone.id = ""; 
+                             clone.style.display = "flex"; 
+                             clone.style.margin = "10px auto"; 
+                             const btn = clone.querySelector('.copy-btn');
+                             if(btn) {
+                                 btn.onclick = function() { 
+                                     navigator.clipboard.writeText(b.num || "").then(()=>Swal.fire({toast:true, icon:'success', title:'Copiado'}));
+                                 };
+                             }
+                             overlayContainer.appendChild(clone);
+                         }
+                     }
+                 }
+                 // 3. Inputs Admin
+                 if(document.body.classList.contains('is-admin')) {
+                     let K = k.charAt(0).toUpperCase() + k.slice(1);
+                     if(k=='bbva') K='BBVA'; if(k=='mp') K='MP'; 
+                     const chk = document.getElementById('check'+K); if(chk) chk.checked = active;
+                     const ni = document.getElementById('name'+K); if(ni) ni.value = b.name||'';
+                     const nui = document.getElementById('num'+K); if(nui) nui.value = b.num||'';
+                 }
+             });
+        }
+        function saveBank(k) {
+            let K = k.charAt(0).toUpperCase() + k.slice(1);
+            if(k=='bbva') K='BBVA'; if(k=='mp') K='MP';
+            const data = { name: document.getElementById('name'+K).value, num: document.getElementById('num'+K).value, active: document.getElementById('check'+K).checked };
+            db.ref(`banks/${k}`).update(data).then(() => { Swal.fire({toast:true, icon:'success', title: K + ' Actualizado'}); });
+        }
+
+        // --- Auth ---
+        function openLogin() { if(!document.body.classList.contains('is-admin')) document.getElementById('loginModal').style.display='flex'; }
+        function attemptLogin() { auth.signInWithEmailAndPassword(document.getElementById('adminUser').value, document.getElementById('adminPass').value).then(()=>{ closeModal('loginModal'); Swal.fire({toast:true, icon:'success', title:'Bienvenido Admin'}); }).catch(()=>Swal.fire("Error","Credenciales incorrectas","error")); }
+        function logoutAdmin() { auth.signOut().then(()=>location.reload()); }
+
+        // ==========================================
+        // 5. LÓGICA DE EVENTOS & CARRUSEL (FEATURE 1)
+        // ==========================================
+        function renderEventsList(events) {
+            const track = document.getElementById('home-events-track'); // Carrusel Inicio
+            const grid = document.getElementById('events-grid'); // Lista Sorteos
+            
+            if(!track || !grid) return;
+            track.innerHTML = ''; grid.innerHTML = '';
+            
+            if(!events || Object.keys(events).length === 0) {
+                const msg = '<p style="text-align:center; color:white; width:100%;">No hay sorteos activos.</p>';
+                track.innerHTML = msg; grid.innerHTML = msg; return;
+            }
+
+            const eventKeys = Object.keys(events);
+            let cardsHTML = '';
+
+            eventKeys.forEach(id => {
+                const ev = events[id].config;
+                const html = `
+                    <div class="event-card" onclick="selectEvent('${id}')">
+                        <div class="btn-edit-floating admin-only" onclick="event.stopPropagation(); openEditEvent('${id}')">
+                            <i class="fas fa-pencil-alt"></i>
+                        </div>
+                        <img src="${ev.img || 'https://via.placeholder.com/300'}" class="event-img">
+                        <div class="event-body">
+                            <div><div class="event-title">${ev.title}</div><div class="event-desc">${ev.descShort || ''}</div></div>
+                            <div>
+                                <div class="event-price">$${ev.price}</div>
+                                <button class="btn-action" style="width:100%; margin-top:10px;">VER BOLETOS</button>
+                            </div>
+                        </div>
+                    </div>`;
+                cardsHTML += html;
+            });
+
+            // 1. Llenar Grid (Sorteos Page)
+            grid.innerHTML = cardsHTML;
+
+            // 2. Llenar Carrusel (Inicio Page)
+            track.innerHTML = cardsHTML;
+
+            // 3. Lógica Botones Carrusel (Feature 1)
+            setTimeout(() => {
+                checkCarouselArrows();
+            }, 500);
+        }
+
+        // Feature 1: Desplazamiento manual por botones
+        function scrollHomeCarousel(direction) {
+            const container = document.getElementById('home-events-scroll-area');
+            const cardWidth = 300; // Ancho aprox tarjeta + gap
+            if(container) {
+                container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+            }
+        }
+
+        // Verificar si mostrar botones (si hay scroll)
+        function checkCarouselArrows() {
+            const container = document.getElementById('home-events-scroll-area');
+            const prevBtn = document.getElementById('home-prev-btn');
+            const nextBtn = document.getElementById('home-next-btn');
+            
+            if(!container || !prevBtn || !nextBtn) return;
+
+            // Si el contenido es mayor al contenedor, mostramos botones
+            if (container.scrollWidth > container.clientWidth) {
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+            } else {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                // Centrar contenido si son pocos elementos
+                document.getElementById('home-events-track').style.justifyContent = 'center';
+            }
+        }
+
         // FAQ Logic
         function openFaqEditor() { closeModal('modal-settings-menu'); renderFaqEditor(); document.getElementById('modal-editor-faq').style.display='flex'; }
         function renderFaqEditor() { const c=document.getElementById('cms-faq-list-container'); c.innerHTML=''; (siteConfig.faqs||[]).forEach((f,i)=>{ const d=document.createElement('div'); d.className='cms-term-item'; d.innerHTML=`<div class="cms-term-delete" onclick="delFaq(${i})">&times;</div><input class="cms-input-sm fq" value="${f.q}"><textarea class="cms-input-sm fa">${f.a}</textarea>`; c.appendChild(d); }); }
@@ -1489,48 +1580,9 @@
         function delTerm(i) { siteConfig.terms.splice(i,1); renderTermsEditor(); }
         function saveTermsConfig() { const titles = document.querySelectorAll('.tt'); const descs = document.querySelectorAll('.td'); const arr=[]; titles.forEach((t,i) => { if(t.value) arr.push({title:t.value, desc:descs[i].value}); }); db.ref('site_config/terms').set(arr).then(()=>{ closeModal('modal-editor-terms'); Swal.fire({toast:true, icon:'success', title:'Términos Guardados'}); }); }
         function openTermsPublic() { const c = document.getElementById('terms-public-content'); if(!siteConfig.terms || siteConfig.terms.length === 0) c.innerHTML = '<p style="text-align:center;">Sin términos registrados.</p>'; else c.innerHTML = siteConfig.terms.map(t => `<div style="margin-bottom:15px;"><strong>${t.title}</strong><p>${t.desc}</p></div>`).join(''); document.getElementById('modal-terms').style.display = 'flex'; }
-
-        // Auth
-        function openLogin() { if(!document.body.classList.contains('is-admin')) document.getElementById('loginModal').style.display='flex'; }
-        function attemptLogin() { auth.signInWithEmailAndPassword(document.getElementById('adminUser').value, document.getElementById('adminPass').value).then(()=>{ closeModal('loginModal'); Swal.fire({toast:true, icon:'success', title:'Bienvenido Admin'}); }).catch(()=>Swal.fire("Error","Credenciales incorrectas","error")); }
-        function logoutAdmin() { auth.signOut().then(()=>location.reload()); }
-
         // ==========================================
-        // 6. LÓGICA DE EVENTOS (CORE)
+        // 6. GESTIÓN DE EVENTO SELECCIONADO
         // ==========================================
-        function renderEventsList(events) {
-            const grid = document.getElementById('events-grid');
-            const list = document.getElementById('home-events-list');
-            if(!grid) return;
-            grid.innerHTML = ''; list.innerHTML = '';
-            
-            if(!events || Object.keys(events).length === 0) {
-                const msg = '<p style="grid-column:1/-1; text-align:center; color:white;">No hay sorteos activos.</p>';
-                grid.innerHTML = msg; list.innerHTML = msg; return;
-            }
-
-            Object.entries(events).forEach(([id, data]) => {
-                const ev = data.config;
-                const html = `
-                    <div class="event-card" onclick="selectEvent('${id}')">
-                        <div class="btn-edit-floating admin-only" onclick="event.stopPropagation(); openEditEvent('${id}')">
-                            <i class="fas fa-pencil-alt"></i>
-                        </div>
-                        <img src="${ev.img || 'https://via.placeholder.com/300'}" class="event-img">
-                        <div class="event-body">
-                            <div><div class="event-title">${ev.title}</div><div class="event-desc">${ev.descShort || ''}</div></div>
-                            <div>
-                                <div class="event-price">$${ev.price}</div>
-                                <button class="btn-action" style="width:100%; margin-top:10px;">VER BOLETOS</button>
-                            </div>
-                        </div>
-                    </div>`;
-                grid.innerHTML += html; list.innerHTML += html;
-            });
-            // Remover Skeleton si estamos en home
-            if(!window.location.search) removeSkeleton();
-        }
-
         function selectEvent(id) {
             currentEventId = id;
             selected = [];
@@ -1557,23 +1609,143 @@
                 
                 if(document.body.classList.contains('is-admin')) renderGroupedNotifications();
                 
-                // Si llegamos aquí directo, quitar skeleton
                 removeSkeleton();
             });
             showPage('boletos');
         }
 
+        function startCountdown(date) {
+            if(countdownInterval) clearInterval(countdownInterval);
+            const disp = document.getElementById('countdown-display');
+            const msg = document.getElementById('closed-msg');
+            if(!date) { disp.style.display='none'; msg.style.display='none'; return; }
+            
+            const end = new Date(date).getTime();
+            if(isNaN(end)) { disp.style.display='none'; return; }
+            
+            disp.style.display='flex';
+            msg.style.display='none';
+            isEventClosed = false;
+
+            countdownInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const d = end - now;
+                if(d < 0) { 
+                    clearInterval(countdownInterval); disp.style.display='none';
+                    msg.style.display='block'; isEventClosed = true; createGrid(); return; 
+                }
+                document.getElementById("cd-d").innerText = Math.floor(d/(1000*60*60*24)).toString().padStart(2,'0');
+                document.getElementById("cd-h").innerText = Math.floor((d%(1000*60*60*24))/(1000*60*60)).toString().padStart(2,'0');
+                document.getElementById("cd-m").innerText = Math.floor((d%(1000*60*60))/(1000*60)).toString().padStart(2,'0');
+                document.getElementById("cd-s").innerText = Math.floor((d%(1000*60))/1000).toString().padStart(2,'0');
+            }, 1000);
+        }
+
+        // ==========================================
+        // 7. LÓGICA DE ADMIN (PAGOS Y NOTIFICACIONES - Feature 2)
+        // ==========================================
+        function openAdminTicket(i) {
+             window.targetTicketIdx = i;
+             const t = currentEventTickets[i];
+             if(!t) return;
+
+             // Llenar datos del modal
+             document.getElementById('adm-ticket-num').innerText = (parseInt(i)+1);
+             document.getElementById('adm-client').innerText = t.owner || "Sin Nombre";
+             document.getElementById('adm-phone').innerText = t.phone || "Sin Teléfono";
+             document.getElementById('adm-state').innerText = t.state || "No especificado"; 
+             const statusEl = document.getElementById('adm-status');
+             statusEl.innerText = t.status.toUpperCase();
+             statusEl.style.color = (t.status === 'pagado') ? '#28a745' : '#ffc107';
+             document.getElementById('adm-wa-link').href = `https://wa.me/${t.phone}`;
+
+             // Calcular boletos del usuario para mostrarlos en el resumen
+             let userTickets = [];
+             const totalBoletos = parseInt(currentEventConfig.qty || 100);
+             let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+             let rangeSize = Math.floor(baseNums / totalBoletos);
+             let pad = (baseNums > 100) ? (baseNums > 1000 ? 4 : 3) : 2;
+
+             Object.entries(currentEventTickets).forEach(([idx, ticketData]) => {
+                 if (ticketData.phone === t.phone) {
+                     if (rangeSize > 1) userTickets.push(`${parseInt(idx)+1}`);
+                     else userTickets.push(idx.toString().padStart(pad,'0'));
+                 }
+             });
+             window.currentUserTicketsList = userTickets.join(", ");
+             document.getElementById('adm-all-tickets').innerText = window.currentUserTicketsList;
+             
+             document.getElementById('modal-admin-ticket').style.display='flex';
+        }
+
+        // FEATURE 2: CONFIRMAR PAGO Y REDIRIGIR A WHATSAPP
+        function confirmPaymentAndSend() {
+            const i = window.targetTicketIdx;
+            if(!currentEventId || i === undefined) return;
+            const t = currentEventTickets[i];
+            
+            // 1. Marcar todos los de este usuario como pagados en Firebase
+            const updates = {};
+            Object.entries(currentEventTickets).forEach(([idx, ticketData]) => {
+                 if (ticketData.phone === t.phone && ticketData.status === 'apartado') {
+                     updates[`events/${currentEventId}/tickets/${idx}/status`] = 'pagado';
+                 }
+            });
+
+            db.ref().update(updates).then(() => {
+                closeModal('modal-admin-ticket');
+                
+                // Mostrar alerta de éxito primero
+                Swal.fire({
+                    title: '¡Pago Confirmado!',
+                    text: 'Redirigiendo a WhatsApp para notificar al cliente...',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                
+                // 2. Generar Link del Boleto Digital del Cliente
+                // Usamos una URL limpia para que el cliente solo vea su boleto
+                const linkBase = window.location.href.split('?')[0];
+                const digitalLink = `${linkBase}?viewTicket=true&id=${currentEventId}&num=${i}`; 
+                
+                // 3. Construir Mensaje de WhatsApp
+                const fb = siteConfig.fbLink || "Facebook";
+                const waChannel = siteConfig.waChannel || "Canal WA";
+                
+                const msg = `🌟 ¡FELICIDADES, ${t.owner}! 🌟\n\n¡Excelente noticia! 🎉 Tu participación en el Gran Sorteo 🔥 ${currentEventConfig.title} 🔥 ha sido confirmada con éxito. ✅\n\n🎫 Números Oficiales Asignados: 👉 ${window.currentUserTicketsList}\n\n🍀 Te enviamos la mejor de las suertes.\n\n👇 Accede aquí a tu Boleto Digital Oficial:\n🔗 ${digitalLink}\n\n📡 Mantente al tanto:\n📘 ${fb}\n💬 ${waChannel}\n\n✨ ¡Mucho éxito! ✨`;
+                
+                // 4. Abrir WhatsApp (Redirección Automática)
+                setTimeout(() => {
+                    window.open(`https://wa.me/${t.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+                }, 1500); 
+            });
+        }
+
+        function changeStatus(s) {
+            const i = window.targetTicketIdx;
+            if(!currentEventId || i === undefined) return;
+            if(s==='disponible') {
+                db.ref(`events/${currentEventId}/tickets/${i}`).remove().then(() => { closeModal('modal-admin-ticket'); Swal.fire({toast:true, icon:'info', title:'Boleto Liberado'}); });
+            } else {
+                db.ref(`events/${currentEventId}/tickets/${i}`).update({status:s}).then(() => { closeModal('modal-admin-ticket'); Swal.fire({toast:true, icon:'success', title:'Estado actualizado'}); });
+            }
+        }
+
+        // ==========================================
+        // 8. GENERACIÓN DE GRILLA
+        // ==========================================
         function createGrid() {
             const grid = document.getElementById('grid-rifa');
             grid.innerHTML = '';
-            if (isEventClosed) grid.classList.add('locked'); else grid.classList.remove('locked');
+            
+            if (isEventClosed) grid.classList.add('locked'); 
+            else grid.classList.remove('locked');
             
             const totalBoletos = parseInt(currentEventConfig.qty || 100);
             let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
             let rangeSize = Math.floor(baseNums / totalBoletos);
-            let pad = 2;
-            if(baseNums > 100) pad = 3; 
-            if(baseNums > 1000) pad = 4;
+            let pad = (baseNums > 100) ? (baseNums > 1000 ? 4 : 3) : 2;
 
             for(let i=0; i<totalBoletos; i++) {
                 let d = document.createElement('div');
@@ -1621,15 +1793,19 @@
             const bar = document.getElementById('selection-bar');
             if(selected.length > 0) {
                 bar.classList.add('active');
+                
                 const totalBoletos = parseInt(currentEventConfig.qty || 100);
                 let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
                 let rangeSize = Math.floor(baseNums / totalBoletos);
                 let displayTxt = "";
-                if(rangeSize > 1) displayTxt = selected.map(n => `#${n+1}`).join(', ');
-                else {
+                
+                if(rangeSize > 1) {
+                    displayTxt = selected.map(n => `#${n+1}`).join(', ');
+                } else {
                     let pad = (baseNums > 100) ? (baseNums > 1000 ? 4 : 3) : 2;
                     displayTxt = selected.map(n => n.toString().padStart(pad, '0')).join(', ');
                 }
+                
                 document.getElementById('bar-nums').innerText = displayTxt;
                 document.getElementById('bar-total').innerText = `$${selected.length * currentEventConfig.price}`;
             } else {
@@ -1637,9 +1813,13 @@
             }
         }
 
+        // ==========================================
+        // 9. FORMULARIO Y ENVÍO WHATSAPP (CLIENTE)
+        // ==========================================
         function openFormModal() {
             if(isEventClosed) return Swal.fire("Cerrado", "El sorteo ha finalizado.", "error");
             document.getElementById('form-total').innerText = `$${selected.length * currentEventConfig.price}`;
+            
             const totalBoletos = parseInt(currentEventConfig.qty || 100);
             let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
             let rangeSize = Math.floor(baseNums / totalBoletos);
@@ -1650,6 +1830,7 @@
                 let pad = (baseNums > 100) ? (baseNums > 1000 ? 4 : 3) : 2;
                 displayTxt = selected.map(n => n.toString().padStart(pad, '0')).join(', ');
             }
+            
             document.getElementById('form-nums').innerText = displayTxt;
             document.getElementById('modal-form').style.display='flex';
         }
@@ -1659,10 +1840,11 @@
             const phone = document.getElementById('user-phone').value;
             const state = document.getElementById('user-state').value;
             
-            if(!name || !phone || !state) return Swal.fire("Error","Llena todos los campos (Nombre, Estado, Teléfono)","warning");
+            if(!name || !phone || !state) return Swal.fire("Error","Llena todos los campos","warning");
             
             const updates = {};
             const now = new Date().toISOString();
+            
             selected.forEach(i => {
                 updates[`events/${currentEventId}/tickets/${i}`] = { status:'apartado', owner:name, phone:phone, state:state, date:now };
             });
@@ -1671,49 +1853,32 @@
                 const totalBoletos = parseInt(currentEventConfig.qty || 100);
                 let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
                 let rangeSize = Math.floor(baseNums / totalBoletos);
+                let pad = (baseNums > 100) ? (baseNums > 1000 ? 4 : 3) : 2;
                 let numMsg = "";
                 
-                if(rangeSize > 1) numMsg = selected.map(n => `${(n+1).toString().padStart(2,'0')}`).join(', ');
-                else {
-                    let pad = (baseNums > 100) ? 3 : 2;
+                if(rangeSize > 1) {
+                    numMsg = selected.map(n => {
+                        let start = n * rangeSize;
+                        let end = start + rangeSize - 1;
+                        return `Boleto #${n+1} (Nums: ${start.toString().padStart(pad,'0')}-${end.toString().padStart(pad,'0')})`;
+                    }).join('\n');
+                } else {
                     numMsg = selected.map(n => n.toString().padStart(pad,'0')).join(', ');
                 }
                 
                 const total = selected.length * currentEventConfig.price;
-                const txt = `👋 Hola, buen día. Mi nombre es ${name} y me comunico desde el estado de ${state}. 🎉 Deseo participar en el evento “${currentEventConfig.title}”. 🎫 Números seleccionados: 👉 ${numMsg} 💰 Total a pagar: $${total} 📱 Número de contacto: ${phone}. Quedo atento a que me compartan los datos de pago para confirmar mi apartado a la brevedad. ¡Muchas gracias y excelente día! ✨`;
+                const txt = `👋 Hola, buen día. Mi nombre es ${name} y me comunico desde el estado de ${state}.\n🎉 Deseo participar en el evento “${currentEventConfig.title}”.\n\n🎫 Números seleccionados:\n${numMsg}\n\n💰 Total a pagar: $${total}\n📱 Número de contacto: ${phone}.\n\nQuedo atento a que me compartan los datos de pago para confirmar mi apartado. ¡Gracias! ✨`;
                 
+                // Enviar a SiteConfig (Número de Admin)
                 window.open(`https://wa.me/${siteConfig.waOrders}?text=${encodeURIComponent(txt)}`, '_blank');
+                
                 selected=[]; updateBar(); closeModal('modal-form'); showPage('pagos');
             });
         }
 
-        function startCountdown(date) {
-            if(countdownInterval) clearInterval(countdownInterval);
-            const disp = document.getElementById('countdown-display');
-            const msg = document.getElementById('closed-msg');
-            if(!date) { disp.style.display='none'; msg.style.display='none'; return; }
-            
-            const end = new Date(date).getTime();
-            if(isNaN(end)) { disp.style.display='none'; return; }
-            
-            disp.style.display='flex';
-            msg.style.display='none';
-            isEventClosed = false;
-
-            countdownInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const d = end - now;
-                if(d < 0) { 
-                    clearInterval(countdownInterval); disp.style.display='none';
-                    msg.style.display='block'; isEventClosed = true; createGrid(); return; 
-                }
-                document.getElementById("cd-d").innerText = Math.floor(d/(1000*60*60*24)).toString().padStart(2,'0');
-                document.getElementById("cd-h").innerText = Math.floor((d%(1000*60*60*24))/(1000*60*60)).toString().padStart(2,'0');
-                document.getElementById("cd-m").innerText = Math.floor((d%(1000*60*60))/(1000*60)).toString().padStart(2,'0');
-                document.getElementById("cd-s").innerText = Math.floor((d%(1000*60))/1000).toString().padStart(2,'0');
-            }, 1000);
-        }
-
+        // ==========================================
+        // 10. FUNCIONES EXTRA (Features 3 & 4)
+        // ==========================================
         function updateFinancialPanel() {
             let sold=0, pending=0;
             if(currentEventTickets) {
@@ -1736,9 +1901,6 @@
             else { pBar.classList.remove('sold-out'); pTxt.style.color = "#666"; }
         }
 
-        // ==========================================
-        // 7. VERIFICADOR Y UTILIDADES
-        // ==========================================
         function verifyMyTickets() {
             const phoneInput = document.getElementById('verifier-phone').value.trim();
             const resultDiv = document.getElementById('verifier-result');
@@ -1755,15 +1917,14 @@
                     const totalBoletos = parseInt(config.qty || 100);
                     let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
                     let rangeSize = Math.floor(baseNums / totalBoletos);
+                    let pad = (baseNums > 100) ? 3 : 2;
 
                     Object.entries(tickets).forEach(([ticketIdx, tData]) => {
                         if(tData.phone && tData.phone.includes(phoneInput)) {
                             let displayNum = "";
                             if(rangeSize > 1) displayNum = `#${parseInt(ticketIdx)+1}`;
-                            else {
-                                let pad = (baseNums > 100) ? 3 : 2;
-                                displayNum = ticketIdx.toString().padStart(pad,'0');
-                            }
+                            else displayNum = ticketIdx.toString().padStart(pad,'0');
+                            
                             found.push({ eventName: config.title, num: displayNum, status: tData.status });
                         }
                     });
@@ -1785,7 +1946,9 @@
 
         function highlightTicket(val) {
             if(!val) return;
-            const target = document.getElementById('t-'+parseInt(val)) || document.getElementById('t-'+(parseInt(val)-1));
+            let target = document.getElementById('t-'+parseInt(val));
+            if(!target) target = document.getElementById('t-'+(parseInt(val)-1)); // Fix for index offset if needed
+            
             if(target) {
                 target.scrollIntoView({behavior:'smooth', block:'center'});
                 target.style.border='3px solid var(--accent)'; target.style.transform='scale(1.2)'; target.style.zIndex='100';
@@ -1793,62 +1956,123 @@
             }
         }
 
-        // ==========================================
-        // 8. ADMIN TICKET GESTIÓN
-        // ==========================================
-        function openAdminTicket(i) {
-             window.targetTicketIdx = i;
-             const t = currentEventTickets[i];
-             document.getElementById('adm-ticket-num').innerText = (parseInt(i)+1);
-             document.getElementById('adm-client').innerText = t.owner || "Sin Nombre";
-             document.getElementById('adm-phone').innerText = t.phone || "Sin Teléfono";
-             document.getElementById('adm-state').innerText = t.state || "No especificado"; 
-             const statusEl = document.getElementById('adm-status');
-             statusEl.innerText = t.status.toUpperCase();
-             statusEl.style.color = (t.status === 'pagado') ? '#28a745' : '#ffc107';
-             document.getElementById('adm-wa-link').href = `https://wa.me/${t.phone}`;
-
-             let userTickets = [];
-             const totalBoletos = parseInt(currentEventConfig.qty || 100);
-             let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
-             let rangeSize = Math.floor(baseNums / totalBoletos);
-             let pad = (baseNums > 100) ? 3 : 2;
-
-             Object.entries(currentEventTickets).forEach(([idx, ticketData]) => {
-                 if (ticketData.phone === t.phone) {
-                     if (rangeSize > 1) userTickets.push(`${parseInt(idx)+1}`);
-                     else userTickets.push(idx.toString().padStart(pad,'0'));
-                 }
-             });
-             window.currentUserTicketsList = userTickets.join(", ");
-             document.getElementById('adm-all-tickets').innerText = window.currentUserTicketsList;
-             document.getElementById('modal-admin-ticket').style.display='flex';
-        }
-
-        function changeStatus(s) {
-            const i = window.targetTicketIdx;
-            if(!currentEventId || i === undefined) return;
-            const t = currentEventTickets[i];
-
-            if(s==='disponible') {
-                db.ref(`events/${currentEventId}/tickets/${i}`).remove().then(() => { closeModal('modal-admin-ticket'); Swal.fire({toast:true, icon:'info', title:'Boleto Liberado'}); });
-            } else {
-                db.ref(`events/${currentEventId}/tickets/${i}`).update({status:s}).then(() => {
-                    closeModal('modal-admin-ticket');
-                    Swal.fire({toast:true, icon:'success', title:'Confirmado'});
-                    const linkBase = window.location.href.split('?')[0];
-                    const digitalLink = `${linkBase}?viewTicket=true&id=${currentEventId}&num=${i}`;
-                    const fb = siteConfig.fbLink || "Facebook";
-                    const waChannel = siteConfig.waChannel || "Canal WA";
-                    const msg = `🌟 ¡FELICIDADES, ${t.owner}! 🌟 ¡Excelente noticia! 🎉 Tu participación en el Gran Sorteo 🔥 ${currentEventConfig.title} 🔥 ha sido confirmada con éxito. ✅ 🎫 Números Oficiales Asignados: 👉 ${window.currentUserTicketsList} 🍀 Te enviamos la mejor de las suertes. 👇 Accede aquí a tu Boleto Digital Oficial: 🔗 ${digitalLink} 📡 Mantente al tanto: 📘 ${fb} 💬 ${waChannel} ✨ ¡Mucho éxito! ✨`;
-                    window.open(`https://wa.me/${t.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        function renderGroupedNotifications() { 
+            const c=document.getElementById('admin-notifications'); 
+            if(!c) return; c.innerHTML=''; 
+            const groups = {};
+            if(currentEventTickets) {
+                Object.entries(currentEventTickets).forEach(([idx, ticket]) => {
+                    if(ticket.status === 'apartado') {
+                        if(!groups[ticket.phone]) groups[ticket.phone] = { name: ticket.owner, idxs: [] };
+                        groups[ticket.phone].idxs.push(idx);
+                    }
                 });
             }
+            if(Object.keys(groups).length === 0) { c.innerHTML='<p style="text-align:center; color:#999;">Sin apartados pendientes.</p>'; return; }
+            Object.entries(groups).forEach(([phone, dat]) => {
+                let chips = dat.idxs.map(i => `<span class="ticket-chip">#${parseInt(i)+1}</span>`).join(' ');
+                c.innerHTML += `<div class="admin-group-card"><div class="group-header"><h4>${dat.name}</h4><span>${phone}</span></div><div class="group-tickets">${chips}</div><div style="display:flex; justify-content:end; gap:5px;"><button class="btn-small btn-free" onclick="freeG('${phone}')">LIBERAR</button><button class="btn-small btn-approve" onclick="payG('${phone}')">PAGADO</button></div></div>`;
+            });
+        }
+        function payG(phone) { const updates={}; Object.entries(currentEventTickets).forEach(([i, t]) => { if(t.phone === phone && t.status === 'apartado') updates[`events/${currentEventId}/tickets/${i}/status`] = 'pagado'; }); db.ref().update(updates).then(()=>{ Swal.fire({toast:true,icon:'success',title:'Grupo confirmado'}); }); }
+        function freeG(phone) { const updates={}; Object.entries(currentEventTickets).forEach(([i, t]) => { if(t.phone === phone && t.status === 'apartado') updates[`events/${currentEventId}/tickets/${i}`] = null; }); db.ref().update(updates).then(()=>{ Swal.fire({toast:true,icon:'info',title:'Grupo liberado'}); }); }
+
+        // FEATURE 3: BOLETO DIGITAL ORDENADO
+        function loadDigitalTicketMode(evtId, numRaw) {
+            db.ref(`events/${evtId}`).once('value').then(snap => {
+                const data = snap.val();
+                if(!data) { document.body.innerHTML = "<h2 style='color:white; text-align:center; padding:50px;'>Evento finalizado o no existe.</h2>"; return; }
+                const config = data.config;
+                const ticketData = data.tickets ? data.tickets[numRaw] : null;
+                
+                if(!ticketData) { document.body.innerHTML = "<h2 style='color:white; text-align:center; padding:50px;'>Boleto no encontrado.</h2>"; return; }
+
+                document.getElementById('vt-link-client').innerText = ticketData.owner;
+                document.getElementById('vt-link-state').innerText = ticketData.state || "";
+                document.getElementById('vt-link-event-name').innerText = config.title;
+                const imgEl = document.getElementById('vt-link-img');
+                if(config.img) { imgEl.src = config.img; imgEl.style.display = 'block'; }
+                
+                let myNumbers = [];
+                const totalBoletos = parseInt(config.qty || 100);
+                let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
+                let rangeSize = Math.floor(baseNums / totalBoletos);
+                let pad = (baseNums > 100) ? (baseNums > 1000 ? 4 : 3) : 2;
+
+                Object.entries(data.tickets).forEach(([idx, t]) => {
+                    if(t.phone === ticketData.phone) {
+                        if(rangeSize > 1) {
+                            myNumbers.push(`#${parseInt(idx)+1}`);
+                        } else {
+                            myNumbers.push(idx.toString().padStart(pad,'0'));
+                        }
+                    }
+                });
+                
+                // ORDENAR NÚMEROS
+                myNumbers.sort((a,b) => {
+                    let numA = parseInt(a.replace('#',''));
+                    let numB = parseInt(b.replace('#',''));
+                    return numA - numB;
+                });
+
+                const container = document.getElementById('vt-link-num');
+                // TEXTO PEQUEÑO SI HAY MUCHOS NÚMEROS
+                if(myNumbers.length > 8) {
+                    container.classList.add('small-text');
+                }
+                
+                container.innerText = myNumbers.join(", ");
+            });
         }
 
-        // ==========================================
-        // 9. MÁQUINA SUERTE Y NOTIFICACIONES
-        // ==========================================
+        // FEATURE 3 & 4: ENVÍO DE COMPROBANTE REDIRIGE AL WA DEL ADMIN (PANEL)
+        function sendPaymentProof() { 
+            const msg = "He concluido con el pago del boleto apartado a mi nombre. Te anexo el comprobante de pago, espero la confirmación de que ya me encuentro participando oficialmente."; 
+            // Usa el número del siteConfig (Admin)
+            window.open(`https://wa.me/${siteConfig.waOrders}?text=${encodeURIComponent(msg)}`, '_blank'); 
+        }
+
+        // Utils Generales
+        function shareCurrentEventLink() { if(!currentEventId) return; const link = window.location.href.split('?')[0]+"?evt="+currentEventId; navigator.clipboard.writeText(link).then(()=>Swal.fire({toast:true, icon:'success', title:'Link Copiado'})); }
+        function sharePaymentLink() { const link = window.location.href.split('?')[0]+"?viewPayment=true"; navigator.clipboard.writeText(link).then(()=>Swal.fire({toast:true, icon:'success', title:'Enlace Copiado'})); }
+        function shareTicketWhatsApp() { const txt = `Hola! Aquí está tu boleto digital:\nEvento: ${document.getElementById('vt-event-name').innerText}\nNúmeros: ${document.getElementById('vt-link-num').innerText}\nGracias por participar!`; window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank'); }
+        function showPage(id) { document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none'); document.getElementById('page-'+id).style.display = 'block'; window.scrollTo({top:0, behavior:'smooth'}); }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function openSettingsMenu() { document.getElementById('modal-settings-menu').style.display = 'flex'; }
+        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>Swal.fire({toast:true, icon:'success', title:'Copiado'})); }
+        
+        function openScreenshotModal() {
+            const t = document.getElementById('screenshot-grid-target'); t.innerHTML='';
+            const total = parseInt(currentEventConfig.qty || 100);
+            for(let i=0; i<total; i++) {
+                const d = document.createElement('div'); d.className='screenshot-cell';
+                const tick = currentEventTickets[i];
+                if(tick) {
+                    if(tick.status==='pagado') d.classList.add('ss-paid');
+                    else { d.classList.add('ss-reserved'); d.innerText=(i+1); }
+                } else { d.classList.add('ss-free'); d.innerText=(i+1); }
+                t.appendChild(d);
+            }
+            document.getElementById('ss-event-title').innerText = currentEventConfig.title;
+            document.getElementById('modal-screenshot').style.display='flex';
+        }
+
+        // CRUD Eventos & Slot
+        function addImage(type) { const url = document.getElementById('imgEvidenceInput').value; if(url) db.ref('images/evidence').push({url}).then(() => Swal.fire({toast:true, icon:'success', title:'Imagen subida'})); }
+        function updateEvidenceUI(images) {
+            const w = document.getElementById('evidenceCarouselImgWrapper'); const list = document.getElementById('evidenceImgList');
+            if(!w) return; w.innerHTML = ''; list.innerHTML = ''; carouselData.evidence = [];
+            Object.entries(images).forEach(([key, val]) => { carouselData.evidence.push(val.url); w.innerHTML += `<img src="${val.url}">`; list.innerHTML += `<div class="admin-img-item"><span>Img...${key.substr(-4)}</span><span onclick="db.ref('images/evidence/${key}').remove()" style="color:red;cursor:pointer;">&times;</span></div>`; });
+            if(carouselData.evidence.length > 0) w.children[0].style.display = 'block'; else w.innerHTML = '<p style="text-align:center; padding:50px;">Sin evidencia aún.</p>';
+        }
+        function moveCarousel(type, dir) { const w = document.getElementById(type+'CarouselImgWrapper'); const imgs = w.querySelectorAll('img'); if(imgs.length === 0) return; imgs[carouselIdx[type]].style.display = 'none'; carouselIdx[type] += dir; if(carouselIdx[type] >= imgs.length) carouselIdx[type] = 0; if(carouselIdx[type] < 0) carouselIdx[type] = imgs.length - 1; imgs[carouselIdx[type]].style.display = 'block'; }
+
+        function openEventModal() { document.getElementById('edit-event-id').value=''; document.getElementById('evt-title').value=''; document.getElementById('evt-price').value=''; document.getElementById('evt-qty').value='100'; document.getElementById('evt-img').value=''; document.getElementById('evt-desc-short').value=''; document.getElementById('evt-desc-long').value=''; document.getElementById('evt-date-end').value=''; document.getElementById('btn-delete-event').style.display='none'; document.getElementById('modal-event-config').style.display='flex'; }
+        function openEditEvent(id) { db.ref(`events/${id}/config`).once('value').then(s=>{ const c = s.val(); document.getElementById('edit-event-id').value=id; document.getElementById('evt-title').value=c.title; document.getElementById('evt-price').value=c.price; document.getElementById('evt-qty').value=c.qty || '100'; document.getElementById('evt-img').value=c.img; document.getElementById('evt-desc-short').value=c.descShort; document.getElementById('evt-desc-long').value=c.descLong; document.getElementById('evt-date-end').value=c.dateEnd||''; document.getElementById('btn-delete-event').style.display='inline-block'; document.getElementById('modal-event-config').style.display='flex'; }); }
+        function saveEventConfig() { const id = document.getElementById('edit-event-id').value; const config = { title: document.getElementById('evt-title').value, price: document.getElementById('evt-price').value, qty: document.getElementById('evt-qty').value, img: document.getElementById('evt-img').value, descShort: document.getElementById('evt-desc-short').value, descLong: document.getElementById('evt-desc-long').value, dateEnd: document.getElementById('evt-date-end').value }; if(!config.title) return Swal.fire("Error","Falta título","error"); if(id) db.ref(`events/${id}/config`).update(config); else db.ref('events').push({config}); closeModal('modal-event-config'); Swal.fire({toast:true, icon:'success', title:'Evento Guardado'}); }
+        function deleteCurrentEvent() { const id = document.getElementById('edit-event-id').value; Swal.fire({title:'Eliminar?', showCancelButton:true}).then(r=>{ if(r.isConfirmed){ db.ref(`events/${id}`).remove(); closeModal('modal-event-config'); } }); }
+        
         function openLuckyModal() { if(isEventClosed) return Swal.fire("Cerrado", "El sorteo ha finalizado.", "warning"); document.getElementById('modal-lucky').style.display='flex'; document.getElementById('lucky-step-1').style.display='block'; document.getElementById('lucky-step-2').style.display='none'; }
         function setLucky(n) { document.getElementById('lucky-qty').value = n; }
         
@@ -1900,102 +2124,6 @@
 
         function confirmLucky() { if(tempPicks.length > 0) { selected = [...selected, ...tempPicks]; createGrid(); updateBar(); closeModal('modal-lucky'); } }
         function resetLucky() { document.getElementById('lucky-step-2').style.display='none'; document.getElementById('lucky-step-1').style.display='block'; }
-
-        function renderGroupedNotifications() { 
-            const c=document.getElementById('admin-notifications'); 
-            if(!c) return; c.innerHTML=''; 
-            const groups = {};
-            if(currentEventTickets) {
-                Object.entries(currentEventTickets).forEach(([idx, ticket]) => {
-                    if(ticket.status === 'apartado') {
-                        if(!groups[ticket.phone]) groups[ticket.phone] = { name: ticket.owner, idxs: [] };
-                        groups[ticket.phone].idxs.push(idx);
-                    }
-                });
-            }
-            if(Object.keys(groups).length === 0) { c.innerHTML='<p style="text-align:center; color:#999;">Sin apartados pendientes.</p>'; return; }
-            Object.entries(groups).forEach(([phone, dat]) => {
-                let chips = dat.idxs.map(i => `<span class="ticket-chip">#${parseInt(i)+1}</span>`).join(' ');
-                c.innerHTML += `<div class="admin-group-card"><div class="group-header"><h4>${dat.name}</h4><span>${phone}</span></div><div class="group-tickets">${chips}</div><div style="display:flex; justify-content:end; gap:5px;"><button class="btn-small btn-free" onclick="freeG('${phone}')">LIBERAR</button><button class="btn-small btn-approve" onclick="payG('${phone}')">PAGADO</button></div></div>`;
-            });
-        }
-        function payG(phone) { const updates={}; Object.entries(currentEventTickets).forEach(([i, t]) => { if(t.phone === phone && t.status === 'apartado') updates[`events/${currentEventId}/tickets/${i}/status`] = 'pagado'; }); db.ref().update(updates).then(()=>{ Swal.fire({toast:true,icon:'success',title:'Grupo confirmado'}); }); }
-        function freeG(phone) { const updates={}; Object.entries(currentEventTickets).forEach(([i, t]) => { if(t.phone === phone && t.status === 'apartado') updates[`events/${currentEventId}/tickets/${i}`] = null; }); db.ref().update(updates).then(()=>{ Swal.fire({toast:true,icon:'info',title:'Grupo liberado'}); }); }
-
-        // ==========================================
-        // 10. FUNCIONES EXTRA (Evidence, Digital Ticket)
-        // ==========================================
-        function loadDigitalTicketMode(evtId, numRaw) {
-            db.ref(`events/${evtId}`).once('value').then(snap => {
-                const data = snap.val();
-                if(!data) { document.body.innerHTML = "<h2 style='color:white; text-align:center;'>Evento finalizado.</h2>"; return; }
-                const config = data.config;
-                const ticketData = data.tickets ? data.tickets[numRaw] : null;
-                if(!ticketData) { document.body.innerHTML = "<h2 style='color:white; text-align:center;'>Boleto no encontrado.</h2>"; return; }
-
-                document.getElementById('vt-link-client').innerText = ticketData.owner;
-                document.getElementById('vt-link-state').innerText = ticketData.state || "";
-                document.getElementById('vt-link-event-name').innerText = config.title;
-                const imgEl = document.getElementById('vt-link-img');
-                if(config.img) { imgEl.src = config.img; imgEl.style.display = 'block'; }
-                
-                let myNumbers = [];
-                const totalBoletos = parseInt(config.qty || 100);
-                let baseNums = (totalBoletos <= 100) ? 100 : totalBoletos;
-                let rangeSize = Math.floor(baseNums / totalBoletos);
-                let pad = (baseNums > 100) ? 3 : 2;
-
-                Object.entries(data.tickets).forEach(([idx, t]) => {
-                    if(t.phone === ticketData.phone) {
-                        if(rangeSize > 1) myNumbers.push(`#${parseInt(idx)+1}`);
-                        else myNumbers.push(idx.toString().padStart(pad,'0'));
-                    }
-                });
-                document.getElementById('vt-link-num').innerText = myNumbers.join(", ");
-            });
-        }
-
-        function sendPaymentProof() { const msg = "He concluido con el pago del boleto aparatado a mi nombre te anexo el comprobante de pago espero la confirmación de que ya me encuentro participando oficialmente."; window.open(`https://wa.me/${siteConfig.waOrders}?text=${encodeURIComponent(msg)}`, '_blank'); }
-        function shareCurrentEventLink() { if(!currentEventId) return; const link = window.location.href.split('?')[0]+"?evt="+currentEventId; navigator.clipboard.writeText(link).then(()=>Swal.fire({toast:true, icon:'success', title:'Link Copiado'})); }
-        function sharePaymentLink() { const link = window.location.href.split('?')[0]+"?viewPayment=true"; navigator.clipboard.writeText(link).then(()=>Swal.fire({toast:true, icon:'success', title:'Enlace Copiado'})); }
-        function shareTicketWhatsApp() { const txt = `Hola! Aquí está tu boleto digital:\nEvento: ${document.getElementById('vt-event-name').innerText}\nNúmeros: ${document.getElementById('vt-num').innerText}\nGracias por participar!`; window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank'); }
-
-        // Utilidades UI
-        function showPage(id) { document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none'); document.getElementById('page-'+id).style.display = 'block'; window.scrollTo({top:0, behavior:'smooth'}); }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openSettingsMenu() { document.getElementById('modal-settings-menu').style.display = 'flex'; }
-        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>Swal.fire({toast:true, icon:'success', title:'Copiado'})); }
-        
-        function openScreenshotModal() {
-            const t = document.getElementById('screenshot-grid-target'); t.innerHTML='';
-            const total = parseInt(currentEventConfig.qty || 100);
-            for(let i=0; i<total; i++) {
-                const d = document.createElement('div'); d.className='screenshot-cell';
-                const tick = currentEventTickets[i];
-                if(tick) {
-                    if(tick.status==='pagado') d.classList.add('ss-paid');
-                    else { d.classList.add('ss-reserved'); d.innerText=(i+1); }
-                } else { d.classList.add('ss-free'); d.innerText=(i+1); }
-                t.appendChild(d);
-            }
-            document.getElementById('ss-event-title').innerText = currentEventConfig.title;
-            document.getElementById('modal-screenshot').style.display='flex';
-        }
-
-        function addImage(type) { const url = document.getElementById('imgEvidenceInput').value; if(url) db.ref('images/evidence').push({url}).then(() => Swal.fire({toast:true, icon:'success', title:'Imagen subida'})); }
-        function updateEvidenceUI(images) {
-            const w = document.getElementById('evidenceCarouselImgWrapper'); const list = document.getElementById('evidenceImgList');
-            if(!w) return; w.innerHTML = ''; list.innerHTML = ''; carouselData.evidence = [];
-            Object.entries(images).forEach(([key, val]) => { carouselData.evidence.push(val.url); w.innerHTML += `<img src="${val.url}">`; list.innerHTML += `<div class="admin-img-item"><span>Img...${key.substr(-4)}</span><span onclick="db.ref('images/evidence/${key}').remove()" style="color:red;cursor:pointer;">&times;</span></div>`; });
-            if(carouselData.evidence.length > 0) w.children[0].style.display = 'block'; else w.innerHTML = '<p style="text-align:center; padding:50px;">Sin evidencia aún.</p>';
-        }
-        function moveCarousel(type, dir) { const w = document.getElementById(type+'CarouselImgWrapper'); const imgs = w.querySelectorAll('img'); if(imgs.length === 0) return; imgs[carouselIdx[type]].style.display = 'none'; carouselIdx[type] += dir; if(carouselIdx[type] >= imgs.length) carouselIdx[type] = 0; if(carouselIdx[type] < 0) carouselIdx[type] = imgs.length - 1; imgs[carouselIdx[type]].style.display = 'block'; }
-
-        // CRUD Eventos
-        function openEventModal() { document.getElementById('edit-event-id').value=''; document.getElementById('evt-title').value=''; document.getElementById('evt-price').value=''; document.getElementById('evt-qty').value='100'; document.getElementById('evt-img').value=''; document.getElementById('evt-desc-short').value=''; document.getElementById('evt-desc-long').value=''; document.getElementById('evt-date-end').value=''; document.getElementById('btn-delete-event').style.display='none'; document.getElementById('modal-event-config').style.display='flex'; }
-        function openEditEvent(id) { db.ref(`events/${id}/config`).once('value').then(s=>{ const c = s.val(); document.getElementById('edit-event-id').value=id; document.getElementById('evt-title').value=c.title; document.getElementById('evt-price').value=c.price; document.getElementById('evt-qty').value=c.qty || '100'; document.getElementById('evt-img').value=c.img; document.getElementById('evt-desc-short').value=c.descShort; document.getElementById('evt-desc-long').value=c.descLong; document.getElementById('evt-date-end').value=c.dateEnd||''; document.getElementById('btn-delete-event').style.display='inline-block'; document.getElementById('modal-event-config').style.display='flex'; }); }
-        function saveEventConfig() { const id = document.getElementById('edit-event-id').value; const config = { title: document.getElementById('evt-title').value, price: document.getElementById('evt-price').value, qty: document.getElementById('evt-qty').value, img: document.getElementById('evt-img').value, descShort: document.getElementById('evt-desc-short').value, descLong: document.getElementById('evt-desc-long').value, dateEnd: document.getElementById('evt-date-end').value }; if(!config.title) return Swal.fire("Error","Falta título","error"); if(id) db.ref(`events/${id}/config`).update(config); else db.ref('events').push({config}); closeModal('modal-event-config'); Swal.fire({toast:true, icon:'success', title:'Evento Guardado'}); }
-        function deleteCurrentEvent() { const id = document.getElementById('edit-event-id').value; Swal.fire({title:'Eliminar?', showCancelButton:true}).then(r=>{ if(r.isConfirmed){ db.ref(`events/${id}`).remove(); closeModal('modal-event-config'); } }); }
     </script>
 </body>
 </html>
