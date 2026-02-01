@@ -378,12 +378,16 @@
 
         /* --- BANCOS & CARDS --- */
         .cards-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; margin-top: 2rem; width: 100%; }
-        .bank-card { 
-            width: 320px; height: 190px; border-radius: 20px; padding: 25px; color: white; position: relative; 
+                .bank-card { 
+            width: 320px; height: 190px; border-radius: 20px; 
+            /* Aumenté el padding de abajo a 40px para subir los textos */
+            padding: 25px 25px 40px 25px; 
+            color: white; position: relative; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; 
             transition: transform 0.3s, box-shadow 0.3s; display: none; font-family: 'Courier New', monospace; 
             text-shadow: 0 1px 2px rgba(0,0,0,0.3); overflow: hidden; border: none;
         }
+
         .bank-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .bank-card.visible { display: flex; }
         .card-logo-img { height: 40px; max-width: 100px; object-fit: contain; filter: drop-shadow(0 0 2px rgba(255,255,255,0.8)); }
@@ -401,10 +405,48 @@
             background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; display: flex; align-items: center; 
             justify-content: center; gap: 10px; white-space: normal; backdrop-filter: blur(2px);
         }
-        .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
-        .card-holder { font-size: 0.85rem; text-transform: uppercase; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; opacity: 0.9; }
-        .card-label { font-size: 0.6rem; opacity: 0.8; display: block; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+                /* --- AJUSTE TARJETAS: ESQUINAS PERFECTAS --- */
+        .card-bottom { 
+            display: flex; 
+            justify-content: space-between; /* Empuja uno a cada lado */
+            align-items: flex-end; 
+            width: 100%;
+            margin-top: auto; /* Asegura que se vaya al fondo */
+        }
         
+        /* Contenedor Izquierdo (Titular) */
+        .card-corner-left { 
+            text-align: left; 
+            flex: 1; /* Toma el espacio disponible */
+        }
+        
+        /* Contenedor Derecho (Banco) */
+        .card-corner-right { 
+            text-align: right; 
+            flex: 1; 
+        }
+
+        .card-label { 
+            font-size: 0.65rem; 
+            opacity: 0.9; 
+            display: block; 
+            color: #fff; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            margin-bottom: 2px;
+            font-weight: 600;
+        }
+        
+        .card-holder {
+            font-size: 0.9rem; /* Un poco más grande para legibilidad */
+            font-weight: bold;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px; /* Evita que el nombre largo rompa la tarjeta */
+        }
+
         .copy-btn { 
             background: white; border: none; color: #333; padding: 5px 12px; border-radius: 20px; 
             cursor: pointer; font-size: 0.7rem; font-weight: 800; text-shadow: none; 
@@ -412,28 +454,105 @@
         }
         .copy-btn:hover { transform: scale(1.1); box-shadow: 0 5px 10px rgba(0,0,0,0.2); }
 
-        /* --- VIRTUAL TICKET --- */
-        .virtual-ticket-card { background: radial-gradient(circle, #222 0%, #000 100%); color: var(--accent); padding: 30px 20px; border-radius: 20px; border: 4px double var(--primary); text-align: center; position: relative; overflow: hidden; width: 90%; max-width: 380px; min-height: 550px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 50px rgba(0,0,0,0.5); margin: 0 auto; }
-        .vt-logo { height: 60px; object-fit:contain; margin-bottom: 10px; filter: drop-shadow(0 0 5px white); flex-shrink: 0; }
-        .vt-congrats { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; margin-bottom: 0; color: white; line-height: 1.1; text-shadow: 0 0 15px var(--primary); letter-spacing: 1px; }
-        .vt-msg { font-size: 0.9rem; color: #ccc; margin-bottom: 15px; font-style: italic; }
-        .vt-divider { border-top: 1px dashed rgba(255,255,255,0.3); width: 100%; margin: 10px 0; }
-        .vt-event-img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; border: 2px solid var(--primary); margin: 10px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .vt-data-row { margin: 8px 0; }
-        .vt-label { font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 2px; }
-        .vt-value { color: white; text-transform: uppercase; font-weight: 800; font-size: 1.3rem; text-shadow: 0 2px 4px black; line-height: 1.2; margin-top: 2px; }
-        .vt-numbers { 
-            font-size: 2.5rem; font-weight: 900; background: rgba(255,255,255,0.1); 
-            padding: 10px; border-radius: 12px; margin: 10px 0; letter-spacing: 3px; 
-            color: #FFD700; text-shadow: 0 0 20px #FFD700; word-wrap: break-word; line-height: 1.1;
-            max-height: 160px; overflow-y: auto; display: block; scrollbar-width: thin;
-            scrollbar-color: var(--primary) rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2);
+              /* --- VIRTUAL TICKET (OPTIMIZADO COMPACTO) --- */
+        .virtual-ticket-card { 
+            background: radial-gradient(circle, #222 0%, #000 100%); 
+            color: var(--accent); 
+            padding: 20px; /* Menos padding */
+            border-radius: 15px; 
+            border: 2px solid var(--primary); /* Borde más fino */
+            text-align: center; 
+            position: relative; 
+            overflow: hidden; 
+            width: 90%; 
+            max-width: 360px; 
+            min-height: auto; /* Altura automática ajustada al contenido */
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); 
+            margin: 0 auto; 
         }
-        .vt-footer { font-size: 0.7rem; color: #777; margin-top: 10px; flex-shrink: 0; }
-        .vt-shine { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%); pointer-events: none; }
-        .btn-whatsapp-share { background: #25D366; color: white; width: 100%; margin-top: 15px; border-radius: 30px; padding: 15px; font-weight: 800; border: none; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-whatsapp-share:hover { background: #1ebc57; transform: scale(1.02); box-shadow: 0 10px 30px rgba(37, 211, 102, 0.6); }
+        
+        /* Nuevo Header Agrupado (Logo + Titulo) */
+        .vt-header-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
 
+        .vt-logo { 
+            height: 50px; /* Logo más pequeño */
+            width: auto; 
+            object-fit: contain; 
+            filter: drop-shadow(0 0 5px white); 
+        }
+        
+        .vt-text-col { text-align: left; }
+        
+        .vt-congrats { 
+            font-size: 1.1rem; /* Texto ajustado */
+            font-weight: 900; 
+            text-transform: uppercase; 
+            color: white; 
+            line-height: 1; 
+            text-shadow: 0 0 10px var(--primary); 
+            letter-spacing: 0.5px; 
+        }
+        
+        .vt-msg { 
+            font-size: 0.75rem; 
+            color: #25D366; 
+            font-weight: bold; 
+            margin-top: 3px; 
+        }
+
+        .vt-event-img { 
+            width: 100%; 
+            height: 90px; /* Imagen mucho más pequeña como pediste */
+            object-fit: cover; 
+            border-radius: 8px; 
+            border: 1px solid var(--primary); 
+            margin: 5px 0 10px 0; 
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3); 
+        }
+        
+        .vt-data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        
+        .vt-label { font-size: 0.65rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+        .vt-value { color: white; text-transform: uppercase; font-weight: 700; font-size: 0.95rem; line-height: 1.2; }
+        
+        /* Números más visibles y protagonistas */
+        .vt-numbers { 
+            font-size: 2rem; 
+            font-weight: 900; 
+            background: rgba(255,255,255,0.1); 
+            padding: 15px 5px; 
+            border-radius: 10px; 
+            margin: 5px 0; 
+            letter-spacing: 2px; 
+            color: #FFD700; 
+            text-shadow: 0 0 15px #FFD700; 
+            word-wrap: break-word; 
+            line-height: 1.1;
+            border: 1px dashed var(--primary);
+        }
+        
+        .vt-footer { font-size: 0.65rem; color: #666; margin-top: 10px; }
+        .vt-shine { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%); pointer-events: none; }
+        
+        .btn-whatsapp-share { background: #25D366; color: white; width: 100%; margin-top: 15px; border-radius: 30px; padding: 12px; font-weight: 800; border: none; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-whatsapp-share:hover { background: #1ebc57; transform: scale(1.02); box-shadow: 0 10px 30px rgba(37, 211, 102, 0.6); }
+ 
         /* --- FOOTER & EXTRAS --- */
         footer { background: #050505; color: white; padding: 20px 0; text-align: center; margin-top: auto; border-top: 1px solid #222; }
         .footer-socials { margin-bottom: 10px; display: flex; justify-content: center; gap: 25px; }
@@ -574,6 +693,12 @@
         .btn-keep-buying { background: transparent; border: 1px solid #aaa; color: #aaa; width: 100%; margin-top: 10px; border-radius: 25px; padding: 10px; font-size: 0.85rem; cursor: pointer; text-decoration: none; display: inline-block; transition: 0.3s; }
         .btn-keep-buying:hover { background: white; color: black; border-color: white; }
 
+        /* --- FIX: SWEETALERT SIEMPRE ENCIMA --- */
+        div:where(.swal2-container) {
+            z-index: 20000 !important;
+        }
+
+
     </style>
 
 </head>
@@ -583,39 +708,45 @@
         <div class="sk-text">Cargando Sistema...</div>
     </div>
     
-    <div id="overlay-ticket" class="overlay-fullscreen">
+      <div id="overlay-ticket" class="overlay-fullscreen">
         <div class="virtual-ticket-card" style="margin-top: 20px;">
             <div class="vt-shine"></div>
-            <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="vt-logo" alt="Logo">
             
-            <div class="vt-congrats">¡FELICIDADES!</div>
-            <p class="vt-msg" style="color:#25D366; font-weight:bold;">✅ Participación Confirmada</p>
-            
+            <div class="vt-header-group">
+                <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="vt-logo" alt="Logo">
+                <div class="vt-text-col">
+                    <div class="vt-congrats">¡FELICIDADES!</div>
+                    <div class="vt-msg">✅ Boleto Confirmado</div>
+                </div>
+            </div>
+
             <img id="vt-link-img" src="" class="vt-event-img" style="display:none;">
             
-            <div class="vt-divider"></div>
-            
-            <div class="vt-data-row">
-                <div class="vt-label">Participante</div>
-                <div id="vt-link-client" class="vt-value">CARGANDO...</div>
+            <div class="vt-data-grid">
+                <div>
+                    <div class="vt-label">Participante</div>
+                    <div id="vt-link-client" class="vt-value">CARGANDO...</div>
+                </div>
+                <div>
+                    <div class="vt-label">Sorteo</div>
+                    <div id="vt-link-event-name" class="vt-value" style="font-size:0.8rem;">...</div>
+                </div>
             </div>
             
-            <div class="vt-data-row">
-                <div class="vt-label">Ubicación</div>
-                <div id="vt-link-state" class="vt-value" style="font-size:1rem;">...</div>
+            <div class="vt-label">TUS NÚMEROS DE LA SUERTE</div>
+            <div id="vt-link-num" class="vt-numbers">00</div>
+            
+            <div class="vt-data-grid" style="margin-top:10px; margin-bottom:0;">
+                <div>
+                    <div class="vt-label">Ubicación</div>
+                    <div id="vt-link-state" class="vt-value" style="font-size:0.8rem;">...</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="vt-label">Fecha</div>
+                    <div class="vt-value" style="font-size:0.8rem;">HOY</div>
+                </div>
             </div>
 
-            <div class="vt-data-row">
-                <div class="vt-label">Tus Números de la Suerte</div>
-                <div id="vt-link-num" class="vt-numbers">00</div>
-            </div>
-
-            <div class="vt-data-row">
-                <div class="vt-label">Sorteo</div>
-                <div id="vt-link-event-name" style="color:white; font-size:0.9rem;">...</div>
-            </div>
-            
-            <div class="vt-divider"></div>
             <div class="vt-footer">Tu Suerte Suma | Mucha Suerte 🍀</div>
         </div>
         
@@ -624,7 +755,7 @@
             <span style="font-size:0.8rem;">(Toma una captura de pantalla)</span>
         </p>
     </div>
-
+ 
     <div id="overlay-payment" class="overlay-fullscreen">
         <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" style="height:80px; margin-bottom:20px; filter:drop-shadow(0 0 5px white);">
         <h2 class="section-title" style="color:var(--accent);">Métodos de Pago</h2>
@@ -917,24 +1048,38 @@
         </div>
     </div>
 
-    <div id="modal-virtual-ticket" class="modal-overlay" style="display:none;">
+        <div id="modal-virtual-ticket" class="modal-overlay" style="display:none;">
         <div class="modal-content" style="background:transparent; box-shadow:none; padding:0; width:100%; display:flex; flex-direction:column; align-items:center;">
+            
             <div class="virtual-ticket-card">
                 <div class="vt-shine"></div>
-                <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="vt-logo" alt="Logo">
-                <div class="vt-congrats">¡FELICIDADES!</div>
-                <p class="vt-msg">Participación confirmada.</p>
-                <div class="vt-divider"></div>
-                <div class="vt-data-row"><div class="vt-label">Participante</div><div id="vt-client" class="vt-value">NOMBRE CLIENTE</div></div>
-                <div class="vt-data-row"><div class="vt-label">Estado</div><div id="vt-state" class="vt-value" style="font-size:1rem;">ESTADO</div></div>
                 
-                <div class="vt-data-row"><div class="vt-label">Tus Números</div><div id="vt-num" class="vt-numbers">00, 00</div></div>
+                <div class="vt-header-group">
+                    <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="vt-logo" alt="Logo">
+                    <div class="vt-text-col">
+                        <div class="vt-congrats">¡FELICIDADES!</div>
+                        <div class="vt-msg">✅ Boleto Confirmado</div>
+                    </div>
+                </div>
+
+                <div class="vt-data-grid">
+                    <div>
+                        <div class="vt-label">Participante</div>
+                        <div id="vt-client" class="vt-value">NOMBRE CLIENTE</div>
+                    </div>
+                    <div>
+                        <div class="vt-label">Sorteo</div>
+                        <div id="vt-event-name" class="vt-value" style="font-size:0.8rem;">Evento</div>
+                    </div>
+                </div>
                 
-                <div class="vt-data-row"><div class="vt-label">Sorteo</div><div id="vt-event-name" style="color:white; font-size:0.9rem;">Nombre Evento</div></div>
-                <div class="vt-divider"></div>
+                <div class="vt-label">TUS NÚMEROS</div>
+                <div id="vt-num" class="vt-numbers">00, 00</div>
+                
                 <div class="vt-footer">Tu Suerte Suma | Sorteos Transparentes</div>
             </div>
-            <div style="background:white; padding:15px; border-radius:15px; margin-top:10px; text-align:center; width:90%; max-width:380px;">
+
+            <div style="background:white; padding:15px; border-radius:15px; margin-top:10px; text-align:center; width:90%; max-width:360px;">
                 <p style="color:#666; font-size:0.8rem; margin-bottom:5px;">Enviar al cliente (WhatsApp):</p>
                 <button onclick="shareTicketWhatsApp()" class="btn-whatsapp-share" style="margin-top:0;">
                     <i class="fab fa-whatsapp"></i> ENVIAR CONFIRMACIÓN
@@ -1212,7 +1357,7 @@
                 <h2 class="section-title">Métodos de Pago</h2>
                 <p style="color:#ddd; margin-bottom:2rem;">Selecciona, copia y envía tu comprobante.</p>
 
-                <div class="cards-grid">
+                                <div class="cards-grid">
                     <div id="card-bbva-main" class="bank-card card-bbva">
                         <div class="card-top">
                             <img src="https://i.ibb.co/zTZbpYx8/pngwing-com.png" class="card-logo-bank-icon" style="filter: brightness(0) invert(1);">
@@ -1223,8 +1368,14 @@
                             <button class="copy-btn" onclick="copyText('view-num-bbva-main')">COPIAR</button>
                         </div>
                         <div class="card-bottom">
-                            <div style="width: 70%;"><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-bbva-main">...</div></div>
-                            <div><span class="card-label">BANCO</span><div class="card-holder">BBVA</div></div>
+                            <div class="card-corner-left">
+                                <span class="card-label">TITULAR</span>
+                                <div class="card-holder" id="view-name-bbva-main">...</div>
+                            </div>
+                            <div class="card-corner-right">
+                                <span class="card-label">BANCO</span>
+                                <div class="card-holder">BBVA</div>
+                            </div>
                         </div>
                     </div>
 
@@ -1238,8 +1389,14 @@
                             <button class="copy-btn" onclick="copyText('view-num-azteca-main')">COPIAR</button>
                         </div>
                         <div class="card-bottom">
-                            <div style="width: 70%;"><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-azteca-main">...</div></div>
-                            <div><span class="card-label">BANCO</span><div class="card-holder">AZTECA</div></div>
+                            <div class="card-corner-left">
+                                <span class="card-label">TITULAR</span>
+                                <div class="card-holder" id="view-name-azteca-main">...</div>
+                            </div>
+                            <div class="card-corner-right">
+                                <span class="card-label">BANCO</span>
+                                <div class="card-holder">AZTECA</div>
+                            </div>
                         </div>
                     </div>
 
@@ -1253,8 +1410,14 @@
                             <button class="copy-btn" onclick="copyText('view-num-mp-main')">COPIAR</button>
                         </div>
                         <div class="card-bottom">
-                            <div style="width: 60%;"><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-mp-main">...</div></div>
-                            <div><span class="card-label">BANCO</span><div class="card-holder">MERCADO PAGO</div></div>
+                            <div class="card-corner-left">
+                                <span class="card-label">TITULAR</span>
+                                <div class="card-holder" id="view-name-mp-main">...</div>
+                            </div>
+                            <div class="card-corner-right">
+                                <span class="card-label">BANCO</span>
+                                <div class="card-holder">MERCADO PAGO</div>
+                            </div>
                         </div>
                     </div>
                     
@@ -1268,8 +1431,14 @@
                             <button class="copy-btn" onclick="copyText('view-num-oxxo-main')">COPIAR</button>
                         </div>
                         <div class="card-bottom">
-                            <div style="width: 70%;"><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-oxxo-main">...</div></div>
-                            <div><span class="card-label">DEPÓSITO</span><div class="card-holder">OXXO</div></div>
+                            <div class="card-corner-left">
+                                <span class="card-label">TITULAR</span>
+                                <div class="card-holder" id="view-name-oxxo-main">...</div>
+                            </div>
+                            <div class="card-corner-right">
+                                <span class="card-label">DEPÓSITO</span>
+                                <div class="card-holder">OXXO</div>
+                            </div>
                         </div>
                     </div>
                     
@@ -1283,8 +1452,14 @@
                             <button class="copy-btn" onclick="copyText('view-num-banorte-main')">COPIAR</button>
                         </div>
                         <div class="card-bottom">
-                            <div style="width: 70%;"><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-banorte-main">...</div></div>
-                            <div><span class="card-label">BANCO</span><div class="card-holder">BANORTE</div></div>
+                            <div class="card-corner-left">
+                                <span class="card-label">TITULAR</span>
+                                <div class="card-holder" id="view-name-banorte-main">...</div>
+                            </div>
+                            <div class="card-corner-right">
+                                <span class="card-label">BANCO</span>
+                                <div class="card-holder">BANORTE</div>
+                            </div>
                         </div>
                     </div>
                     
@@ -1298,11 +1473,18 @@
                             <button class="copy-btn" onclick="copyText('view-num-banamex-main')">COPIAR</button>
                         </div>
                         <div class="card-bottom">
-                            <div style="width: 70%;"><span class="card-label">TITULAR</span><div class="card-holder" id="view-name-banamex-main">...</div></div>
-                            <div><span class="card-label">BANCO</span><div class="card-holder">BANAMEX</div></div>
+                            <div class="card-corner-left">
+                                <span class="card-label">TITULAR</span>
+                                <div class="card-holder" id="view-name-banamex-main">...</div>
+                            </div>
+                            <div class="card-corner-right">
+                                <span class="card-label">BANCO</span>
+                                <div class="card-holder">BANAMEX</div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
 
                 <button onclick="sendPaymentProof()" class="btn-action" style="margin-top:30px; display:inline-flex; align-items:center; justify-content:center; gap:10px; width:auto; background:#25D366; padding:15px 30px; border-radius:50px; font-size:1.1rem; border:none; color:white;">
                     <i class="fab fa-whatsapp" style="font-size:1.5rem;"></i> Enviar Comprobante
@@ -1446,7 +1628,7 @@
         </div>
 
         <div class="footer-dev">
-            Esta página fue hecha por <a href="#" target="_blank">ZonaTecno</a>
+            Esta página fue hecha por <a href="https://mancilla-dk.github.io/ZonaTecno/" target="_blank">ZonaTecno</a>
         </div>
     </footer>
     <script>
