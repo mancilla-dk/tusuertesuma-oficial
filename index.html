@@ -780,51 +780,53 @@
         <div class="sk-text">Cargando Sistema...</div>
     </div>
     
-      <div id="overlay-ticket" class="overlay-fullscreen">
-        <div class="virtual-ticket-card" style="margin-top: 20px;">
-            <div class="vt-shine"></div>
-            
+          <div id="overlay-ticket" class="overlay-fullscreen">
+        <div class="virtual-ticket-card" style="margin-top: 40px;">
             <div class="vt-header-group">
                 <img src="https://i.ibb.co/b5HD5sPD/Picsart-26-01-23-15-46-54-673.png" class="vt-logo" alt="Logo">
                 <div class="vt-text-col">
                     <div class="vt-congrats">¡FELICIDADES!</div>
-                    <div class="vt-msg">✅ Boleto Confirmado</div>
+                    <div class="vt-msg">BOLETO CONFIRMADO <i class="fas fa-check-circle"></i></div>
                 </div>
             </div>
 
-            <img id="vt-link-img" src="" class="vt-event-img" style="display:none;">
-            
             <div class="vt-data-grid">
-                <div>
-                    <div class="vt-label">Participante</div>
-                    <div id="vt-link-client" class="vt-value">CARGANDO...</div>
+                <div class="vt-item">
+                    <span class="vt-label">PARTICIPANTE</span>
+                    <span id="vt-client" class="vt-value">CARGANDO...</span>
                 </div>
-                <div>
-                    <div class="vt-label">Sorteo</div>
-                    <div id="vt-link-event-name" class="vt-value" style="font-size:0.8rem;">...</div>
+                <div class="vt-item" style="text-align:right;">
+                    <span class="vt-label">ESTADO</span>
+                    <span id="vt-state" class="vt-value">...</span>
                 </div>
-            </div>
-            
-            <div class="vt-label">TUS NÚMEROS DE LA SUERTE</div>
-            <div id="vt-link-num" class="vt-numbers">00</div>
-            
-            <div class="vt-data-grid" style="margin-top:10px; margin-bottom:0;">
-                <div>
-                    <div class="vt-label">Ubicación</div>
-                    <div id="vt-link-state" class="vt-value" style="font-size:0.8rem;">...</div>
+                
+                <div class="vt-item" style="grid-column: span 2;">
+                    <span class="vt-label">SORTEO</span>
+                    <span id="vt-event-name" class="vt-value" style="color:#00ff88; font-size:0.85rem;">...</span>
                 </div>
-                <div style="text-align:right;">
-                    <div class="vt-label">Fecha</div>
-                    <div class="vt-value" style="font-size:0.8rem;">HOY</div>
-                </div>
-            </div>
 
-            <div class="vt-footer">Tu Suerte Suma | Mucha Suerte 🍀</div>
+                <div class="vt-item">
+                    <span class="vt-label">FECHA COMPRA</span>
+                    <span id="vt-date" class="vt-value">...</span>
+                </div>
+                <div class="vt-item" style="text-align:right;">
+                    <span class="vt-label">STATUS</span>
+                    <span class="vt-value" style="color:#FFD700;">PAGADO</span>
+                </div>
+            </div>
+            
+            <div class="vt-numbers-box">
+                <span class="vt-label" style="display:block; text-align:center; margin-bottom:5px;">TUS NÚMEROS DE LA SUERTE</span>
+                <div id="vt-num" class="vt-numbers">00 - 00</div>
+            </div>
+            
+            <div class="vt-barcode-strip"></div>
+            <div class="vt-footer">Tu Suerte Suma | Comprobante Oficial</div>
         </div>
         
-        <p style="color:#999; margin-top:20px; text-align:center; padding:0 20px;">
+        <p style="color:#999; margin-top:20px; text-align:center; font-size:0.85rem;">
             Guarda este boleto como comprobante.<br>
-            <span style="font-size:0.8rem;">(Toma una captura de pantalla)</span>
+            (Toma una captura de pantalla)
         </p>
     </div>
  
